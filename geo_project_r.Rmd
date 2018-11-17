@@ -1,0 +1,164 @@
+---
+title: "geo_project"
+author: "Ng Jia Wen"
+date: "28/10/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/Documents/UCL/SAG/geo_project")
+```
+
+```{r}
+# Load libraries
+library(leaflet)
+library(sp)
+library(dplyr)
+library(mapview)
+library(ggplot2)
+library(rgdal)
+```
+
+### Clean Data
+```{r}
+# Load crime and boundary data
+COL_data <- read.csv(file=paste(getwd(),'/data/COL_street.csv',sep=''), header=TRUE, sep="\t")
+metro_data <- read.csv(file=paste(getwd(),'/data/metro_street.csv',sep=''), header=TRUE, sep="\t")
+data <- rbind(COL_data, metro_data)
+load("boundaries/LondonLSOA")
+load("boundaries/LondonWards")
+
+# get crime df
+df <- subset(data, select=c("Crime.type", "LSOA.name","Longitude","Latitude","Month"))
+
+# get crime count by LSOA
+crimenum_by_LSOA <- data.frame(table(df$LSOA.name)) %>% na.omit()
+crimenum_by_LSOA$Var1 <- as.character(crimenum_by_LSOA$Var1)
+crimenum_by_LSOA <- crimenum_by_LSOA[!apply(crimenum_by_LSOA, 1, function(x) any(x=="")),] 
+
+# Transform to leaflet's CRS
+projection <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
+LondonWards_transformed <- spTransform(LondonWards, projection)
+LondonLSOA_transformed <- spTransform(LondonLSOA, projection)
+
+# get combined boundary + LSOA crime count data
+LondonLSOA_transformed@data <- left_join(LondonLSOA_transformed@data, crimenum_by_LSOA, by=c("LSOA11NM"="Var1"))
+```
+
+### Exploratory Plots
+```{r}
+# Plot barplot of crime type
+par(mar=c(15,6,4,1)+.1)
+barplot(table(df$Crime.type), main='London Crimes', xlab='Crime Type',ylab='Count',las =2)
+
+# Plot line chart crime x month
+crime_count_by_month <-data.frame(table(df$Month, df$Crime.type)) 
+names(crime_count_by_month) <- c("Month", "Crime.type","Freq")
+
+ggplot(crime_count_by_month, aes(x = Month, y = Freq, colour = Crime.type, group=Crime.type), main='Crime Count by Type')+
+  geom_line()+
+  geom_point()+ 
+  ggtitle("Crime Count in London")
+
+# Plot line chart without ASB and Violence
+crime_count_wo_ASB_V <- crime_count_by_month[!(crime_count_by_month$Crime.type=='Anti-social behaviour' |crime_count_by_month$Crime.type=='Violence and sexual offences'),]
+
+ggplot(crime_count_wo_ASB_V, aes(x = Month, y = Freq, colour = Crime.type, group=Crime.type), main='Crime Count by Type')+
+  geom_line()+
+  geom_point()+ 
+  ggtitle("Crime Count in London")
+
+# Plot Mosaicplot
+mosaicplot(main='Crime Proportions', table(df$Month, df$Crime.type))
+
+```
+
+### Get Crime Density Count Map
+```{r}
+# colour LSOA based on frequency values
+pal <- colorNumeric(
+  palette = "Blues",
+  domain = LondonLSOA_transformed$Freq)
+# colour LSOA based on colourquantiles
+qpal <- colorQuantile("Blues", LondonLSOA_transformed$Freq, n = 5)
+# colour LSOA based on bins
+binpal <- colorBin("Blues", LondonLSOA_transformed$Freq, 3, pretty = TRUE)
+
+# Plot crime map based on count density 
+LSOA_crimemap <- leaflet(LondonLSOA_transformed, width = "100%")%>% 
+  addProviderTiles(providers$CartoDB.Positron) %>% 
+  setView(lng = -0.118092, lat = 51.509865, zoom = 9)%>%
+  addPolygons(stroke = FALSE, smoothFactor = 0.2, fillOpacity = 1,
+    color = ~qpal(Freq)) %>% 
+  addPolygons(data=LondonLSOA_transformed, weight = 0.1, fillOpacity = 0,popup = paste("Region: ", LondonLSOA_transformed$LSOA11NM, "<br>",
+                          "Value: ", LondonLSOA_transformed$Freq, "<br>")) %>% 
+  addLegend(pal =qpal, values = LondonLSOA_transformed$Freq, opacity = 1, labFormat = function(type, cuts, p) {
+    n = length(cuts)
+    paste0(cuts[-n], " &ndash; ", cuts[-1])
+  })
+
+LSOA_crimemap
+```
+
+### Map pubs in london
+```{r}
+pubs <- readOGR("data/pubs.geojson", "OGRGeoJSON",require_geomType="wkbPoint")
+map <- leaflet() %>%
+  addProviderTiles(providers$CartoDB.Positron, group = "Base") %>% 
+  addCircleMarkers(
+    data = pubs,
+    radius = 1,
+    color = "red",
+    stroke = TRUE, fillOpacity = 1)
+
+map
+```
+
+### Create Maps for GIF
+```{r}
+months <- c("2017-01","2017-02","2017-03","2017-04","2017-05","2017-06","2017-07","2017-08","2017-09","2017-10","2017-11","2017-12")
+
+crime_types <- unique(df$Crime.type)
+
+for (crime_type in crime_types){
+  for (month in months){
+  single_crime_df <- subset(df, Crime.type == crime_type & Month == month)
+  single_crime_map <- leaflet(single_crime_df, width = "100%")%>% 
+  addProviderTiles(providers$CartoDB.Positron) %>% 
+  setView(lng = -0.118092, lat = 51.509865, zoom = 9)%>%
+  addCircleMarkers(radius =1, color = 'red', stroke = FALSE, fillOpacity = 0.5) %>% 
+  addLabelOnlyMarkers(lng = -0.5, lat = 51.7, label = month, 
+                      labelOptions = labelOptions(noHide = T, textOnly = T,style = list(
+        "color" = "black",
+        "font-family" = "source sans pro",
+        "font-style" = "bold",
+        "font-size" = "20px",
+        "border-color" = "rgba(0,0,0,0.5)"
+      )))
+  path <- sprintf("/GIFs/%s/%s_%s.png", crime_type, crime_type,month)
+  print(path)
+  mapshot(single_crime_map, file = paste0(getwd(), path, sep=""))
+}
+}
+
+```
+
+### Create GIFs
+```{r}
+
+library(purrr)
+library(magick)
+
+crime_types <- unique(df$Crime.type)
+
+for (crime_type in crime_types){
+  file_path = paste0(getwd(), sprintf("/GIFs/%s", crime_type), sep="")
+  list.files(path = file_path, pattern = "*.png", full.names = T) %>% 
+    map(image_read) %>% # reads each path file
+    image_join() %>% # joins image
+    image_animate(fps=2) %>% # animates, can opt for number of loops
+    image_write(sprintf("%s.gif",crime_type)) # write to current dir
+}
+
+```
