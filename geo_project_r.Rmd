@@ -6,7 +6,9 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo=FALSE,
+               cache=TRUE, autodep=TRUE, cache.comments=FALSE,
+               message=FALSE, warning=FALSE)
 setwd("~/Documents/UCL/SAG/geo_project")
 ```
 
@@ -18,6 +20,11 @@ library(dplyr)
 library(mapview)
 library(ggplot2)
 library(rgdal)
+library(spgwr)
+library(gstat)
+library(spdep)
+library(spatstat)
+library(maptools)
 ```
 
 ### Clean Data
@@ -28,22 +35,12 @@ metro_data <- read.csv(file=paste(getwd(),'/data/metro_street.csv',sep=''), head
 data <- rbind(COL_data, metro_data)
 load("boundaries/LondonLSOA")
 load("boundaries/LondonWards")
+projection <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
+LondonWards <- spTransform(LondonWards, projection)
+LondonLSOA <- spTransform(LondonLSOA, projection)
 
 # get crime df
 df <- subset(data, select=c("Crime.type", "LSOA.name","Longitude","Latitude","Month"))
-
-# get crime count by LSOA
-crimenum_by_LSOA <- data.frame(table(df$LSOA.name)) %>% na.omit()
-crimenum_by_LSOA$Var1 <- as.character(crimenum_by_LSOA$Var1)
-crimenum_by_LSOA <- crimenum_by_LSOA[!apply(crimenum_by_LSOA, 1, function(x) any(x=="")),] 
-
-# Transform to leaflet's CRS
-projection <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
-LondonWards_transformed <- spTransform(LondonWards, projection)
-LondonLSOA_transformed <- spTransform(LondonLSOA, projection)
-
-# get combined boundary + LSOA crime count data
-LondonLSOA_transformed@data <- left_join(LondonLSOA_transformed@data, crimenum_by_LSOA, by=c("LSOA11NM"="Var1"))
 ```
 
 ### Exploratory Plots
@@ -74,8 +71,17 @@ mosaicplot(main='Crime Proportions', table(df$Month, df$Crime.type))
 
 ```
 
-### Get Crime Density Count Map
+### Get Crime Density Count Map By LSOA
 ```{r}
+LondonLSOA_transformed <- LondonLSOA
+# get crime count by LSOA
+crimenum_by_LSOA <- data.frame(table(df$LSOA.name)) %>% na.omit()
+crimenum_by_LSOA$Var1 <- as.character(crimenum_by_LSOA$Var1)
+crimenum_by_LSOA <- crimenum_by_LSOA[!apply(crimenum_by_LSOA, 1, function(x) any(x=="")),] 
+
+# get combined boundary + LSOA crime count data
+LondonLSOA_transformed@data <- left_join(LondonLSOA_transformed@data, crimenum_by_LSOA, by=c("LSOA11NM"="Var1"))
+
 # colour LSOA based on frequency values
 pal <- colorNumeric(
   palette = "Blues",
@@ -101,11 +107,142 @@ LSOA_crimemap <- leaflet(LondonLSOA_transformed, width = "100%")%>%
 LSOA_crimemap
 ```
 
+### Violence and Sexual Offences  
+Violence and sexual offences (VSO) crime is chosen as it is one of the more severe crimes that bring about damage to people and property. Violence includes murder, kidnap, etc hence the level of severity of this nature of crime can be high. We want to understand more about these types of crimes in order to help understand and possibly predict the factors that contribute to this crime type.   
+```{r}
+# Get violence and sexual offences crimes only
+vs_df <- subset(df, Crime.type == 'Violence and sexual offences')
+vs_df <- vs_df[!is.na(vs_df$Longitude),]
+vs_df <- vs_df[!is.na(vs_df$Latitude),]
+```
+
+If we plot a year's worth of VSO on a map, we would get the following result:   
+```{r}
+# Violence and Sexual Offences Map 
+vs_dot_map <- leaflet(vs_df) %>% 
+    addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -0.118092, lat = 51.509865, zoom = 9)%>%
+  addCircleMarkers(radius =1, color = 'red', stroke = FALSE, fillOpacity = 0.5)
+
+vs_dot_map
+
+```
+This map is not very helpful in telling us much information about the crime nature. Hence, we employ some methods in point pattern analysis to help us understand more. 
+
+### Point Pattern Analysis
+```{r}
+# get ppp file
+london_shape <- readOGR('boundaries/greaterlondon.geojson')
+vs_spatial_points <-  vs_df
+coordinates(vs_spatial_points) <- ~Longitude+Latitude
+pts <- coordinates(vs_spatial_points)
+londonOwin <- as.owin(london_shape)
+vs_ppp <- ppp(pts[,1],pts[,2], window=londonOwin)
+
+# ggplot(data=vs_LSOA@data, aes(vs_LSOA$Freq)) + geom_histogram() + ggtitle('Violence and Sexual Assault Crimes in 2017') + ylab('Number of LSOAs') + xlab('Violence and Sexual Offences Occurrence')
+```
+
+Looking at the density plot below, we see that VSO is the most dense in the central part of London.
+```{r}
+# density plot
+ds <- density(vs_ppp)
+plot(ds, main='Violence and Sexual Offences')
+```
+
+To test for spatial clustering, we run ripley's K function and it indicates that there is a high level of clustering for VSO. 
+```{r}
+# ripley's k function
+ktest <- Kest(vs_ppp)
+plot(ktest)
+```
+However, this result is not very helpful. The sheer number of cases in central london as compared to everywhere else, skews ripley's K function -- there is clustering and the clustering happens in central london.   
+
+We could perhaps analyse VSO by LSOAs to ensure that the crime density is contained. 
+
+### Analysing by LSOA
+```{r}
+
+# Clean Data
+vs_LSOA <- LondonLSOA
+vs_num_by_LSOA <- data.frame(table(vs_df$LSOA.name)) %>% na.omit()
+vs_num_by_LSOA$Var1 <- as.character(vs_num_by_LSOA$Var1)
+vs_num_by_LSOA <- vs_num_by_LSOA[!apply(vs_num_by_LSOA, 1, function(x) any(x=="")),]
+vs_LSOA@data<- left_join(vs_LSOA@data, vs_num_by_LSOA, by=c("LSOA11NM"="Var1"))
+
+```
+Plotting VSO by LSOA, we get the following map:  
+```{r}
+# Plot map
+cc_colors <- c('#FFE80C','#FF7700','#E81501')
+cc_pal <- colorBin(
+  palette = cc_colors,
+  bins = c(0,10,100,2000),
+  na.color='black')
+
+pop_up_text = paste("Region: ", vs_LSOA$LSOA11NM, "<br>",
+                          "Value: ", vs_LSOA$Freq, "<br>")
+
+vs_LSOA_map <- leaflet(vs_LSOA) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -0.118092, lat = 51.509865, zoom = 9)%>%
+  addPolygons(stroke = FALSE, smoothFactor = 0.2, fillOpacity = 1,
+    color = ~cc_pal(Freq), popup = pop_up_text) %>% 
+  addLegend("bottomright", 
+    colors= cc_colors, 
+    labels=c('0-10', "10-100","100-2000"),
+    opacity= 1)
+
+vs_LSOA_map
+```
+From this map, it is clear that only certain LSOAs have a high VSO count. Many of them are in central london, but it is not as widespread as in the previous map. We can also see an obvious outlier in the far left of London -- Hillingdon. 
+
+### Analysing Factors that Contribute to VSO
+```{r}
+### Clean census data
+#https://data.london.gov.uk/dataset/lsoa-atlas
+lsoa_census <- read.csv('data/lsoa_data_edited.csv')
+lsoa_census$house_price <- as.numeric(lsoa_census$house_price)
+lsoa_census_2 <- read.csv('data/lsoa_data_edited_2.csv')
+lsoa_census <- left_join(lsoa_census, lsoa_census_2, by=c("Codes"="Codes",
+                                                          "Names" = "Names"))
+vs_census <-  vs_LSOA
+vs_census@data <- left_join(vs_census@data, lsoa_census, by=c("LSOA11CD" = "Codes"))
+vs_census.W <- nb2listw(poly2nb(vs_census))
+
+# run durbin model
+vs.durbin <- lagsarlm(Freq ~ X0.15 + X16.29 + X30.44 + X45.64 + X65. + Working.age + person_per_hectare + couple_w_children + white + uk_born + household_no_english + Christian + Buddhist + Hindu + Jewish + Muslim + Sikh + other_religion + no_religion + owned_outright + social_rented + private_rented + household_at_least_one_usual_resident + household_no_usual_resident + whole_house + apartment + house_price + unemployment_rate + bad_health + no_cars_in_household + poor_transport_access + household_income, data = vs_census@data, listw = vs_census.W, type = 'mixed')
+
+summary(vs.durbin)
+```
+**Here are the results**
+Significant and negatively correlated:  
+X0.15, X16.29, X45.64, X65, person_per_hectare, owned_outright, household_at_least_one_usual_resident, apartment, poor_transport_access                    
+
+Significant and positively correlated:  
+Christian, Buddhist, Hindu, Jewish, Muslim, no_religion, private-rented, household_no_usual_resident, unemployment_rate , no_cars_in_household , household_income                                         
+
+
+### Extra code below 
+
 ### Map pubs in london
 ```{r}
+library("raster")
+library("sp")
+pubs <- readOGR("data/pubs.geojson", "OGRGeoJSON",require_geomType="wkbPoint")
+pubs <- spTransform(pubs, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
+
+plot(LondonLSOA)
+plot(pubs, col="red" , add=TRUE)
+l <- LondonLSOA
+l@data <- subset(l@data,select=c('LSOA11NM'))
+res <- sp::over(pubs, l)
+
+res <- poly.counts(pubs,LondonLSOA)
+setNames(res, LondonLSOA@data$lala)
+
 pubs <- readOGR("data/pubs.geojson", "OGRGeoJSON",require_geomType="wkbPoint")
 map <- leaflet() %>%
-  addProviderTiles(providers$CartoDB.Positron, group = "Base") %>% 
+  addProviderTiles(providers$CartoDB.Positron, group = "Base") %>%
   addCircleMarkers(
     data = pubs,
     radius = 1,
@@ -114,6 +251,7 @@ map <- leaflet() %>%
 
 map
 ```
+![](outputs/GIFs/all_gifs/Anti-social behaviour.gif)
 
 ### Create Maps for GIF
 ```{r}
@@ -124,11 +262,11 @@ crime_types <- unique(df$Crime.type)
 for (crime_type in crime_types){
   for (month in months){
   single_crime_df <- subset(df, Crime.type == crime_type & Month == month)
-  single_crime_map <- leaflet(single_crime_df, width = "100%")%>% 
-  addProviderTiles(providers$CartoDB.Positron) %>% 
+  single_crime_map <- leaflet(single_crime_df, width = "100%")%>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
   setView(lng = -0.118092, lat = 51.509865, zoom = 9)%>%
-  addCircleMarkers(radius =1, color = 'red', stroke = FALSE, fillOpacity = 0.5) %>% 
-  addLabelOnlyMarkers(lng = -0.5, lat = 51.7, label = month, 
+  addCircleMarkers(radius =1, color = 'red', stroke = FALSE, fillOpacity = 0.5) %>%
+  addLabelOnlyMarkers(lng = -0.5, lat = 51.7, label = month,
                       labelOptions = labelOptions(noHide = T, textOnly = T,style = list(
         "color" = "black",
         "font-family" = "source sans pro",
@@ -154,7 +292,7 @@ crime_types <- unique(df$Crime.type)
 
 for (crime_type in crime_types){
   file_path = paste0(getwd(), sprintf("/GIFs/%s", crime_type), sep="")
-  list.files(path = file_path, pattern = "*.png", full.names = T) %>% 
+  list.files(path = file_path, pattern = "*.png", full.names = T) %>%
     map(image_read) %>% # reads each path file
     image_join() %>% # joins image
     image_animate(fps=2) %>% # animates, can opt for number of loops
