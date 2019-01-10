@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo=FALSE,
                cache=TRUE, autodep=TRUE, cache.comments=FALSE,
                message=FALSE, warning=FALSE)
-setwd("~/Documents/UCL/SAG/geo_project")
+setwd("~/Documents/UCL/Term_1/SAG/geo_project")
 ```
 
 ```{r}
@@ -27,20 +27,14 @@ library(spatstat)
 library(maptools)
 ```
 
-### Clean Data
 ```{r}
-# Load crime and boundary data
-COL_data <- read.csv(file=paste(getwd(),'/data/COL_street.csv',sep=''), header=TRUE, sep="\t")
-metro_data <- read.csv(file=paste(getwd(),'/data/metro_street.csv',sep=''), header=TRUE, sep="\t")
-data <- rbind(COL_data, metro_data)
+# load necessary data
 load("boundaries/LondonLSOA")
 load("boundaries/LondonWards")
 projection <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
 LondonWards <- spTransform(LondonWards, projection)
 LondonLSOA <- spTransform(LondonLSOA, projection)
-
-# get crime df
-df <- subset(data, select=c("Crime.type", "LSOA.name","Longitude","Latitude","Month"))
+load("df.Rda") #crime df
 ```
 
 ### Exploratory Plots
@@ -109,6 +103,7 @@ LSOA_crimemap
 
 ### Violence and Sexual Offences  
 Violence and sexual offences (VSO) crime is chosen as it is one of the more severe crimes that bring about damage to people and property. Violence includes murder, kidnap, etc hence the level of severity of this nature of crime can be high. We want to understand more about these types of crimes in order to help understand and possibly predict the factors that contribute to this crime type.   
+
 ```{r}
 # Get violence and sexual offences crimes only
 vs_df <- subset(df, Crime.type == 'Violence and sexual offences')
@@ -155,21 +150,21 @@ To test for spatial clustering, we run ripley's K function and it indicates that
 ktest <- Kest(vs_ppp)
 plot(ktest)
 ```
+
 However, this result is not very helpful. The sheer number of cases in central london as compared to everywhere else, skews ripley's K function -- there is clustering and the clustering happens in central london.   
 
 We could perhaps analyse VSO by LSOAs to ensure that the crime density is contained. 
 
 ### Analysing by LSOA
 ```{r}
-
 # Clean Data
 vs_LSOA <- LondonLSOA
 vs_num_by_LSOA <- data.frame(table(vs_df$LSOA.name)) %>% na.omit()
 vs_num_by_LSOA$Var1 <- as.character(vs_num_by_LSOA$Var1)
 vs_num_by_LSOA <- vs_num_by_LSOA[!apply(vs_num_by_LSOA, 1, function(x) any(x=="")),]
 vs_LSOA@data<- left_join(vs_LSOA@data, vs_num_by_LSOA, by=c("LSOA11NM"="Var1"))
-
 ```
+
 Plotting VSO by LSOA, we get the following map:  
 ```{r}
 # Plot map
@@ -196,15 +191,110 @@ vs_LSOA_map
 ```
 From this map, it is clear that only certain LSOAs have a high VSO count. Many of them are in central london, but it is not as widespread as in the previous map. We can also see an obvious outlier in the far left of London -- Hillingdon. 
 
+```{r}
+load("lsoa_census.Rda")
+vs_census <-  vs_LSOA
+vs_census@data <- left_join(vs_census@data, lsoa_census, by=c("LSOA11CD" = "Codes"))
+vs_census$total_pop <- vs_census$X0.15 + vs_census$X16.29 + vs_census$X30.44 + vs_census$X45.64 + vs_census$X65.
+
+vs_census$freq_pop <-  vs_census$Freq / vs_census$total_pop * 1000 #crime per 1000 people
+
+binpal <- colorBin("Blues", vs_census$freq_pop, 3, pretty = FALSE)
+
+# Plot map
+cc_colors <- c('#FFA2A2','#FF7676','#C11010')
+cc_pal <- colorBin(
+  palette = cc_colors,
+  bins = c(0,20,40,1000),
+  na.color='black')
+
+pop_up_text = paste("Region: ", vs_census$LSOA11NM, "<br>",
+                          "Value: ", vs_census$freq_pop, "<br>")
+
+vs_LSOA_crime_pop_map <- leaflet(vs_census) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -0.118092, lat = 51.509865, zoom = 9)%>%
+  addPolygons(stroke = FALSE, smoothFactor = 0.2, fillOpacity = 1,
+    color = ~cc_pal(freq_pop), popup = pop_up_text) %>% 
+  addLegend("bottomright",
+    title = 'Crime Count per 1000 people',
+    colors= cc_colors, 
+    labels=c('0-20', "20-40","40-700"),
+    opacity= 1)
+
+vs_LSOA_crime_pop_map
+
+```
+#### Just City of London 001F ####
+```{r}
+top_10 <-  data.frame(vs_census@data[order(-vs_census$freq_pop)[1:20], "Names"])
+top_10$freq_pop <- vs_census@data[order(-vs_census$freq_pop)[1:20], "freq_pop"]
+
+COL001F_shp <- vs_LSOA[vs_LSOA$LSOA11NM == 'City of London 001F',]
+
+## plot points of occurrence
+COL001F_ll <- vs_df[vs_df$LSOA.name == 'City of London 001F',]
+COL001F_ll <- subset(COL001F_ll, select=c("Longitude", "Latitude"))
+points <- SpatialPoints(COL001F_ll)
+plot(COL001F_shp)
+plot(points, add= TRUE , col = 'red', pch = 16)
+
+
+
+H031A_shp <- vs_LSOA[vs_LSOA$LSOA11NM == 'Hillingdon 031A',]
+H031A_ll <- vs_df[vs_df$LSOA.name == 'Hillingdon 031A',]
+H031A_ll <- subset(H031A_ll, select=c("Longitude", "Latitude"))
+
+H031A_map <- leaflet(H031A_ll) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addCircleMarkers(radius = 1, color = 'blue') %>% 
+  addPolygons(data = H031A_shp, weight = 1) 
+
+H031A_map
+
+
+# plot kernel density plot 
+COL001F_latlong <- vs_df[vs_df$LSOA.name == 'City of London 001F',]
+coordinates(COL001F_latlong) <- ~Longitude+Latitude
+pts <- coordinates(COL001F_latlong)
+COL001F_Owin <- as.owin(COL001F_shp)
+COL001F_ppp <- ppp(pts[,1],pts[,2], window=COL001F_Owin)
+COL001F_den <- density(COL001F_ppp)
+plot(COL001F_den, main='City of London 001F')
+
+# Do they mostly occur on roads?
+# If on roads, is it on public transport -- buses and tubes?
+# Do they mostly occur near pubs?
+# Do they mostly occur near transport interchanges? (tube stations) https://www.doogal.co.uk/london_stations.php
+#https://mapcruzin.com/free-england-arcgis-maps-shapefiles.htm
+
+# plot with background
+london_stns <- read.csv('boundaries/London stations.csv')
+pubs <- readOGR("data/pubs.geojson", "OGRGeoJSON",require_geomType="wkbPoint")
+roads <- readOGR("boundaries/england-roads-shape/roads.shp")
+COL001F_map <- leaflet(COL001F_ll) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -0.090900, lat = 51.511751, zoom = 14)%>%
+  addCircleMarkers(radius = 1, color = 'blue') %>% 
+  addPolygons(data = COL001F_shp, weight = 1) %>% 
+  addCircleMarkers(data = london_stns, radius = 1, color = 'yellow', opacity = 1) %>% 
+  addCircleMarkers(data = pubs, radius = 1, color = 'red')
+
+COL001F_map
+
+```
+
 ### Analysing Factors that Contribute to VSO
 ```{r}
 ### Clean census data
 #https://data.london.gov.uk/dataset/lsoa-atlas
-lsoa_census <- read.csv('data/lsoa_data_edited.csv')
-lsoa_census$house_price <- as.numeric(lsoa_census$house_price)
-lsoa_census_2 <- read.csv('data/lsoa_data_edited_2.csv')
-lsoa_census <- left_join(lsoa_census, lsoa_census_2, by=c("Codes"="Codes",
-                                                          "Names" = "Names"))
+# lsoa_census <- read.csv('data/lsoa_data_edited.csv')
+# lsoa_census$house_price <- as.numeric(lsoa_census$house_price)
+# lsoa_census_2 <- read.csv('data/lsoa_data_edited_2.csv')
+# lsoa_census <- left_join(lsoa_census, lsoa_census_2, by=c("Codes"="Codes",
+#                                                           "Names" = "Names"))
+# save(lsoa_census,file="lsoa_census.Rda")
+load("lsoa_census.Rda")
 vs_census <-  vs_LSOA
 vs_census@data <- left_join(vs_census@data, lsoa_census, by=c("LSOA11CD" = "Codes"))
 vs_census.W <- nb2listw(poly2nb(vs_census))
@@ -220,8 +310,6 @@ X0.15, X16.29, X45.64, X65, person_per_hectare, owned_outright, household_at_lea
 
 Significant and positively correlated:  
 Christian, Buddhist, Hindu, Jewish, Muslim, no_religion, private-rented, household_no_usual_resident, unemployment_rate , no_cars_in_household , household_income                                         
-
-
 ### Extra code below 
 
 ### Map pubs in london
@@ -299,4 +387,22 @@ for (crime_type in crime_types){
     image_write(sprintf("%s.gif",crime_type)) # write to current dir
 }
 
+```
+
+
+### Clean Data
+```{r}
+# Load crime and boundary data
+COL_data <- read.csv(file=paste(getwd(),'/data/COL_street.csv',sep=''), header=TRUE, sep="\t")
+metro_data <- read.csv(file=paste(getwd(),'/data/metro_street.csv',sep=''), header=TRUE, sep="\t")
+data <- rbind(COL_data, metro_data)
+load("boundaries/LondonLSOA")
+load("boundaries/LondonWards")
+projection <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
+LondonWards <- spTransform(LondonWards, projection)
+LondonLSOA <- spTransform(LondonLSOA, projection)
+
+# get crime df
+df <- subset(data, select=c("Crime.type", "LSOA.name","Longitude","Latitude","Month"))
+save(df,file="df.Rda")
 ```
