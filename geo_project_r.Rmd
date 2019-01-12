@@ -2,7 +2,14 @@
 title: "Spatial Analysis of Crime Patterns in London"
 author: "Ng Jia Wen & Junju Ng"
 date: "28/10/2018"
-output: html_document
+output:
+  bookdown::html_document2:
+    number_sections: true
+  bookdown::pdf_document2:
+    number_sections: true
+bibliography: library.bib
+biblio-style: apalike
+link-citations: yes
 editor_options: 
   chunk_output_type: console
 ---
@@ -14,30 +21,6 @@ knitr::opts_chunk$set(echo=FALSE,
 #setwd("~/Documents/UCL/Term_1/SAG/geo_project")
 
 ```
-
-### Introduction (problem definition, background, brief lit review)
-Crime (and the prevention of and response to crime) is associated with significant social and economic costs. In England and Wales, the total cost of crimes against individuals and businesses is £50.1 billion and £8.7 billion respectively in 2015/16 alone (Brand and Price, 2014). A significant portion of these costs are incurred in London, given that about 20% of crimes in England and Wales occurs in London (Mayor of London, 2016). 
-
-Consequently, much work has been done to understand the occurrence of crime, and to predict crime. To date, the spatial concentration of crime in cities is well-established in the literature (Andresen and Malleson, 2011). (Sherman et al., 1989)'s seminal analysis of predatory crime in Minneapolis revealed that 50% of police calls come from 3% of street segments, indicating that crime hotspots, down to the street level, are present within cities. Recent works have thus focussed on trying to improve spatial analysis techniques for crime. Specifically, (Chainey et al., 2008) examined the use of different hotspot mapping techniques to predict spatial patterns of crime in Camden and Islington local authority district areas in London. Other workers (e.g. (Cheng and Williams, 2012)) have been working on developing techniques to examine spatial-temporal patterns of crime, in order to understand how crime develops and evolves to improve crime prediction. 
-
-Given that a significant portion of crimes in England and Wales occurs in London and the occurrence of crime is non-random, this study will therefore examine spatial crime patterns in London. Specifically, this study aims to answer three main questions: 1) can crime types be spatially correlated? 2) where do crime types occur? 3) what factors are associated with the occurrence of different types of crime? 
-
-
-#### Study area
-
-London is a thriving metropolis in the United Kingdom with a population of 8.8 million. However, beyond the large residential population, London also attracts a huge number of visitors, with more than 56 million overnight stays from tourists in 2016 (Mayor of London, 2016). 
-(insert picture of study area)
-
-### Data description (justify choice of data and provide sources)
-Official geocoded crime data from London is required to analyse spatial patterns of crime. To this end, crime data in London for a 1-year period (1 January 2017 to 31 December 2017) from the Metropolitan Police and the City of London Police was used for this study. These data are taken from the Metropolitan Police and the City of London Police because they are the two police forces covering the London and Greater London area. The data was obtained via the police.uk website as a CSV file. Whilst most crimes are geocoded, some reported crimes do not have a location and are therefore excluded from the analysis. The effect on excluding crimes without locations from the analysis is anticipated to be minimal, as these crimes only form a small proportion of reported crimes (5.3% for the City of London Police, and 1.2% for the Metropolitan Police).
-
-The geocoded crime data are categorised into 14 crime types: anti-social behaviour, bicycle theft, burglary, criminal damage and arson, drugs, other crime, other theft, possession of weapons, public order, robbery, shoplifting, theft from a person, vehicle crime, and violence and sexual offences. 
- 
-In addition, geomasking techniques were applied to the data to reduce their spatial accuracy for privacy purposes. However, analysis by (Tompson et al., 2015) reveals that at the lower super output area (LSOA) level, 85% of areas exhibited no statistically significant difference between the masked and raw crime data. Hence, analysis of patterns in crime will predominantly be conducted at the LSOA level in this study. 
-
-2011 census data at the LSOA level was also obtained from the London Datastore, to examine the demographic factors that may contribute to the occurrence of crimes. These demographic characteristics include information such as age, ethnicity, income levels. (edit later).
-
-Also have pubs data, transport data.
 
 ```{r}
 # Load libraries
@@ -54,7 +37,37 @@ library(spatstat)
 library(maptools)
 library(tmap)
 library(knitr)
+library(bookdown)
 ```
+
+# Introduction (problem definition, background, brief lit review)
+Crime (and the prevention of and response to crime) is associated with significant social and economic costs. In England and Wales, the total cost of crimes against individuals and businesses is £50.1 billion and £8.7 billion respectively in 2015/16 alone [@Brand2014]. A significant portion of these costs are incurred in London, given that about 20% of crimes in England and Wales occurs in London [@MayorofLondon2016]. 
+
+Consequently, much work has been done to understand the occurrence of crime, and to predict crime. To date, the spatial concentration of crime in cities is well-established in the literature [@Malleson2016]. [@Sherman1989]'s seminal analysis of predatory crime in Minneapolis revealed that 50% of police calls come from 3% of street segments, indicating that crime hotspots, down to the street level, are present within cities. Recent works have thus focussed on trying to improve spatial analysis techniques for crime. Specifically, [@Chainey2008] examined the use of different hotspot mapping techniques to predict spatial patterns of crime in Camden and Islington local authority district areas in London. Other workers (e.g.[@Cheng2012]) have been working on developing techniques to examine spatial-temporal patterns of crime, in order to understand how crime develops and evolves to improve crime prediction. 
+
+Given that a significant portion of crimes in England and Wales occurs in London and the occurrence of crime is non-random, this study will therefore examine spatial crime patterns in London. Specifically, this study aims to answer three main questions: 1) can crime types be spatially correlated? 2) where do crime types occur? 3) what factors are associated with the occurrence of different types of crime? 
+
+## Study area
+
+London is a thriving metropolis in the United Kingdom with a population of 8.8 million. However, beyond the large residential population, London also attracts a huge number of visitors, with more than 56 million overnight stays from tourists in 2016 [@MayorofLondon2016]. 
+
+London consists of 33 local government districts (32 London Boroughs and the City of London). The City of London Police is the police force responsible for law enforcement within the City of London while the Metropolitan Police Service is reponsible for policing the Greater London region, excluding the City of London. 
+(insert picture of study area)
+
+# Data description (justify choice of data and provide sources)
+Official geocoded crime data from London is required to analyse spatial patterns of crime. To this end, crime data in London for a 1-year period (1 January 2017 to 31 December 2017) from the Metropolitan Police and the City of London Police was used for this study. These data are taken from the Metropolitan Police and the City of London Police because they are the two police forces covering the London and Greater London area. The data was obtained via the police.uk website as a CSV file. Whilst most crimes are geocoded, some reported crimes do not have a location and are therefore excluded from the analysis. The effect on excluding crimes without locations from the analysis is anticipated to be minimal, as these crimes only form a small proportion of reported crimes (5.3% for the City of London Police, and 1.2% for the Metropolitan Police).
+
+The geocoded crime data are categorised into 14 crime types: anti-social behaviour, bicycle theft, burglary, criminal damage and arson, drugs, other crime, other theft, possession of weapons, public order, robbery, shoplifting, theft from a person, vehicle crime, and violence and sexual offences. 
+ 
+In addition, geomasking techniques were applied to the data to reduce their spatial accuracy for privacy purposes. Specifically, each crime is mapped to its nearest map point on the master list of map points kept by the Home Office [@Office2019]. However, analysis by [@Tompson2015] reveals that at the lower super output area (LSOA) level, 85% of areas exhibited no statistically significant difference between the masked and raw crime data. Hence, analysis of patterns in crime will predominantly be conducted at the LSOA level in this study. 
+
+2011 census data at the LSOA level was also obtained from the London Datastore, to examine the demographic factors that may contribute to the occurrence of crimes. These demographic characteristics include information such as age, ethnicity, income levels. (edit later). 
+
+Also have pubs data, transport data.
+
+Description of what LSOAs are
+
+
 
 ```{r}
 # load necessary data
@@ -64,15 +77,25 @@ projection <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
 LondonWards <- spTransform(LondonWards, projection)
 LondonLSOA <- spTransform(LondonLSOA, projection)
 load("df.Rda") #crime df
+
+# remove crime reports with no location from df
+df <- df[!is.na(df$Longitude),]
+df <- df[!is.na(df$Latitude),]
 ```
 
-### Exploratory Spatial Data Analysis
-This section will examine the ...
+# Exploratory Spatial Data Analysis
+An exploratory analysis of the crime data will be conducted in this section.
 
-```{r}
+A total of 1,048,712 crimes were reported in 2017. Of these crimes, 1,035,826 (98.7%) have a location. As discussed previously, only the geocoded crimes will be used in the analysis.
+
+## Variations in Crime by Type
+
+The barplot below depicts the frequency of crimes by crime type in London in 2017 (\@ref(fig:barplot)). Over 40% of reported crimes in London come from 2 categories - antisocial behaviour (22.0%) and violence and sexual offences (20.7%). The next two most significant crime types making up 20% of crimes are other theft (10.5%) and vehicle crime (10.0%). The remaining 10 crime types make up the remaining 36.9% of crimes. As such, different types of crimes are reported at different frequencies, with antisocial behaviour and violence and sexual offences being the most commonly reported crimes, followed by vehicle crime and other theft.
+
+```{r barplot, echo=FALSE, fig.cap="2017 London frequency of crimes by crime type"}
 # Plot barplot of crime type
 par(mar=c(8, 4.1, 4.1, 2.1))
-barplot(table(df$Crime.type),las=2, ylab="Frequency", cex.names=0.6, cex.axis=0.6, cex.lab=0.6, main="Frequency of crimes in London")
+barplot(table(df$Crime.type),las=2, ylab="Frequency", cex.names=0.6, cex.axis=0.6, cex.lab=0.6, main="Crime Count in London by Type")
 text(0.7, 220000, "227995", cex = 0.6)
 text(1.9,28000,"21450", cex=0.6)
 text(3.1,83000,"75801", cex=0.6)
@@ -89,11 +112,15 @@ text(15.1,110000,"103237", cex=0.6)
 text(16.3,205000,"214104", cex=0.6)
 ```
 
-```{r}
-# Plot barplot of crime type
-par(mar=c(15,6,4,1)+.1)
-barplot(table(df$Crime.type), main='London Crimes', xlab='Crime Type',ylab='Count',las =2)
+## Variations in Crime by Type and Month
 
+A line graph of crime count by type and month (\@ref(fig:linegraph)) is plotted to examine temporal patterns in crime in London across the year. \@ref(fig:linegraph_noASBVSO) depicts a similar graph, without anti-social behaviour and violence and sexual offences, in order to better observe trends in the other crime types. 
+
+From \@ref(fig:linegraph), it is evident that the frequency of some crime types varies throughout the year. For instance, reports of anti-social behaviour appear to peak in July and August. Burglary reports appear to increase between October and January, while bicycle theft reports appear to increase between May and October (\@ref(fig:linegraph_noASBVSO)).
+
+DO WE INCLUDE THE DISCUSSION OF THE TEMPORAL VARIATIONS??? - NOT SURE IF VARIATIONS ARE SIGNIFICANT
+
+```{r linegraph, echo=FALSE, fig.cap="2017 London crime count by type and month"}
 # Plot line chart crime x month
 crime_count_by_month <-data.frame(table(df$Month, df$Crime.type)) 
 names(crime_count_by_month) <- c("Month", "Crime.type","Freq")
@@ -101,8 +128,12 @@ names(crime_count_by_month) <- c("Month", "Crime.type","Freq")
 ggplot(crime_count_by_month, aes(x = Month, y = Freq, colour = Crime.type, group=Crime.type), main='Crime Count by Type')+
   geom_line()+
   geom_point()+ 
-  ggtitle("Crime Count in London")
+  ggtitle("Crime Count in London by Type and Month")
 
+```
+
+
+```{r linegraph_noASBVSO, echo=FALSE, fig.cap="2017 London crime count by type and month (excluding anti-social behaviour and violence and sexual offences"}
 # Plot line chart without ASB and Violence
 crime_count_wo_ASB_V <- crime_count_by_month[!(crime_count_by_month$Crime.type=='Anti-social behaviour' |crime_count_by_month$Crime.type=='Violence and sexual offences'),]
 
@@ -111,13 +142,35 @@ ggplot(crime_count_wo_ASB_V, aes(x = Month, y = Freq, colour = Crime.type, group
   geom_point()+ 
   ggtitle("Crime Count in London")
 
+```
+
+
+```{r}
 # Plot Mosaicplot
-mosaicplot(main='Crime Proportions', table(df$Month, df$Crime.type))
+#mosaicplot(main='Crime Proportions', table(df$Month, df$Crime.type))
+```
+
+## Variations in Crime by LSOA
+
+Crime counts are also examined by LSOA, in order to study the distribution of crime in London. From \@ref(fig:lsoacrimecount) and \@ref(tab:LSOA_stats), it is evident that crime counts vary significantly between LSOAs. Few LSOAs have extremely high crime counts, while 50% of LSOAs have crime counts between 64 and 211. Consequently, the quantiles classification scheme will be used to map the distribution of crime counts across London. 
+
+```{r lsoacrimecount, echo=FALSE, fig.cap="2017 London crime counts by LSOA"}
+# get crime count by LSOA
+barplot(table(df$LSOA.name),las=2, ylab="Frequency", xlab = NA, cex.names=0.6, cex.axis=0.6, cex.lab=0.6, main="Frequency of crimes in London by LSOA")
+```
+
+```{r LSOA_stats}
+LSOA_stats <- matrix(c(1.0, 64.0, 127.0, 175.3, 211.0, 7329.0), ncol=1, byrow=TRUE)
+rownames(LSOA_stats) <- c("Minimum","1st Quartile","Median","Mean","3rd Quartile","Maximum")
+colnames(LSOA_stats) <- c("Value")
+LSOA_stats <- kable(LSOA_stats, caption="Crime Count Statistics by LSOA")
+LSOA_stats
 
 ```
 
-### Get Crime Density Count Map By LSOA
-```{r}
+Crime count maps are plotted to visualise the spatial distribution of crime across London. The crime count map (Figure \@ref(fig:crimecountmap)) illustrates the total number of reported crimes in each LSOA in 2017. This allows for the visualisation of regions with the highest number of crimes. By visual inspection, crime counts are highest in central London, although some regions with higher crime counts are present along the river Thames in East London, along the Lea Valley and in Hillingdon. However, as crime counts do not consider that LSOAs have unequal areas, and thus do not give an accurate representation of crime density.
+
+```{r crimecountmap, echo=FALSE, fig.cap="2017 London crime count map by LSOA"}
 LondonLSOA_transformed <- LondonLSOA
 # get crime count by LSOA
 crimenum_by_LSOA <- data.frame(table(df$LSOA.name)) %>% na.omit()
@@ -152,12 +205,62 @@ LSOA_crimemap <- leaflet(LondonLSOA_transformed, width = "100%")%>%
 
 LSOA_crimemap
 
-#plot crime density count map
+#plot crime count map
 tmap_mode("view")
-tm_shape(LondonLSOA_transformed)+ tm_polygons(col="Freq", palette="YlOrRd", style = "jenks")
+tmap_mode("plot")
+tm_shape(LondonLSOA_transformed)+ tm_layout("Crime counts by LSOA") +tm_polygons(col="Freq", palette="Blues", style = "quantile", border.col='transparent', title = "Crime counts") 
 ```
 
-### Violence and Sexual Offences  
+Consequently, a crime rate map (Figure \@ref(fig:crimeratemap)), derived by taking the crime count divided by the resident population in the corresponding LSOA, are plotted, to obtain an estimate of crime density. No significant difference between the crime rate and crime count maps is observed.
+
+These crime rate maps allow for the assessment of the risk of crime in each LSOA [@Brantingham1997]. However, it is to be noted that residential populations are used to calculate crime rate. Thus, regions with a low residential population (but high pedestrian population e.g. commercial areas) would have an inflated crime rate. 
+
+```{r crimeratemap, echo=FALSE, fig.cap="2017 London crime rate map by LSOA"}
+load("lsoa_census.Rda")
+census <-  LondonLSOA_transformed
+census@data <- left_join(census@data, lsoa_census, by=c("LSOA11CD" = "Codes"))
+census$total_pop <- census$X0.15 + census$X16.29 + census$X30.44 + census$X45.64 + census$X65.
+#census[is.na(census$Freq)]<- 0 #set Freq = 0 for LSOAs with no crimes
+
+census$freq_pop <-  census$Freq / census$total_pop * 1000 #crime per 1000 people
+
+binpal <- colorBin("Blues", census$freq_pop, 3, pretty = FALSE)
+
+# Plot map
+cc_colors <- c('#FFA2A2','#FF7676','#C11010')
+cc_pal <- colorBin(
+  palette = cc_colors,
+  bins = c(0,20,40,1000),
+  na.color='black')
+
+pop_up_text = paste("Region: ", census$LSOA11NM, "<br>",
+                          "Value: ", census$freq_pop, "<br>")
+
+LSOA_crime_pop_map <- leaflet(census) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -0.118092, lat = 51.509865, zoom = 9)%>%
+  addPolygons(stroke = FALSE, smoothFactor = 0.2, fillOpacity = 1,
+    color = ~cc_pal(freq_pop), popup = pop_up_text) %>% 
+  addLegend("bottomright",
+    title = 'Crime Count per 1000 people',
+    colors= cc_colors, 
+    labels=c('0-20', "20-40","40-700"),
+    opacity= 1)
+
+LSOA_crime_pop_map
+
+tm_shape(census)+ tm_layout("Crime rates by LSOA") + tm_polygons(col="freq_pop", palette="YlOrRd", style = "quantile", border.col='transparent', title = "Crime rates")
+
+# Missing data here because no residential areas in those census tracts
+
+```
+
+# Methodology
+
+
+# Results and discussion
+
+## Violence and Sexual Offences  
 Violence and sexual offences (VSO) crime is chosen as it is one of the more severe crimes that bring about damage to people and property. Violence includes murder, kidnap, etc hence the level of severity of this nature of crime can be high. We want to understand more about these types of crimes in order to help understand and possibly predict the factors that contribute to this crime type.   
 
 ```{r}
@@ -247,7 +350,7 @@ vs_LSOA_map <- leaflet(vs_LSOA) %>%
 
 vs_LSOA_map
 
-tm_shape(vs_LSOA)+ tm_polygons(col="Freq", palette="YlOrRd", style = "jenks")
+tm_shape(vs_LSOA)+ tm_polygons(col="Freq", palette="YlOrRd", style = "quantile")
 ```
 From this map, it is clear that only certain LSOAs have a high VSO count. Many of them are in central london, but it is not as widespread as in the previous map. We can also see an obvious outlier in the far left of London -- Hillingdon. 
 
@@ -287,7 +390,7 @@ vs_LSOA_crime_pop_map <- leaflet(vs_census) %>%
 
 vs_LSOA_crime_pop_map
 
-tm_shape(vs_census)+ tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks")
+tm_shape(vs_census)+ tm_polygons(col="freq_pop", palette="YlOrRd", style = "quantile")
 
 # Missing data here because no residential areas in those census tracts
 
@@ -461,7 +564,7 @@ tm_shape(vs_LSOA) + tm_polygons(col="Ii_cluster")
 
 ```
 
-### Analyse vehicle crime data
+## Analyse vehicle crime data
 Vehicle crime is chosen for further analysis as it is one of the relatively higher crime rates (excluding violence and sexual offences). The pattern of distribution is also slightly different from that of violence and sexual offences hence we are interested in seeing if there are differences in the factors associated with the occurrence of vehicle crime.
 ```{r}
 # get only vehicle crime
@@ -587,7 +690,7 @@ LSOA_vehiclemap
 
 #plot vehiclemap
 tmap_mode("view")
-tm_shape(LondonLSOA_transformed_vehicle)+ tm_polygons(col="Freq", palette="Greens", style = "jenks", n=3)
+tm_shape(LondonLSOA_transformed_vehicle)+ tm_polygons(col="Freq", palette="Greens", style = "quantile", n=3)
 ```
 We can see that highest vehicle crime rates are north of the river Thames (mostly along the river)
 Two major hotspots near the airports (Heathrow and London City). Central London (Marylebone, Mayfair) and Kensington also have relatively higher rates. Some pattern near Lea Valley? Also have high rates near Brent.
@@ -632,7 +735,7 @@ vehicle_LSOA_crime_pop_map <- leaflet(vehicle_census) %>%
 
 vehicle_LSOA_crime_pop_map
 
-tm_shape(vehicle_census)+ tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks")
+tm_shape(vehicle_census)+ tm_polygons(col="freq_pop", palette="YlOrRd", style = "quantile")
 
 # Missing data here because no residential areas in those census tracts
 
@@ -867,99 +970,99 @@ Number of parameters estimated: 65
 AIC: 38123, (AIC for lm: 38701)
 
 
-### Extra code below 
+<!-- ### Extra code below  -->
 
-### Map pubs in london
-```{r}
-library("raster")
-library("sp")
-pubs <- readOGR("data/pubs.geojson", "OGRGeoJSON",require_geomType="wkbPoint")
-pubs <- spTransform(pubs, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
+<!-- ### Map pubs in london -->
+<!-- ```{r} -->
+<!-- library("raster") -->
+<!-- library("sp") -->
+<!-- pubs <- readOGR("data/pubs.geojson", "OGRGeoJSON",require_geomType="wkbPoint") -->
+<!-- pubs <- spTransform(pubs, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0")) -->
 
-plot(LondonLSOA)
-plot(pubs, col="red" , add=TRUE)
-l <- LondonLSOA
-l@data <- subset(l@data,select=c('LSOA11NM'))
-res <- sp::over(pubs, l)
+<!-- plot(LondonLSOA) -->
+<!-- plot(pubs, col="red" , add=TRUE) -->
+<!-- l <- LondonLSOA -->
+<!-- l@data <- subset(l@data,select=c('LSOA11NM')) -->
+<!-- res <- sp::over(pubs, l) -->
 
-res <- poly.counts(pubs,LondonLSOA)
-setNames(res, LondonLSOA@data$lala)
+<!-- res <- poly.counts(pubs,LondonLSOA) -->
+<!-- setNames(res, LondonLSOA@data$lala) -->
 
-pubs <- readOGR("data/pubs.geojson", "OGRGeoJSON",require_geomType="wkbPoint")
-map <- leaflet() %>%
-  addProviderTiles(providers$CartoDB.Positron, group = "Base") %>%
-  addCircleMarkers(
-    data = pubs,
-    radius = 1,
-    color = "red",
-    stroke = TRUE, fillOpacity = 1)
+<!-- pubs <- readOGR("data/pubs.geojson", "OGRGeoJSON",require_geomType="wkbPoint") -->
+<!-- map <- leaflet() %>% -->
+<!--   addProviderTiles(providers$CartoDB.Positron, group = "Base") %>% -->
+<!--   addCircleMarkers( -->
+<!--     data = pubs, -->
+<!--     radius = 1, -->
+<!--     color = "red", -->
+<!--     stroke = TRUE, fillOpacity = 1) -->
 
-map
-```
-![](outputs/GIFs/all_gifs/Anti-social behaviour.gif)
+<!-- map -->
+<!-- ``` -->
+<!-- ![](outputs/GIFs/all_gifs/Anti-social behaviour.gif) -->
 
-### Create Maps for GIF
-```{r}
-months <- c("2017-01","2017-02","2017-03","2017-04","2017-05","2017-06","2017-07","2017-08","2017-09","2017-10","2017-11","2017-12")
+<!-- ### Create Maps for GIF -->
+<!-- ```{r} -->
+<!-- months <- c("2017-01","2017-02","2017-03","2017-04","2017-05","2017-06","2017-07","2017-08","2017-09","2017-10","2017-11","2017-12") -->
 
-crime_types <- unique(df$Crime.type)
+<!-- crime_types <- unique(df$Crime.type) -->
 
-for (crime_type in crime_types){
-  for (month in months){
-  single_crime_df <- subset(df, Crime.type == crime_type & Month == month)
-  single_crime_map <- leaflet(single_crime_df, width = "100%")%>%
-  addProviderTiles(providers$CartoDB.Positron) %>%
-  setView(lng = -0.118092, lat = 51.509865, zoom = 9)%>%
-  addCircleMarkers(radius =1, color = 'red', stroke = FALSE, fillOpacity = 0.5) %>%
-  addLabelOnlyMarkers(lng = -0.5, lat = 51.7, label = month,
-                      labelOptions = labelOptions(noHide = T, textOnly = T,style = list(
-        "color" = "black",
-        "font-family" = "source sans pro",
-        "font-style" = "bold",
-        "font-size" = "20px",
-        "border-color" = "rgba(0,0,0,0.5)"
-      )))
-  path <- sprintf("/GIFs/%s/%s_%s.png", crime_type, crime_type,month)
-  print(path)
-  mapshot(single_crime_map, file = paste0(getwd(), path, sep=""))
-}
-}
+<!-- for (crime_type in crime_types){ -->
+<!--   for (month in months){ -->
+<!--   single_crime_df <- subset(df, Crime.type == crime_type & Month == month) -->
+<!--   single_crime_map <- leaflet(single_crime_df, width = "100%")%>% -->
+<!--   addProviderTiles(providers$CartoDB.Positron) %>% -->
+<!--   setView(lng = -0.118092, lat = 51.509865, zoom = 9)%>% -->
+<!--   addCircleMarkers(radius =1, color = 'red', stroke = FALSE, fillOpacity = 0.5) %>% -->
+<!--   addLabelOnlyMarkers(lng = -0.5, lat = 51.7, label = month, -->
+<!--                       labelOptions = labelOptions(noHide = T, textOnly = T,style = list( -->
+<!--         "color" = "black", -->
+<!--         "font-family" = "source sans pro", -->
+<!--         "font-style" = "bold", -->
+<!--         "font-size" = "20px", -->
+<!--         "border-color" = "rgba(0,0,0,0.5)" -->
+<!--       ))) -->
+<!--   path <- sprintf("/GIFs/%s/%s_%s.png", crime_type, crime_type,month) -->
+<!--   print(path) -->
+<!--   mapshot(single_crime_map, file = paste0(getwd(), path, sep="")) -->
+<!-- } -->
+<!-- } -->
 
-```
+<!-- ``` -->
 
-### Create GIFs
-```{r}
+<!-- ### Create GIFs -->
+<!-- ```{r} -->
 
-library(purrr)
-library(magick)
+<!-- library(purrr) -->
+<!-- library(magick) -->
 
-crime_types <- unique(df$Crime.type)
+<!-- crime_types <- unique(df$Crime.type) -->
 
-for (crime_type in crime_types){
-  file_path = paste0(getwd(), sprintf("/GIFs/%s", crime_type), sep="")
-  list.files(path = file_path, pattern = "*.png", full.names = T) %>%
-    map(image_read) %>% # reads each path file
-    image_join() %>% # joins image
-    image_animate(fps=2) %>% # animates, can opt for number of loops
-    image_write(sprintf("%s.gif",crime_type)) # write to current dir
-}
+<!-- for (crime_type in crime_types){ -->
+<!--   file_path = paste0(getwd(), sprintf("/GIFs/%s", crime_type), sep="") -->
+<!--   list.files(path = file_path, pattern = "*.png", full.names = T) %>% -->
+<!--     map(image_read) %>% # reads each path file -->
+<!--     image_join() %>% # joins image -->
+<!--     image_animate(fps=2) %>% # animates, can opt for number of loops -->
+<!--     image_write(sprintf("%s.gif",crime_type)) # write to current dir -->
+<!-- } -->
 
-```
+<!-- ``` -->
 
 
-### Clean Data
-```{r}
-# Load crime and boundary data
-COL_data <- read.csv(file=paste(getwd(),'/data/COL_street.csv',sep=''), header=TRUE, sep="\t")
-metro_data <- read.csv(file=paste(getwd(),'/data/metro_street.csv',sep=''), header=TRUE, sep="\t")
-data <- rbind(COL_data, metro_data)
-load("boundaries/LondonLSOA")
-load("boundaries/LondonWards")
-projection <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
-LondonWards <- spTransform(LondonWards, projection)
-LondonLSOA <- spTransform(LondonLSOA, projection)
+<!-- ### Clean Data -->
+<!-- ```{r} -->
+<!-- # Load crime and boundary data -->
+<!-- COL_data <- read.csv(file=paste(getwd(),'/data/COL_street.csv',sep=''), header=TRUE, sep="\t") -->
+<!-- metro_data <- read.csv(file=paste(getwd(),'/data/metro_street.csv',sep=''), header=TRUE, sep="\t") -->
+<!-- data <- rbind(COL_data, metro_data) -->
+<!-- load("boundaries/LondonLSOA") -->
+<!-- load("boundaries/LondonWards") -->
+<!-- projection <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") -->
+<!-- LondonWards <- spTransform(LondonWards, projection) -->
+<!-- LondonLSOA <- spTransform(LondonLSOA, projection) -->
 
-# get crime df
-df <- subset(data, select=c("Crime.type", "LSOA.name","Longitude","Latitude","Month"))
-save(df,file="df.Rda")
-```
+<!-- # get crime df -->
+<!-- df <- subset(data, select=c("Crime.type", "LSOA.name","Longitude","Latitude","Month")) -->
+<!-- save(df,file="df.Rda") -->
+<!-- ``` -->
