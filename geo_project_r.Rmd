@@ -95,6 +95,12 @@ df <- df[!is.na(df$Latitude),]
 # Methodology
 
 
+Vehicle data was first plotted in terms of crime count and crime count per 1000 resident population. As the data appears to have regional groups, hence use Moran's I to test for spatial autocorrelation
+- elaborate on Moran's I
+- local Moran
+
+Regions then analysed using Google Map imagery. Further supplemented with OpenStreetMap data.
+
 # Exploratory Spatial Data Analysis
 An exploratory analysis of the crime data will be conducted in this section.
 
