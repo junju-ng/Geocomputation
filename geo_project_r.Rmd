@@ -225,14 +225,39 @@ tm_shape(census)+ tm_layout("Crime rates by LSOA") + tm_polygons(col="freq_pop",
 # Missing data here because no residential areas in those census tracts
 
 ```
+
+
 # Methodology
+Based on our exploratory data analysis, different crime types have different counts and spatial variations. As such, we have decided to analyse 2 different crime types in isolation: Violence and Sexual Offences (VSO), and Vehicle crime.
+
+VSO is one of the most commonly reported, as well as the more severe crimes that bring about damage to people and property. Vehicle crime is chosen due to its unique nature in that it can be committed without direct contact with the victim, unlike violence and sexual offences which often requires direct contact with the victim, thus making a interesting constrast to the study. 
+
+As the 2 crime types have its own spatial pattern and are likely to be caused by different factors, the methodology that we undertake will be different for each of them. 
+
+## Methods in Violence and Sexual Offences
+A spatial point pattern analysis was done on the City of London 001F LSOA. 
+
+The process is as follows: 
+
+1. Test if point pattern is homogeneous: Quadrat Counting
+  Point process was found to be non-homogeneous hence, Kernel Density Estimation was employed to identify      areas with high intensity. 
+2. Identify high intensity areas: Kernel Density Estimation 
+  Hypothesis: VSO crimes correlate with locations of entertainment outlets (pubs, bars & restaurants)
+3. Test hypothesis: Inhomogeneous K cross function
+  
+
+### Quadrat Counting
+Dirichlet Tessellation
+Chi-sq
+### Kernel Density Estimation
+### Inhomogenous K cross function
+Monte Carlo Simulation
+
+
+
 
 # Results and discussion
 
-Two crime types, violence and sexual offences, and vehicle crime have been used for further analysis.
-Further analysis of violence and sexual offences will be conducted, as is one of the most commonly reported, as well as more severe crimes that bring about damage to people and property. Vehicle crime is chosen for further analysis as it is one of the more commonly reported crimes (excluding violence and sexual offences). The nature of vehicle crime is also different from that of violence and sexual offences, as vehicle crime relates to the theft of and/or from vehicles [@Flatley2017]. Consequently, vehicle crime can be committed without direct contact with the victim, unlike violence and sexual offences which often requires direct contact with the victim.  
-
-As the nature of violence and sexual offences, and vehicle crime differs, comparisons between the spatial distribution of the two crime types in London will also allow for better understanding of the factors influencing the occurrence of these two crimes.
 
 This section will present the results of the analysis of the spatial distribution of the two crime types: violence and sexual offences, and vehicle crime.
 
@@ -316,6 +341,7 @@ By plotting the spatial distribution of the crimes on a map, we can make our fir
 H1. VSO crimes are randomly distributed in the City of London 001F LSOA    
 ```{r}
 ## plot map of COL001F
+tmap_mode("plot")
 tm_shape(roads)+
   tm_lines(col= 'grey', lwd=1.0)+ #
   tm_layout(legend.bg.color="white",
@@ -356,10 +382,10 @@ COL001F_den <- density(COL001F_ppp)
 plot(COL001F_den, main='City of London 001F')
 ```
 From the map, clusters of VSO crime seem to occur North-East of City of London 001F. To understand why this is so, we can study the area in more detail (red box).    
-![](google_map/COL001F_Hotspot_box.png)  
+![](pictures/COL001F_Hotspot_box.png)  
 The street level view reveals a hotspot of 67 VSO crimes in the region. 
 
-![](google_map/COL001F_Hotspot.png)
+![](pictures/COL001F_Hotspot.png)
 
 Based on visual inspection alone, the offences seem to congregate around public entertainment outlets (orange markers above). Here, we construct a third hypothesis.   
 
