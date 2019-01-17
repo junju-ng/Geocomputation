@@ -223,6 +223,80 @@ tm_shape(census) + tm_polygons(col="freq_pop", palette="YlGnBu", style = "jenks"
 \pagebreak
 
 # Methodology
+Based on our exploratory data analysis, different crime types have different counts and spatial variations. As such, we have decided to analyse 2 different crime types in isolation: Violence and Sexual Offences (VSO), and Vehicle crime.
+
+VSO is one of the most commonly reported, as well as the more severe crimes that bring about damage to people and property. Vehicle crime is chosen due to its unique nature in that it can be committed without direct contact with the victim, unlike violence and sexual offences which often requires direct contact with the victim, thus making it an interesting constrast to the study. 
+
+As the 2 crime types have its own spatial pattern and are likely to be caused by different factors, the methodology that we undertake will be different for each of them. 
+
+## Methods in Analysing Violence and Sexual Offences
+A spatial point pattern analysis was done on the City of London 001F (COL001F) LSOA. 
+
+Two hypotheses were made in the process of analysing VSO crime patterns in the LSOA:
+
+    H1. VSO crimes are randomly distributed in COL001F 
+
+    H2. VSO crime locations positively correlate with the locations of entertainment outlets
+
+The reason for these hypotheses will be made clearer in section 5.1. 
+
+Here is the methodology employed to investigate the hypotheses: 
+
+1. Test H1 with Quadrat Counting
+    + If homogenous, find out if there is clustering with Ripley's K Function. 
+        - If there is clustering, H1 is rejected.
+        - If not, H1 is accepted.
+    + If non-homogenous, use Kernel Density Estimation to identify areas with high intensity. 
+        - H1 is rejected.
+
+2. Test H2 with Inhomogenous K cross function 
+    + If Inhomogenous K cross function reveals positive correlation, H2 is accepted.
+    + If Inhomogenous K cross function reveals no correlation, H2 is rejected.
+    + If Inhomogenous K cross function reveals negative correlation, H2 is rejected. 
+
+The following statistical methods were used in the process:
+
+1. Quadrat Counting
+    
+    To check for homogeneity is to determine whether regions of equal area contain roughly equal number of points.
+    
+    ![Picture 1 shows Quadrat counting for Swedish Pines data. Left: Quadrat counts. Right intensity. [@Baddeley2016]](pictures/quadratcount.png)
+    
+    In quadrat counting, the observation window W is divided into subregions $B_{1},...,B_{m}$ called quadrats. The numbers of points falling in each quadrat is counted. If the spatial point process is homogeneous, the intensity for each quadrat should be equal 'on average'-- the expected count in each quadrat is proportional to the area of the quadrat. Otherwise, the spatial point process is inhomogeneous. [@Baddeley2016]
+    
+
+2. Chi-sq test
+    
+    The Chi-sq test is used to determine whether there is a significance difference between the observed number points and the expected number of points in each quadrats, where chi-squared can be computed via:
+    
+    $\chi^2=\sum_{i=1}^m\frac{(k_i-\bar{\lambda})^2}{\bar{\lambda}}$
+    
+    If there is a significant difference, then we can reject the null hypothesis that the spatial point process is homogeneous as it is not behaving in the way it is expected to behave. 
+    
+4. Kernel Density Estimation
+
+    Kernel Density Estimation (KDE) is a method for estimating the probability density function of a random variable. It can be used to extract the relative likelihood of obtaining a particular value on a random drawn. In spatial analysis, KDE can be used to estimate how the density of a point process varies across space. [@Haworth2018]
+    
+    A KDE can be written as:
+    $\hat{f}(x,y)=\frac{1}{nh^2}\sum_{i=1}^nk_s(\frac{x-x_i}{h_s}\frac{y-y_i}{h_s})$
+    
+    where $n$ is the number of points; $x_{i}$ and $y_{i}$ are the coordinates of the point $i$, $i$ = 1,2, ... , $n$; $h_{s}$ is the bandwidth of a spatial kernel $k_{s}$.
+
+5. Inhomogenous K cross function
+    
+    The inhomogenous K cross function measures whether 2 spatial point patterns are correlated, with the assumption that the spatial point patterns are inhomogenous. 
+    
+    $K_{ij}(r) = \frac{1}{\lambda_{j}}E[t(u,r,X^{j} | u \epsilon X^{i} )]$
+    
+    For any pair of types $i$ and $j$, the multitype K-function $K_{ij}(r)$, also called the bivariate or cross-type K-function, is the expected number of points of type $j$ lying within a distance $r$ of a typical point of type $i$, standardised by dividing by the intensity of points of type $j$, adjusted for spatially varying intensity. [@Baddeley2016] 
+    
+    
+6. Monte-Carlo Simulation
+    
+    The monte-carlo simulation is used to generate 100 simulations of a point pattern according to a specified probability distribution, in order to test whether the result from a test is statistically significant.
+
+
+## Methods in Analysing Vehicle Crime
 
 Vehicle data was first mapped in terms of crime count and crime count per 1000 resident population. These choropleth maps were produced using the jenks classification scheme, to accentuate the variance between classes, and minimise the variance within each class. Visual inspection of the maps suggests that vehicle crime rates appear to concentrate in regions. Thus, the Moran's I was used to test for spatial autocorrelation.
 
@@ -247,6 +321,7 @@ The expectation of \(I_i\) is \(\frac{-w_i}{(n-1)}\), where \(-w_i=\sum_{j}w_{ij
 
 The areas with high vehicle crime rates and which are statistically significant high-high clusters are then analysed using Google Map imagery. Further analysis is also conducted with industrial landuse data from OpenStreetMap.
 \pagebreak
+
 
 # Results and discussion
 
@@ -275,6 +350,7 @@ vs_census$freq_pop <-  vs_census$Freq / vs_census$total_pop * 1000 #crime per 10
 ```
 
 By plotting the occurrence of violence and sexual offences per 1000 people on a chloropeth, we get the following map below:   
+
 ```{r}
 tm_shape(vs_census) + 
   tm_polygons(col = 'freq_pop', 
@@ -286,10 +362,11 @@ tm_shape(vs_census) +
               title.position = c("right", "bottom")
               ) 
 ```
+
 This map shows us that VSO crimes are mainly concentrated in central london, with a few LSOAs having mid-range crime density dispersed across london. 
 
 Ranking the LSOAs by crime density, we obtain the following rank table, showing the top 20 LSOAs with the highest crime rates (crime count per 1000 people): 
-```{r}
+```{r top20}
 top_20 <-  data.frame(vs_census@data[order(-vs_census$freq_pop)[1:20], "Names"])
 #top_10_ <-  data.frame(vs_census@data[order(-vs_census$Freq)[1:20], "Names"])
 top_20$freq_pop <- vs_census@data[order(-vs_census$freq_pop)[1:20], "freq_pop"]
@@ -297,10 +374,10 @@ colnames(top_20) <- c('LSOA name','Crime Rate')
 kable(top_20, caption = '20 LSOAs with the highest crime rates')
 ```
 
-We select the City of London 001F (COL001F) to do our analysis as it has the highest crime density.   
+We select the City of London 001F (COL001F) to do our analysis as it has the highest crime density. We are also interested to investigate why this is so.   
 
 ### Analysing Violence and Sexual Offences in City of London 001F
-```{r}
+```{r clean-vso-data}
 ######################## Clean data ###########################
 COL001F_shp <- vs_LSOA[vs_LSOA$LSOA11NM == 'City of London 001F',]
 COL001F_roads <- readOGR('boundaries/COL001F_roads/COL001F_roads.shp')
@@ -315,7 +392,7 @@ unique_points <- SpatialPoints(unique_COL001F_ll)
 wgs <- '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0'
 proj4string(points) <- CRS(wgs)
 proj4string(unique_points) <- CRS(wgs)
-COL001F_roads <- spTransform(COL001F_roads, CRS(wgs))
+proj4string(COL001F_roads) <- CRS(wgs)
 
 # get elements within LSOA boundary
 roads <- gIntersection(COL001F_shp, COL001F_roads)
@@ -330,20 +407,24 @@ for (i in 1:nrow(points@coords)){
   rownames(points@coords)[i] <- i
 }
 ```
-By plotting the spatial distribution of the crimes on a map, we can make our first hypothesis:  
+By plotting the spatial distribution of the crimes on a map (see \@ref(fig:COL001F_map_w_roads)), we can make our first hypothesis: 
+
 H1. VSO crimes are randomly distributed in the City of London 001F LSOA    
-```{r}
+
+
+```{r COL001F-map_w-roads}
 ## plot map of COL001F
-# tm_shape(roads)+
-#   tm_lines(col= 'grey', lwd=1.0)+ #
-#   tm_layout(legend.bg.color="white",
-#             title="Roads in City of London 001F",
-#             title.position = c("left", "top"), fontfamily = 'Arial') +
-# tm_shape(unique_points)+
-#   tm_dots(size = 0.1, col = 'red', alpha = 1)
+tmap_mode("plot")
+tm_shape(roads)+
+  tm_lines(col= 'grey', lwd=1.0)+ #
+  tm_layout(legend.bg.color="white",
+            title="Roads in City of London 001F",
+            title.position = c("left", "top"), fontfamily = 'Arial') +
+tm_shape(unique_points)+
+  tm_dots(size = 0.1, col = 'red', alpha = 1)
 ```
    
-```{r}
+```{r COL001F-ppp}
 ### Get ppp object
 points_ll <-  data.frame(points@coords)
 coordinates(points_ll) <- ~x+y
@@ -351,40 +432,43 @@ pts <- coordinates(points_ll)
 COL001F_Owin <- as.owin(COL001F_shp)
 COL001F_ppp <- ppp(pts[,1],pts[,2], window=COL001F_Owin)
 ```
-To test for H1, we employ the use of quadrat counting.  In our case, as our area of interest is in the shape of the LSOA itself (not a regular shape), the quadrats are determined by dirichlet tessallation.      
-```{r}
+To test for H1, we employ the use of quadrat counting. If the spatial pattern is homogeneous, each quadrat should have roughly the same amount of intensity (points per area).      
+```{r COL001F-homo}
 ### test for homogeneity 
-B <- dirichlet(COL001F_ppp)
-qX <- quadratcount(COL001F_ppp, tess=B)
+qX <- quadratcount(COL001F_ppp, nx = 8 , ny = 4)
 plot(COL001F_ppp, pch=16)
-plot(qX, add = TRUE, lty=2, cex = 0, col = 'transparent') 
+plot(qX, add = TRUE, lty=2, cex = 0, col = 'red') 
 ```
   
 A chi-sq test  gives the following results:   
-```{r}
-qt <- quadrat.test(COL001F_ppp, tess = B)
+```{r COL001F-homo-chisq}
+qt <- quadrat.test(COL001F_ppp, nx = 8, ny = 4)
 qt
 ```
   
 As the p-value is less than 0.05, it rejects the null hypothesis that the crimes are homogeneous.   
 
 Next, we use the Kernel Density Estimation to visualise the different intensities of the VSO crime on the map.      
-```{r}
+```{r COL001F-KDE}
 COL001F_den <- density(COL001F_ppp)
 plot(COL001F_den, main='City of London 001F')
 ```
+
 From the map, clusters of VSO crime seem to occur North-East of City of London 001F. To understand why this is so, we can study the area in more detail (red box).    
-![](google_map/COL001F_Hotspot_box.png)  
+
+![](pictures/COL001F_Hotspot_box.png)  
+
 The street level view reveals a hotspot of 67 VSO crimes in the region. 
 
-![](google_map/COL001F_Hotspot.png)
+![](pictures/COL001F_Hotspot.png)
 
-Based on visual inspection alone, the offences seem to congregate around public entertainment outlets (orange markers above). Here, we construct a third hypothesis.   
+Based on visual inspection alone, the offences seem to congregate around public entertainment outlets (orange markers above). Here, we construct a second hypothesis.   
 
 H2: The location of VSO crimes correlate with the location of entertainment outlets.      
 
-We define entertainment outlets here to be: restaurants, bars and pubs. With open street map, we can extract the locations of these outlets and visualise them on a map, alongside the VSO crimes:    
-```{r}
+We define entertainment outlets here to be: restaurants, bars and pubs. With open street map, we can extract the locations of these outlets and visualise them on a map, alongside the VSO crimes:   
+
+```{r COL001F-redbluedotmap}
 # get COL001F osm data
 COL001F_nodes_ways <- readRDS(file = "COL001F_nodes_ways.rds")
 
@@ -423,7 +507,7 @@ tm_add_legend(
   
 Visually, the map seems to agree with our hypothesis. VSO crime locations seem to correlate with locations of entertainment outlets. We can perform an inhomogeneous kcross function to determine their spatial relationship.   
 
-```{r}
+```{r COL001F-kcross}
 ##### prepare data for kcross #####
 # create joint pubs_points df
 POIs_type <- rep('POIs', nrow(POIs@coords))
@@ -444,8 +528,9 @@ plot(kc)
   
 The inhomogeneous kcross function tells us that there is in fact, a repulsive spatial relationship between the location of VSO crimes and the location of entertainment outlets (lines below the blue line) -- VSO crimes do not cluster around entertainment outlets.  
 
-Running a monte-carlo simulation tells us whether this observation is statistically significant:     
-```{r}
+Running a monte-carlo simulation tells us whether this observation is statistically significant:  
+
+```{r COL001F-kcross-monte}
 Kcross.inhom_monte_carlo <- envelope(POIspoints_ppp, fun = Kcross.inhom, nsim =100, i = 'POIs', j = 'crime')
 plot(Kcross.inhom_monte_carlo)
 ```
@@ -457,7 +542,7 @@ This finding is surprising because we expected the 2 variables to be attractive.
 So although the 2 variables seem to be occurring in the 'same place', they are in fact brought together because of the spatial structure of the environment. The presence of parks and buildings 'forces' the points to go along in a particular direction. This means if we plot other variables on the map as well (for example: other crimes or locations of supermarkets, etc.), their spatial locations may appear similar too -- avoiding the spaces that can't be occupied (parks, private spaces and buildings) and occupying the spaces that can be.     
 Just out of curiosity, we can do simple tabulation of the number of VSO crimes that happen on the streets. 
 
-```{r results = 'asis'}
+```{r COL001F-roads-intersect, results = 'asis'}
 ### Clean data for buffer to work ####
 tmerc <- "+proj=tmerc +lat_0=42.5 +lon_0=-72.5 +k=0.9999642857142857 +x_0=500000 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0"
 points <- spTransform(points, CRS(tmerc))
@@ -468,11 +553,12 @@ buffered_points <- gBuffer(points, width = 5, byid=TRUE)
 points_on_roads <- gIntersects(roads,buffered_points, byid=TRUE)
 kable(table(points_on_roads), caption = 'Points on the streets')
 ```
-`r round(table(points_on_roads)['TRUE']/sum(table(points_on_roads))*100)`% of VSO crimes happen on the streets.   
 
-The repulsive relationship between VSO crimes and entertainment outlets (bars, pubs and restaurants) is still surprising though and we are uncertain why this is so. Perhaps these are places people usually go to with a group of friends of family and hence it is more difficult for perpatrators to commit VSOs? These are also places with high visibility therefore perpatrators do not dare to commit VSOs? VSOs at bars and pubs are also likely to go unreported, because of the nature of their environments? Or perhaps it could be because of a related variable that causes this repulsive relationship. Clearly, more analysis and research is needed in this area. 
+The results show that **`r round(table(points_on_roads)['TRUE']/sum(table(points_on_roads))*100)`%** of VSO crimes happen on the streets. This may support our guess that the spatial pattern of the VSO crimes is heavily influenced by the spatial structure of the environment. 
 
-```{r}
+The repulsive relationship between VSO crimes and entertainment outlets (bars, pubs and restaurants) is still surprising though and we are uncertain why this is so. Perhaps these are places people usually go to with a group of friends of family and hence it is more difficult for perpatrators to commit VSOs? These are also places with high visibility therefore perpatrators do not dare to commit VSOs? VSOs at bars and pubs are also likely to go unreported, because of the nature of their environments? Or perhaps it could be because of a related variable that causes this repulsive relationship? Clearly, more analysis and research is needed in this area. 
+
+```{r H031A-map}
 
 #### Just Hillingdon 031A #### 
 H031A_shp <- vs_LSOA[vs_LSOA$LSOA11NM == 'Hillingdon 031A',] 
@@ -489,7 +575,7 @@ H031A_map
 ```
 
 ## Analysing Vehicle Crime
-Vehicle crime refers to any theft, tampering, or interference with motor vehicles [@HomeOffice2019]. It is chosen for further analysis as it has one of the relatively higher crime rates. The nature of the crime also contrasts that of violence and sexual offences, as it does not require direct contact with the victim.
+Vehicle crime refers to any theft, tampering, or interference with motor vehicles [@Office2019]. It is chosen for further analysis as it has one of the relatively higher crime rates. The nature of the crime also contrasts that of violence and sexual offences, as it does not require direct contact with the victim.
 
 ```{r}
 # get only vehicle crime
