@@ -3,15 +3,15 @@ title: "Spatial Analysis of Crime Patterns in London"
 author: "Ng Jia Wen & Junju Ng"
 date: "28/10/2018"
 output:
-  bookdown::pdf_document2:
-    number_sections: true
-    keep_tex: yes
-    toc: true
   bookdown::html_document2:
     number_sections: true
     keep_tex: yes
     toc: true
     theme: united
+  bookdown::pdf_document2:
+    number_sections: true
+    keep_tex: yes
+    toc: true
 bibliography: library.bib
 biblio-style: apalike
 always_allow_html: yes
@@ -73,7 +73,7 @@ library(bookdown)
 \pagebreak
 
 # Introduction  
-Crime (and its prevention and responses) is associated with significant social and economic costs. In England and Wales, the total cost of crimes against individuals and businesses is £50.1 billion and £8.7 billion respectively in 2015/16 alone [@Brand2014]. A significant portion of these costs are incurred in London, given that about 20% of crimes in England and Wales occurs in London [@MayorofLondon2016]. 
+Crime (and its prevention and responses) is associated with significant social and economic costs. In England and Wales, the total cost of crimes against individuals and businesses is ?50.1 billion and ?8.7 billion respectively in 2015/16 alone [@Brand2014]. A significant portion of these costs are incurred in London, given that about 20% of crimes in England and Wales occurs in London [@MayorofLondon2016]. 
 
 Consequently, much work has been done to understand the occurrence of crime, and to predict crime. To date, the spatial concentration of crime in cities is well-established in the literature [@Malleson2016]. [@Sherman1989]'s seminal analysis of predatory crime in Minneapolis revealed that 50% of police calls come from 3% of street segments, indicating that crime hotspots, down to the street level, are present within cities. Recent works have thus focussed on trying to improve spatial analysis techniques for crime. Specifically, [@Chainey2008] examined the use of different hotspot mapping techniques to predict spatial patterns of crime in Camden and Islington local authority district areas in London. Other researchers have been working on developing techniques to examine spatial-temporal patterns of crime [@Cheng2012], in order to understand how crime develops and evolves to improve crime prediction. 
 
@@ -318,7 +318,9 @@ The areas with high vehicle crime rates and which are statistically significant 
 
 # Results and discussion
 
-Two crime types, violence and sexual offences, and vehicle crime have been used for further analysis. Vehicle crime refers to any theft, tampering, or interference with motor vehicles [@Office2019].
+Two crime types, violence and sexual offences (VSO), and vehicle crime have been used for further analysis. 
+
+VSO crime is defined to be offences against the person such as common assaults, Grievous Bodily Harm and sexual offences while vehicle crime refers to any theft, tampering, or interference with motor vehicles [@Office2019].
 
 As the nature of violence and sexual offences, and vehicle crime differs, examination of the spatial distribution of the two crime types in London will allow for better understanding of the factors influencing the occurrence of these two crimes.
 
@@ -369,7 +371,7 @@ kable(top_20, caption = '20 LSOAs with the highest crime rates')
 
 We select the City of London 001F (COL001F) to do our analysis as it has the highest crime density. We are also interested to investigate why this is so.   
 
-### Analysing Violence and Sexual Offences in City of London 001F
+### Analysing Violence and Sexual Offences on a Local Scale (City of London 001F)
 ```{r clean-vso-data}
 ######################## Clean data ###########################
 COL001F_shp <- vs_LSOA[vs_LSOA$LSOA11NM == 'City of London 001F',]
@@ -408,13 +410,13 @@ H1. VSO crimes are randomly distributed in the City of London 001F LSOA
 ```{r COL001Fmapwroads, echo=FALSE, fig.cap="City of London 001F LSOA Map with Roads"}
 ## plot map of COL001F
 tmap_mode("plot")
-# tm_shape(roads)+
-#   tm_lines(col= 'grey', lwd=1.0)+ #
-#   tm_layout(legend.bg.color="white",
-#             title="Roads in City of London 001F",
-#             title.position = c("left", "top"), fontfamily = 'Arial') +
-# tm_shape(unique_points)+
-#   tm_dots(size = 0.1, col = 'red', alpha = 1)
+tm_shape(roads)+
+  tm_lines(col= 'grey', lwd=1.0)+ #
+  tm_layout(legend.bg.color="white",
+            title="Roads in City of London 001F",
+            title.position = c("left", "top"), fontfamily = 'Arial') +
+tm_shape(unique_points)+
+  tm_dots(size = 0.1, col = 'red', alpha = 1)
 ```
    
 ```{r COL001F-ppp}
@@ -550,6 +552,14 @@ kable(table(points_on_roads), caption = 'Points on the streets')
 The results show that **`r round(table(points_on_roads)['TRUE']/sum(table(points_on_roads))*100)`%** of VSO crimes happen on the streets. This may support our hypothesis that the spatial pattern of the VSO crimes is heavily influenced by the spatial structure of the environment. 
 
 The repulsive relationship between VSO crimes and entertainment outlets (bars, pubs and restaurants) is still surprising though and we are uncertain why this is so. Perhaps these are places people usually go to with a group of friends of family and hence it is more difficult for perpatrators to commit VSOs? These are also places with high visibility therefore perpatrators do not dare to commit VSOs? VSOs at bars and pubs are also likely to go unreported, because of the nature of their environments? Or perhaps it could be because of a related variable that causes this repulsive relationship? Clearly, more analysis and research is needed in this area. 
+
+### Discussion & Limitations
+
+Our first hypothesis was that VSO crimes are randomly distributed in COL001F LSOA but through our analysis, we have shown that VSO crimes are in fact inhomogeneous. This was uncovered by the use of quadrat counts. 
+
+While this is a quick and dirty way of determining homogeneity, the limitation of this is that quadrats near the borders of the LSOA can be haphazardly cut off. This introduces biasness in the data as quadrats with a smaller area will definitely have lesser crimes. The validity of quadrat counting is also dependent on the size of the quadrats. However, these biases can be significantly reduced if we minimise the number of quadrats with areas that are haphazardly cut off. Quadrats also perhaps, do not need to be the same size. We may wish to deem a seemingly inhomogeneous pattern homogeneous, if we wish to account for the presence of private buildings and residential areas where VSO crimes are unlikely to occur. Customising each quadrat's size may enable us to get around this. 
+
+Our second hypothesis was that VSO crimes are positively correlated with entertainment outlets and this was proven to be false -- they in fact have a repulsive relationship. The reason for this is not known but we can come up with several explanations why this may be so. We can also cross-check this by using other statistical methods like pair-correlation cross function (pcfcross) to see if the results match. In this study, the size of the dataset is a limitation and the results may be more accurate (assuming that this interaction is consistent) or even be subjected to change, if we analyse a bigger area like a Middle Layer Super Output Area (MSOA) or a borough. 
 
 ```{r H031A-map}
 
