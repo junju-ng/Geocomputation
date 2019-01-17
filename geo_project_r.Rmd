@@ -6,6 +6,7 @@ output:
   bookdown::pdf_document2:
     number_sections: true
     keep_tex: yes
+    toc: true
   bookdown::html_document2:
     number_sections: true
     keep_tex: yes
@@ -267,11 +268,11 @@ The following statistical methods were used in the process:
     
     $\chi^2=\sum_{i=1}^m\frac{(k_i-\bar{\lambda})^2}{\bar{\lambda}}$
     
-    If there is a significant difference, then we can reject the null hypothesis that the spatial point process is homogeneous as it is not behaving in the way it is expected to behave. 
+    If there is a significant difference, then we can reject the null hypothesis that the spatial point process is homogeneous. 
     
 4. Kernel Density Estimation
 
-    Kernel Density Estimation (KDE) is a method for estimating the probability density function of a random variable. It can be used to extract the relative likelihood of obtaining a particular value on a random drawn. In spatial analysis, KDE can be used to estimate how the density of a point process varies across space. [@Haworth2018]
+    Kernel Density Estimation (KDE) estimates the probability density function of a random variable. It is used to help us visualise how the density of a point pattern varies over space. [@Haworth2018]
     
     A KDE can be written as:
     $\hat{f}(x,y)=\frac{1}{nh^2}\sum_{i=1}^nk_s(\frac{x-x_i}{h_s}\frac{y-y_i}{h_s})$
