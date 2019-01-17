@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2018.11.15)  17 JAN 2019 16:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2018.11.15)  17 JAN 2019 20:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -698,236 +698,219 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 <pictures/London.png, id=77, 552.56438pt x 409.53pt>
 File: pictures/London.png Graphic file (type png)
 <use pictures/London.png>
-Package pdftex.def Info: pictures/London.png  used on input line 167.
-(pdftex.def)             Requested size: 188.19823pt x 139.48206pt.
-[2 <./pictures/London.PNG>] [3]
-<geo_project_r_files/figure-latex/barplot-1.pdf, id=101, 469.755pt x 325.215pt>
+Package pdftex.def Info: pictures/London.png  used on input line 166.
+(pdftex.def)             Requested size: 376.40488pt x 278.97037pt.
+[2] [3 <./pictures/London.PNG>] [4]
+<geo_project_r_files/figure-latex/barplot-1.pdf, id=105, 469.755pt x 325.215pt>
 
 File: geo_project_r_files/figure-latex/barplot-1.pdf Graphic file (type pdf)
 <use geo_project_r_files/figure-latex/barplot-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/barplot-1.pdf  used o
-n input line 244.
+n input line 245.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<geo_project_r_files/figure-latex/linegraph-1.pdf, id=106, 469.755pt x 325.215p
+<geo_project_r_files/figure-latex/linegraph-1.pdf, id=108, 469.755pt x 325.215p
 t>
 File: geo_project_r_files/figure-latex/linegraph-1.pdf Graphic file (type pdf)
 <use geo_project_r_files/figure-latex/linegraph-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/linegraph-1.pdf  used
- on input line 265.
+ on input line 261.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<geo_project_r_files/figure-latex/linegraphnoASBVSO-1.pdf, id=107, 469.755pt x 
-325.215pt>
-File: geo_project_r_files/figure-latex/linegraphnoASBVSO-1.pdf Graphic file (ty
-pe pdf)
-<use geo_project_r_files/figure-latex/linegraphnoASBVSO-1.pdf>
-Package pdftex.def Info: geo_project_r_files/figure-latex/linegraphnoASBVSO-1.p
-df  used on input line 271.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[4 <./geo_project_r_files/figure-latex/barplot-1.pdf>] [5 <./geo_project_r_file
-s/figure-latex/linegraph-1.pdf>] [6 <./geo_project_r_files/figure-latex/linegra
-phnoASBVSO-1.pdf>]
-
-LaTeX Warning: Reference `fig:crimecountmap' on page 7 undefined on input line 
-312.
-
-<geo_project_r_files/figure-latex/crimecountmap-1.pdf, id=139, 469.755pt x 325.
+[5 <./geo_project_r_files/figure-latex/barplot-1.pdf>] [6 <./geo_project_r_file
+s/figure-latex/linegraph-1.pdf>]
+<geo_project_r_files/figure-latex/crimecountmap-1.pdf, id=131, 469.755pt x 325.
 215pt>
 File: geo_project_r_files/figure-latex/crimecountmap-1.pdf Graphic file (type p
 df)
 <use geo_project_r_files/figure-latex/crimecountmap-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/crimecountmap-1.pdf  
-used on input line 320.
+used on input line 309.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 LaTeX Warning: Reference `fig:crimeratemap' on page 7 undefined on input line 3
-21.
+13.
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 320--330
-[][]
- []
-
-[7 <./geo_project_r_files/figure-latex/crimecountmap-1.pdf>]
-<geo_project_r_files/figure-latex/crimeratemap-1.pdf, id=152, 469.755pt x 325.2
+<geo_project_r_files/figure-latex/crimeratemap-1.pdf, id=133, 469.755pt x 325.2
 15pt>
 File: geo_project_r_files/figure-latex/crimeratemap-1.pdf Graphic file (type pd
 f)
 <use geo_project_r_files/figure-latex/crimeratemap-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/crimeratemap-1.pdf  u
-sed on input line 340.
+sed on input line 333.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 340--342
+Underfull \hbox (badness 10000) in paragraph at lines 333--335
 [][]
  []
 
-[8 <./geo_project_r_files/figure-latex/crimeratemap-1.pdf>]
-LaTeX Font Info:    Try loading font information for T1+lmtt on input line 370.
+[7] [8 <./geo_project_r_files/figure-latex/crimecountmap-1.pdf>] [9 <./geo_proj
+ect_r_files/figure-latex/crimeratemap-1.pdf>]
+LaTeX Font Info:    Try loading font information for T1+lmtt on input line 363.
 
 (c:/texlive/2018/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 389.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 382.
 
 (c:/texlive/2018/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-<pictures/quadratcount.png, id=164, 183.68625pt x 76.285pt>
+<pictures/quadratcount.png, id=161, 183.68625pt x 76.285pt>
 File: pictures/quadratcount.png Graphic file (type png)
 <use pictures/quadratcount.png>
-Package pdftex.def Info: pictures/quadratcount.png  used on input line 438.
+Package pdftex.def Info: pictures/quadratcount.png  used on input line 431.
 (pdftex.def)             Requested size: 183.69418pt x 76.28828pt.
-[9 <./pictures/quadratcount.png>] [10] [11]
-<geo_project_r_files/figure-latex/unnamed-chunk-4-1.pdf, id=202, 469.755pt x 32
+[10 <./pictures/quadratcount.png>] [11] [12]
+<geo_project_r_files/figure-latex/unnamed-chunk-4-1.pdf, id=206, 469.755pt x 32
 5.215pt>
 File: geo_project_r_files/figure-latex/unnamed-chunk-4-1.pdf Graphic file (type
  pdf)
 <use geo_project_r_files/figure-latex/unnamed-chunk-4-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/unnamed-chunk-4-1.pdf
-  used on input line 579.
+  used on input line 575.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[12 <./geo_project_r_files/figure-latex/unnamed-chunk-4-1.pdf>]
-Overfull \hbox (412.24242pt too wide) in paragraph at lines 652--652
+
+Overfull \hbox (412.24242pt too wide) in paragraph at lines 648--648
 []\T1/lmtt/m/n/10 ## Source: "C:\Users\Junju\Desktop\Masters\Term 1\Spatial Ana
 lysis and Geocomputation\Geocomputation\boundaries\COL001F_roads\COL001F_roads.
 shp", layer: "COL001F_roads"[] 
  []
 
-<geo_project_r_files/figure-latex/COL001F-homo-1.pdf, id=212, 469.755pt x 325.2
+[13 <./geo_project_r_files/figure-latex/unnamed-chunk-4-1.pdf>]
+<geo_project_r_files/figure-latex/COL001F-homo-1.pdf, id=218, 469.755pt x 325.2
 15pt>
 File: geo_project_r_files/figure-latex/COL001F-homo-1.pdf Graphic file (type pd
 f)
 <use geo_project_r_files/figure-latex/COL001F-homo-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/COL001F-homo-1.pdf  u
-sed on input line 662.
+sed on input line 658.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[13]
-<geo_project_r_files/figure-latex/COL001F-KDE-1.pdf, id=220, 469.755pt x 325.21
+[14]
+<geo_project_r_files/figure-latex/COL001F-KDE-1.pdf, id=224, 469.755pt x 325.21
 5pt>
 File: geo_project_r_files/figure-latex/COL001F-KDE-1.pdf Graphic file (type pdf
 )
 <use geo_project_r_files/figure-latex/COL001F-KDE-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/COL001F-KDE-1.pdf  us
-ed on input line 683.
+ed on input line 679.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[14 <./geo_project_r_files/figure-latex/COL001F-homo-1.pdf>]
-<pictures/COL001F_Hotspot_box.png, id=233, 963.1182pt x 481.3182pt>
+[15 <./geo_project_r_files/figure-latex/COL001F-homo-1.pdf>]
+<pictures/COL001F_Hotspot_box.png, id=237, 963.1182pt x 481.3182pt>
 File: pictures/COL001F_Hotspot_box.png Graphic file (type png)
 <use pictures/COL001F_Hotspot_box.png>
 Package pdftex.def Info: pictures/COL001F_Hotspot_box.png  used on input line 6
-91.
+87.
 (pdftex.def)             Requested size: 469.75705pt x 234.76102pt.
-<pictures/COL001F_Hotspot.png, id=234, 818.5782pt x 542.025pt>
+<pictures/COL001F_Hotspot.png, id=238, 818.5782pt x 542.025pt>
 File: pictures/COL001F_Hotspot.png Graphic file (type png)
 <use pictures/COL001F_Hotspot.png>
-Package pdftex.def Info: pictures/COL001F_Hotspot.png  used on input line 699.
+Package pdftex.def Info: pictures/COL001F_Hotspot.png  used on input line 695.
 (pdftex.def)             Requested size: 469.75452pt x 311.04993pt.
-[15 <./pictures/COL001F_Hotspot_box.png> <./geo_project_r_files/figure-latex/CO
+[16 <./pictures/COL001F_Hotspot_box.png> <./geo_project_r_files/figure-latex/CO
 L001F-KDE-1.pdf>]
-<geo_project_r_files/figure-latex/COL001F-redbluedotmap-1.pdf, id=251, 469.755p
+<geo_project_r_files/figure-latex/COL001F-redbluedotmap-1.pdf, id=255, 469.755p
 t x 325.215pt>
 File: geo_project_r_files/figure-latex/COL001F-redbluedotmap-1.pdf Graphic file
  (type pdf)
 <use geo_project_r_files/figure-latex/COL001F-redbluedotmap-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/COL001F-redbluedotmap
--1.pdf  used on input line 714.
+-1.pdf  used on input line 710.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[16 <./pictures/COL001F_Hotspot.png>]
-<geo_project_r_files/figure-latex/COL001F-kcross-1.pdf, id=258, 469.755pt x 325
+[17 <./pictures/COL001F_Hotspot.png>]
+<geo_project_r_files/figure-latex/COL001F-kcross-1.pdf, id=262, 469.755pt x 325
 .215pt>
 File: geo_project_r_files/figure-latex/COL001F-kcross-1.pdf Graphic file (type 
 pdf)
 <use geo_project_r_files/figure-latex/COL001F-kcross-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/COL001F-kcross-1.pdf 
- used on input line 721.
+ used on input line 717.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[17 <./geo_project_r_files/figure-latex/COL001F-redbluedotmap-1.pdf>]
-Overfull \hbox (291.49277pt too wide) in paragraph at lines 738--738
+[18 <./geo_project_r_files/figure-latex/COL001F-redbluedotmap-1.pdf>]
+Overfull \hbox (291.49277pt too wide) in paragraph at lines 734--734
 []\T1/lmtt/m/n/10 ## 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
  18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37
 , 38,[] 
  []
 
 
-Overfull \hbox (338.74263pt too wide) in paragraph at lines 738--738
+Overfull \hbox (338.74263pt too wide) in paragraph at lines 734--734
 []\T1/lmtt/m/n/10 ## 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53
 , 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 7
 3, 74, 75, 76,[] 
  []
 
 
-Overfull \hbox (55.24345pt too wide) in paragraph at lines 738--738
+Overfull \hbox (55.24345pt too wide) in paragraph at lines 734--734
 []\T1/lmtt/m/n/10 ## 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91
 , 92, 93, 94, 95, 96, 97, 98, 99,  100.[] 
  []
 
-<geo_project_r_files/figure-latex/COL001F-kcross-monte-1.pdf, id=268, 469.755pt
+<geo_project_r_files/figure-latex/COL001F-kcross-monte-1.pdf, id=272, 469.755pt
  x 325.215pt>
 File: geo_project_r_files/figure-latex/COL001F-kcross-monte-1.pdf Graphic file 
 (type pdf)
 <use geo_project_r_files/figure-latex/COL001F-kcross-monte-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/COL001F-kcross-monte-
-1.pdf  used on input line 740.
+1.pdf  used on input line 736.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[18 <./geo_project_r_files/figure-latex/COL001F-kcross-1.pdf>] [19 <./geo_proje
+[19 <./geo_project_r_files/figure-latex/COL001F-kcross-1.pdf>] [20 <./geo_proje
 ct_r_files/figure-latex/COL001F-kcross-monte-1.pdf>]
-<geo_project_r_files/figure-latex/vhcrimecountmap-1.pdf, id=299, 469.755pt x 32
-5.215pt>
-File: geo_project_r_files/figure-latex/vhcrimecountmap-1.pdf Graphic file (type
- pdf)
-<use geo_project_r_files/figure-latex/vhcrimecountmap-1.pdf>
-Package pdftex.def Info: geo_project_r_files/figure-latex/vhcrimecountmap-1.pdf
-  used on input line 834.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<geo_project_r_files/figure-latex/vhcrimeratemap-1.pdf, id=300, 469.755pt x 325
+<geo_project_r_files/figure-latex/vhcrimeratemap-1.pdf, id=301, 469.755pt x 325
 .215pt>
 File: geo_project_r_files/figure-latex/vhcrimeratemap-1.pdf Graphic file (type 
 pdf)
 <use geo_project_r_files/figure-latex/vhcrimeratemap-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/vhcrimeratemap-1.pdf 
- used on input line 841.
+ used on input line 808.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<geo_project_r_files/figure-latex/vhlocalmoran-1.pdf, id=302, 469.755pt x 325.2
-15pt>
-File: geo_project_r_files/figure-latex/vhlocalmoran-1.pdf Graphic file (type pd
-f)
-<use geo_project_r_files/figure-latex/vhlocalmoran-1.pdf>
-Package pdftex.def Info: geo_project_r_files/figure-latex/vhlocalmoran-1.pdf  u
-sed on input line 872.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<geo_project_r_files/figure-latex/vhmorancluster-1.pdf, id=304, 469.755pt x 325
+[21 <./geo_project_r_files/figure-latex/vhcrimeratemap-1.pdf>]
+<geo_project_r_files/figure-latex/vhmorancluster-1.pdf, id=316, 469.755pt x 325
 .215pt>
 File: geo_project_r_files/figure-latex/vhmorancluster-1.pdf Graphic file (type 
 pdf)
 <use geo_project_r_files/figure-latex/vhmorancluster-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/vhmorancluster-1.pdf 
- used on input line 895.
+ used on input line 856.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[20] [21 <./geo_project_r_files/figure-latex/vhcrimecountmap-1.pdf>] [22 <./geo
-_project_r_files/figure-latex/vhcrimeratemap-1.pdf>] [23 <./geo_project_r_files
-/figure-latex/vhlocalmoran-1.pdf>]
-<pictures/parkedcars.png, id=343, 571.13374pt x 297.61188pt>
-File: pictures/parkedcars.png Graphic file (type png)
-<use pictures/parkedcars.png>
-Package pdftex.def Info: pictures/parkedcars.png  used on input line 935.
-(pdftex.def)             Requested size: 469.75322pt x 244.78352pt.
-[24 <./geo_project_r_files/figure-latex/vhmorancluster-1.pdf>]
-<pictures/Knightsbridge.png, id=354, 912.91063pt x 341.77687pt>
+[22 <./geo_project_r_files/figure-latex/vhmorancluster-1.pdf>]
+<pictures/Newhamshopping.png, id=328, 941.5175pt x 374.39874pt>
+File: pictures/Newhamshopping.png Graphic file (type png)
+<use pictures/Newhamshopping.png>
+Package pdftex.def Info: pictures/Newhamshopping.png  used on input line 887.
+(pdftex.def)             Requested size: 469.75195pt x 186.79901pt.
+<pictures/Barkingscrapyard.png, id=329, 759.33687pt x 400.49625pt>
+File: pictures/Barkingscrapyard.png Graphic file (type png)
+<use pictures/Barkingscrapyard.png>
+Package pdftex.def Info: pictures/Barkingscrapyard.png  used on input line 902.
+
+(pdftex.def)             Requested size: 469.76437pt x 247.76733pt.
+<pictures/heathrowcarpark.png, id=330, 559.08875pt x 248.93pt>
+File: pictures/heathrowcarpark.png Graphic file (type png)
+<use pictures/heathrowcarpark.png>
+Package pdftex.def Info: pictures/heathrowcarpark.png  used on input line 918.
+(pdftex.def)             Requested size: 469.76784pt x 209.16054pt.
+<pictures/chiswickcardealers.png, id=331, 375.90437pt x 326.21875pt>
+File: pictures/chiswickcardealers.png Graphic file (type png)
+<use pictures/chiswickcardealers.png>
+Package pdftex.def Info: pictures/chiswickcardealers.png  used on input line 93
+0.
+(pdftex.def)             Requested size: 375.92638pt x 326.23784pt.
+[23 <./pictures/Newhamshopping.PNG>] [24 <./pictures/Barkingscrapyard.PNG> <./p
+ictures/heathrowcarpark.PNG>] [25 <./pictures/chiswickcardealers.PNG>]
+<pictures/Knightsbridge.png, id=353, 912.91063pt x 341.77687pt>
 File: pictures/Knightsbridge.png Graphic file (type png)
 <use pictures/Knightsbridge.png>
-Package pdftex.def Info: pictures/Knightsbridge.png  used on input line 980.
+Package pdftex.def Info: pictures/Knightsbridge.png  used on input line 956.
 (pdftex.def)             Requested size: 469.7433pt x 175.8632pt.
-[25 <./pictures/parkedcars.PNG>]
+[26 <./pictures/Knightsbridge.PNG>]
 <geo_project_r_files/figure-latex/industrialmap-1.pdf, id=363, 469.755pt x 325.
 215pt>
 File: geo_project_r_files/figure-latex/industrialmap-1.pdf Graphic file (type p
 df)
 <use geo_project_r_files/figure-latex/industrialmap-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/industrialmap-1.pdf  
-used on input line 1044.
+used on input line 1020.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[26 <./pictures/Knightsbridge.PNG>] [27 <./geo_project_r_files/figure-latex/ind
-ustrialmap-1.pdf>] [28]
+[27 <./geo_project_r_files/figure-latex/industrialmap-1.pdf>] [28]
 Overfull \hbox (221.22299pt too wide) in paragraph at lines 1131--1133
 []\T1/lmr/m/n/10 (-20) Mayor of Lon-don. 2016. ``A City for all Lon-don-ers,'' 
 1--84. []https://www.london.gov.uk/sites/default/files/city{\_}for{\_}all{\_}lo
@@ -942,7 +925,7 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1152.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1152.
 
 Package rerunfilecheck Info: File `geo_project_r.out' has not changed.
-(rerunfilecheck)             Checksum: 79CD19FD02605AB95E85BFAB57BF5524;1887.
+(rerunfilecheck)             Checksum: E261AD7A3693863D5C0DEC75F113EC17;2016.
 
 LaTeX Warning: There were undefined references.
 
@@ -950,12 +933,12 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1152.
  ) 
 Here is how much of TeX's memory you used:
  12857 strings out of 492639
- 189453 string characters out of 6133087
- 296653 words of memory out of 5000000
- 16384 multiletter control sequences out of 15000+600000
- 51650 words of font info for 95 fonts, out of 8000000 for 9000
+ 189107 string characters out of 6133087
+ 296466 words of memory out of 5000000
+ 16381 multiletter control sequences out of 15000+600000
+ 51697 words of font info for 95 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 32i,7n,38p,976b,458s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 32i,7n,38p,976b,417s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/texlive/2018/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{c:/texlive/2018/tex
 mf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/texlive/2018/texmf-dist/fonts/enc/
 dvips/lm/lm-rm.enc}{c:/texlive/2018/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc
@@ -972,10 +955,10 @@ m/lmr7.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/tex
 live/2018/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/texlive/2018/texmf-di
 st/fonts/type1/public/lm/lmsy10.pfb><c:/texlive/2018/texmf-dist/fonts/type1/pub
 lic/lm/lmsy7.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on geo_project_r.pdf (29 pages, 11963655 bytes).
+Output written on geo_project_r.pdf (29 pages, 16571178 bytes).
 PDF statistics:
- 481 PDF objects out of 1000 (max. 8388607)
- 384 compressed objects within 4 object streams
- 83 named destinations out of 1000 (max. 500000)
+ 475 PDF objects out of 1000 (max. 8388607)
+ 377 compressed objects within 4 object streams
+ 86 named destinations out of 1000 (max. 500000)
  10439 words of extra memory for PDF output out of 12000 (max. 10000000)
 

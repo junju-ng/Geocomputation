@@ -72,11 +72,11 @@ library(bookdown)
 \pagebreak
 
 # Introduction  
-Crime (and its prevention and responses) is associated with significant social and economic costs. In England and Wales, the total cost of crimes against individuals and businesses is ?50.1 billion and ?8.7 billion respectively in 2015/16 alone [@Brand2014]. A significant portion of these costs are incurred in London, given that about 20% of crimes in England and Wales occurs in London [@MayorofLondon2016]. 
+Crime (and its prevention and responses) is associated with significant social and economic costs. In England and Wales, the total cost of crimes against individuals and businesses is £50.1 billion and £8.7 billion respectively in 2015/16 alone [@Brand2014]. A significant portion of these costs are incurred in London, given that about 20% of crimes in England and Wales occurs in London [@MayorofLondon2016]. 
 
-Consequently, much work has been done to understand the occurrence of crime, and to predict crime. To date, the spatial concentration of crime in cities is well-established in the literature [@Malleson2016]. [@Sherman1989]'s seminal analysis of predatory crime in Minneapolis revealed that 50% of police calls come from 3% of street segments, indicating that crime hotspots, down to the street level, are present within cities. Recent works have thus focussed on trying to improve spatial analysis techniques for crime. Specifically, [@Chainey2008] examined the use of different hotspot mapping techniques to predict spatial patterns of crime in Camden and Islington local authority district areas in London. Other workers have been working on developing techniques to examine spatial-temporal patterns of crime [@Cheng2012], in order to understand how crime develops and evolves to improve crime prediction. 
+Consequently, much work has been done to understand the occurrence of crime, and to predict crime. To date, the spatial concentration of crime in cities is well-established in the literature [@Malleson2016]. [@Sherman1989]'s seminal analysis of predatory crime in Minneapolis revealed that 50% of police calls come from 3% of street segments, indicating that crime hotspots, down to the street level, are present within cities. Recent works have thus focussed on trying to improve spatial analysis techniques for crime. Specifically, [@Chainey2008] examined the use of different hotspot mapping techniques to predict spatial patterns of crime in Camden and Islington local authority district areas in London. Other researchers have been working on developing techniques to examine spatial-temporal patterns of crime [@Cheng2012], in order to understand how crime develops and evolves to improve crime prediction. 
 
-Given that a significant portion of crimes in England and Wales occurs in London and the occurrence of crime is non-random, this study will therefore examine spatial crime patterns in London. Specifically, this study aims to answer two main questions: 1) where do crime types occur? 2) what factors are associated with the occurrence of different types of crime? 
+Given that a significant portion of crimes occurs in London and the occurrence of crime is non-random, this study will therefore examine spatial crime patterns in London. Specifically, this study aims to answer two main questions: 1) where do crime types occur? 2) what factors are associated with the occurrence of different types of crime? 
 
 **Study area**
 
@@ -84,7 +84,7 @@ London is a thriving metropolis in the United Kingdom with a population of 8.8 m
 
 London consists of 33 local government districts (32 London Boroughs and the City of London). The City of London Police is the police force responsible for law enforcement within the City of London while the Metropolitan Police Service is reponsible for policing the Greater London region, excluding the City of London. Greater London can be split into 4835 geographic regions known as lower layer super output areas(LSOAs) for the purposes of reporting small-area statistics. These LSOAs will form the basis of the analysis.
 
-![Boroughs of London](pictures/London.png){width=250px}
+![Boroughs of London](pictures/London.png){width=500px}
 \pagebreak
 
 # Data description  
@@ -94,7 +94,9 @@ The geocoded crime data are categorised into 14 crime types: anti-social behavio
 
 2011 census data at the LSOA level was also downloaded from the London Datastore. This is to obtain information about the total resident population in each London LSOA to calculate crime rates in each LSOA.
 
-In addition, industrial landuse areas are obtained from OpenStreetMap using the overpass API as a polygon dataset. This is to observe if trends between the occurrence of crimes and industrial areas exist. A point dataset of the location of entertainment outlets (defined as pubs, bars, and restaurants) in London is also obtained from OpenStreetMap. The information from OpenStreetMap is crowd-sourced, and not created by geospatial experts. Thus, some inaccuracies may be present in the dataset [@Basiri2016]. However, corroboration of the industrial landuse polygons with aerial imagery and street imagery from Google Maps shows that the data is generally accurate, and therefore suitable for broader-scale exploratory analysis. Further verification of the location of entertainment outlets also suggests that the dataset is broadly up-to-date.
+In addition, industrial landuse areas are obtained from OpenStreetMap using the overpass API as a polygon dataset. This is to observe if trends between the occurrence of crimes and industrial areas exist. The information from OpenStreetMap is crowd-sourced, and not created by geospatial experts. Thus, some inaccuracies may be present in the dataset [@Basiri2016]. However, corroboration of the industrial landuse polygons with aerial imagery and street imagery from Google Maps shows that the data is generally accurate, and therefore suitable for broader-scale exploratory analysis.
+
+A point dataset of the location of entertainment outlets (defined as pubs, bars, and restaurants) in London is also obtained from OpenStreetMap. Further verification of the location of entertainment outlets also suggests that the dataset is broadly up-to-date.
 
 ```{r}
 # load necessary data
@@ -143,9 +145,7 @@ text(16.3,205000,"214104", cex=0.6)
 
 **Variations in Crime by Type and Month**
 
-A line graph of crime count by type and month (Figure \@ref(fig:linegraph)) is plotted to examine temporal patterns in crime in London across the year. Figure \@ref(fig:linegraphnoASBVSO) depicts a similar graph, without anti-social behaviour and violence and sexual offences, in order to better observe trends in the other crime types. 
-
-From Figure \@ref(fig:linegraph), it is evident that the frequency of some crime types varies throughout the year. For instance, reports of anti-social behaviour appear to peak in July and August. Burglary reports appear to increase between October and January, while bicycle theft reports appear to increase between May and October (Figure \@ref(fig:linegraphnoASBVSO)).
+A line graph of crime count by type and month (Figure \@ref(fig:linegraph)) is plotted to examine temporal patterns in crime in London across the year. From Figure \@ref(fig:linegraph), it is evident that the frequency of some crime types varies throughout the year. For instance, reports of anti-social behaviour appear to peak in July and August. Burglary reports appear to increase between October and January, while bicycle theft reports appear to increase between May and October).
 
 ```{r linegraph, echo=FALSE, fig.cap="2017 London crime count by type and month"}
 # Plot line chart crime x month
@@ -155,17 +155,6 @@ names(crime_count_by_month) <- c("Month", "Crime.type","Freq")
 ggplot(crime_count_by_month, aes(x = Month, y = Freq, colour = Crime.type, group=Crime.type), main="Crime Count")+
   geom_line()+
   geom_point()+
-  scale_color_discrete(name = "Crime types")+
-  labs(y = "Crime count")
-```
-
-```{r linegraphnoASBVSO, echo=FALSE, fig.cap="2017 London crime count by type and month (excluding anti-social behaviour and violence and sexual offences"}
-# Plot line chart without ASB and Violence
-crime_count_wo_ASB_V <- crime_count_by_month[!(crime_count_by_month$Crime.type=='Anti-social behaviour' |crime_count_by_month$Crime.type=='Violence and sexual offences'),]
-
-ggplot(crime_count_wo_ASB_V, aes(x = Month, y = Freq, colour = Crime.type, group=Crime.type))+
-  geom_line()+
-  geom_point()+ 
   scale_color_discrete(name = "Crime types")+
   labs(y = "Crime count")
 ```
@@ -182,7 +171,7 @@ LSOA_stats <- kable(LSOA_stats, caption="Crime Count Statistics by LSOA")
 LSOA_stats
 ```
 
-Crime count maps are plotted to visualise the spatial distribution of crime across London. The crime count map (Figure \@ref(fig:crimecountmap)) illustrates the total number of reported crimes in each LSOA in 2017. This depicts regions with the highest number of crimes. By visual inspection, crime counts are highest in central London, although some regions with higher crime counts are present along the river Thames in East London, the Lea Valley and in Hillingdon. However, crime counts do not consider that LSOAs have unequal areas and do not accurately represent crime density.
+Crime count maps are plotted to visualise the spatial distribution of crime across London. The crime count map (Figure \@ref(fig:crimecountmap)) illustrates the total number of reported crimes in each LSOA in 2017. By visual inspection, crime counts are highest in central London, although some regions with higher crime counts are present along the river Thames in East London, the Lea Valley and in Hillingdon.
 
 ```{r crimecountmap, echo=FALSE, fig.cap="2017 London crime count map by LSOA"}
 LondonLSOA_transformed <- LondonLSOA
@@ -198,11 +187,12 @@ LondonLSOA_transformed[is.na(LondonLSOA_transformed$Freq)]<- 0 #set Freq = 0 for
 #plot crime count map
 tmap_mode("view")
 tmap_mode("plot")
-tm_shape(LondonLSOA_transformed) +tm_polygons(col="Freq", palette="Blues", style = "jenks", border.col='transparent', title = "Crime counts", n=4) 
+tm_shape(LondonLSOA_transformed) +tm_polygons(col="Freq", palette="Blues", style = "jenks", border.col='transparent', title = "Crime counts", n=4) +tm_layout("2017 London Crime Count Map by LSOA", title.size=1)
 ```
-Thus, a crime rate map (Figure \@ref(fig:crimeratemap)), derived by taking the crime count divided by the resident population in the corresponding LSOA and then multipled by 1000 (i.e. crime count per 1000 residents), is plotted. These crime rate maps allow for the assessment of the risk of crime in each LSOA [@Brantingham1997]. However, it is to be noted that resident populations are used to calculate crime rate. Thus, regions with a low resident population (but high pedestrian population e.g. commercial areas) would have an inflated crime rate. 
 
-Visually, although there are some differences between the crime rate and crime count maps, the regions with the highest crime counts are also the regions with the highest crime rates. However, a number of regions outside of central London with slightly higher crime counts (284 to 873) have lower-than-expected crime rates. This indicates that residential population does not have a significant influence on crime counts, except when crime counts are slightly elevated and occur in LSOAs outside central London (presumably with a higher residential population). 
+A crime rate map (Figure \@ref(fig:crimeratemap)) is also plotted to take into account population size in each LSOA. This is derived by taking the crime count divided by the resident population in the corresponding LSOA and then multipled by 1000 (i.e. crime count per 1000 residents). These crime rate maps allow for the assessment of the risk of crime [@Brantingham1997]. However, it is to be noted that resident populations are used to calculate crime rate. Thus, regions with a low resident population but high pedestrian population (e.g. commercial areas) would have an inflated crime rate. 
+
+Visually, although there are some differences between the crime rate and crime count maps, the regions with the highest crime counts are also the regions with the highest crime rates. However, a number of regions outside of central London with slightly higher crime counts (235 to 871) have lower-than-expected crime rates. This indicates that residential population does not have a significant influence on crime counts, except when crime counts are slightly elevated and occur in LSOAs outside central London (presumably with a higher residential population). 
 
 ```{r crimeratemap, echo=FALSE, fig.cap="2017 London crime rate map by LSOA"}
 load("lsoa_census.Rda")
@@ -212,7 +202,7 @@ census$total_pop <- census$X0.15 + census$X16.29 + census$X30.44 + census$X45.64
 
 census$freq_pop <-  census$Freq / census$total_pop * 1000 #crime per 1000 people
 
-tm_shape(census) + tm_polygons(col="freq_pop", palette="YlGnBu", style = "jenks", border.col='transparent', title = "Crime count per 1000 residents", n=4)
+tm_shape(census) + tm_polygons(col="freq_pop", palette="YlGnBu", style = "jenks", border.col='transparent', title = "Crime count per 1000 residents", n=4)+tm_layout("2017 London Crime Rate Map by LSOA", title.size=1)
 
 # Missing data here because no residential areas in those census tracts
 ```
@@ -294,9 +284,15 @@ The following statistical methods were used in the process:
 
 ## Methods in Analysing Vehicle Crime
 
-Vehicle data was first mapped in terms of crime count and crime count per 1000 resident population. These choropleth maps were produced using the jenks classification scheme, to accentuate the variance between classes, and minimise the variance within each class. Visual inspection of the maps suggests that vehicle crime rates appear to concentrate in regions. Thus, the Moran's I was used to test for spatial autocorrelation.
+Visual inspection of the maps suggests that vehicle crime rates appear to concentrate in regions. Thus, the following hypothesis was generated:
 
-The Moran's I [@Moran1950] is a weighted correlation coefficient that measures if the spatial data sampled at adjacent locations are correlated with one another. It measures a single average spatial autocorrelation across the entire area. The Moran's I is calculated using the following equation:
+    H3. Vehicle crimes are spatially correlated
+    
+    H4. Vehicle crime rates are correlated with industrial areas
+    
+The reason for these hypotheses will be made clearer in section 5.2.
+
+The Moran's I [@Moran1950] was used to test for spatial autocorrelation. It is a weighted correlation coefficient that measures if the spatial data sampled at adjacent locations are correlated with one another. It measures a single average spatial autocorrelation across the entire area. The Moran's I is calculated using the following equation:
 
 \[I=\frac{n} {\sum_{i}\sum_{j}w_{ij}} \frac{\sum_{i}\sum_{j}w_{ij}(x_i-\bar{x})(x_j-\bar{x})} {\sum_{i}(x_i-\bar{x})^2}\]
 
@@ -313,7 +309,7 @@ A local Moran's I [@Anselin1995], \(I_i\),  was subsequently calculated for each
 
 Where \(z_i = x_i-\bar{x}\), \(z_j = x_j-\bar{x}\), \(m_2=\frac{1}{n}\sum_{i}z_i^2\), \(\bar{x}\) is the mean vehicle crime rate, \(x\), at \(n\) LSOAs and \(i=1,2,...,n\)  
 
-The expectation of \(I_i\) is \(\frac{-w_i}{(n-1)}\), where \(-w_i=\sum_{j}w_{ij}\). Local hotspots of positive or negative autocorrelation will be present if vehicle crime rates are spatially heterogeneous.
+The expectation of \(I_i\) is \(\frac{-w_i}{(n-1)}\), where \(-w_i=\sum_{j}w_{ij}\). Local hotspots of positive or negative autocorrelation will be present if vehicle crime rates are spatially heterogeneous. A bonferroni adjustment was then applied to the results, to identify Moran's I values that are statistically significant at the 95% confidence interval.
 
 The areas with high vehicle crime rates and which are statistically significant high-high clusters are then analysed using Google Map imagery. Further analysis is also conducted with industrial landuse data from OpenStreetMap.
 \pagebreak
@@ -321,8 +317,7 @@ The areas with high vehicle crime rates and which are statistically significant 
 
 # Results and discussion
 
-Two crime types, violence and sexual offences, and vehicle crime have been used for further analysis.
-Examination of violence and sexual offences will be conducted, as it is one of the most commonly reported, as well as more severe crimes that bring about damage to people and property. Vehicle crime refers to any theft, tampering, or interference with motor vehicles [@Office2019]. It is chosen for further analysis as it is one of the more commonly reported crimes (excluding violence and sexual offences). Vehicle crime can also be committed without direct contact with the victim, unlike violence and sexual offences which often requires direct contact with the victim.  
+Two crime types, violence and sexual offences, and vehicle crime have been used for further analysis. Vehicle crime refers to any theft, tampering, or interference with motor vehicles [@Office2019].
 
 As the nature of violence and sexual offences, and vehicle crime differs, examination of the spatial distribution of the two crime types in London will allow for better understanding of the factors influencing the occurrence of these two crimes.
 
@@ -345,9 +340,9 @@ vs_census$total_pop <- vs_census$X0.15 + vs_census$X16.29 + vs_census$X30.44 + v
 vs_census$freq_pop <-  vs_census$Freq / vs_census$total_pop * 1000 #crime per 1000 people
 ```
 
-By plotting the occurrence of violence and sexual offences per 1000 people on a chloropeth, we get the following map below:   
+By plotting the occurrence of violence and sexual offences per 1000 people on a chloropeth, we get the following map below (Figure \@ref(fig:vsocrimeratemap)):   
 
-```{r}
+```{r vsocrimeratemap, echo=FALSE, fig.cap="2017 London crime rate map by LSOA"}
 tm_shape(vs_census) + 
   tm_polygons(col = 'freq_pop', 
               palette = 'Greens', 
@@ -356,12 +351,13 @@ tm_shape(vs_census) +
               border.col = 'transparent',
               title = 'VSO crime counts per 1000 residents',
               title.position = c("right", "bottom")
-              ) 
+              ) +
+  tm_layout("2017 London VSO Crime Rate by LSOA", title.size=1)
 ```
 
 This map shows us that VSO crimes are mainly concentrated in central london, with a few LSOAs having mid-range crime density dispersed across london. 
 
-Ranking the LSOAs by crime density, we obtain the following rank table, showing the top 20 LSOAs with the highest crime rates (crime count per 1000 people): 
+Ranking the LSOAs by crime density, we obtain the following rank table (Table \@ref(tab:top20)), showing the top 20 LSOAs with the highest crime rates (crime count per 1000 people): 
 ```{r top20}
 top_20 <-  data.frame(vs_census@data[order(-vs_census$freq_pop)[1:20], "Names"])
 #top_10_ <-  data.frame(vs_census@data[order(-vs_census$Freq)[1:20], "Names"])
@@ -403,12 +399,12 @@ for (i in 1:nrow(points@coords)){
   rownames(points@coords)[i] <- i
 }
 ```
-By plotting the spatial distribution of the crimes on a map (see \@ref(fig:COL001F_map_w_roads)), we can make our first hypothesis: 
+By plotting the spatial distribution of the crimes on a map (Figure \@ref(fig:COL001Fmapwroads)), we can make our first hypothesis: 
 
 H1. VSO crimes are randomly distributed in the City of London 001F LSOA    
 
 
-```{r COL001F-map_w-roads}
+```{r COL001Fmapwroads, echo=FALSE, fig.cap="City of London 001F LSOA Map with Roads"}
 ## plot map of COL001F
 tmap_mode("plot")
 # tm_shape(roads)+
@@ -428,8 +424,8 @@ pts <- coordinates(points_ll)
 COL001F_Owin <- as.owin(COL001F_shp)
 COL001F_ppp <- ppp(pts[,1],pts[,2], window=COL001F_Owin)
 ```
-To test for H1, we employ the use of quadrat counting. If the spatial pattern is homogeneous, each quadrat should have roughly the same amount of intensity (points per area).      
-```{r COL001F-homo}
+To test for H1, we employ the use of quadrat counting. If the spatial pattern is homogeneous, each quadrat should have roughly the same amount of intensity (points per area) (Figure \@ref(fig:COL001Fhomo)).      
+```{r COL001Fhomo, echo=FALSE, fig.cap="Quadrat counts within COL001F LSOA"}
 ### test for homogeneity 
 qX <- quadratcount(COL001F_ppp, nx = 8 , ny = 4)
 plot(COL001F_ppp, pch=16)
@@ -579,18 +575,12 @@ dfvehicle <- dfvehicle[!is.na(dfvehicle$Longitude),]
 dfvehicle <- dfvehicle[!is.na(dfvehicle$Latitude),]
 ```
 
-Figure \@ref(fig:vhcrimecountmap) and Figure \@ref(fig:vhcrimeratemap) show the spatial distribution of vehicle crime counts and vehicle crime rates by LSOA respectively. Under normal circumstances, if the relatively high crime counts are due to a large resident population, the crime rates in these LSOAs should be relatively lower after accounting for the size of the resident population. 
-
-However, the spatial pattern between the two maps is generally similar. Thus, regions with the highest vehicle crime counts have the highest vehicle crime rates, and vice versa. This can be due to two possibilites:  
-1) Vehicle crime count is inversely proportional to resident population size. If this is true, LSOAs with relatively high crime counts have a small resident population, thus crime rates are also relatively high. On the other hand, LSOAs with relatively low crime counts have a large resident population, thus crime rates are also relatively low.   
-2) The size of the resident population in each LSOA does not have a significant effect on the likelihood of the occurrence of vehicle crime.  
-
-Further analysis of the spatial patterns in the occurrence of vehicle crime will be made using the crime rate map, as this is slightly more accurate than using crime counts - the size of LSOAs varies, hence taking crime counts alone will conflate results; crime rates attempt to account for the variation in LSOA size. Several generalised observations (Figure \@ref(fig:vhcrimeratemap)) are described below:  
-1. Majority of LSOAs with the highest crime rates are located north of the river Thames
-2. LSOAs with the highest crime rates tend to be found along the river Thames  
+Figure \@ref(fig:vhcrimeratemap) shows the spatial distribution of vehicle crime rates by LSOA. Several generalised observations are described below:  
+1. Majority of LSOAs with the highest crime rates are located north of the river Thames  
+2. LSOAs with the highest crime rates tend to be found along the river Thames   
 3. LSOAs in (2) can be grouped into 4 main areas: East London (e.g. Newham, Barking, Greenwich), Central London (e.g. City of London, Westminster), Southwest London (e.g. Kensington, Knightsbridge), West London (e.g. Heathrow, Acton, Hammersmith, Chiswick)  
 
-```{r vhcrimecountmap, echo=FALSE, fig.cap="2017 London vehicle crime counts by LSOA"}
+```{r}
 # get vehicle count by LSOA
 vehiclenum_by_LSOA <- data.frame(table(dfvehicle$LSOA.name)) %>% na.omit()
 vehiclenum_by_LSOA$Var1 <- as.character(vehiclenum_by_LSOA$Var1)
@@ -603,11 +593,6 @@ LondonLSOA_transformed_vehicle <- spTransform(LondonLSOA, projection)
 # get combined boundary + LSOA vehicle count data
 LondonLSOA_transformed_vehicle@data <- left_join(LondonLSOA_transformed_vehicle@data, vehiclenum_by_LSOA, by=c("LSOA11NM"="Var1"))
 LondonLSOA_transformed_vehicle[is.na(LondonLSOA_transformed_vehicle$Freq)]<- 0 #set Freq = 0 for LSOAs with no crimes
-
-#plot vehiclemap
-#tmap_mode("view")
-tmap_mode("plot")
-tm_shape(LondonLSOA_transformed_vehicle)+ tm_polygons(col="Freq", palette="Greens", style = "jenks", n=3, border.col='transparent', title = "Vehicle crime counts")
 ```
 
 ```{r vhcrimeratemap, echo=FALSE, fig.cap="2017 London vehicle crime rate map by LSOA"}
@@ -621,7 +606,7 @@ vehicle_census$freq_pop <-  vehicle_census$Freq / vehicle_census$total_pop * 100
 
 tmap_mode("plot")
 #tmap_mode("view")
-tm_shape(vehicle_census)+ tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents")
+tm_shape(vehicle_census)+ tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents")+tm_layout("2017 London Vehicle Crime Rate by LSOA", title.size=0.8)
 
 # Missing data here because no residential areas in those census tracts??
 ```
@@ -647,23 +632,13 @@ Wl <- nb2listw(nb) # a listw object is a weights list for use in autocorrelation
 #At the LSOA level, frequency of vehicle crimes display significant, positive autocorrelation in London.
 ```
 
-A Moran's I value of 0.36013 suggests that a positive autocorrelation in vehicle crime counts exist on average across the entire area. Results for the Moran's I test using randomisation and the Monte-Carlo simulation using 999 simulations both produce small p-values of 2.2e-16 and 0.001 respectively, suggesting that the calculated Moran's I value is highly statistically significant. Thus, at the LSOA level, frequency of vehicle crimes display, on average, a significant positive autocorrelation in London.
+A global Moran's I calculation was ran for all the London LSOAs. The resultant I value of 0.36013 suggests that a positive autocorrelation in vehicle crime counts exist on average across the entire area. Results for the Moran's I test using randomisation and the Monte-Carlo simulation using 999 simulations both produce small p-values of 2.2e-16 and 0.001 respectively, suggesting that the calculated Moran's I value is highly statistically significant. Thus, at the LSOA level, frequency of vehicle crimes display, on average, a significant positive autocorrelation in London.
 
 **Local spatial autocorrelation**
 
-Local variations in spatial autocorrelation are also examined, to determine if levels of autocorrelation vary due to spatial heterogeneity. A map of the local Moran's I values at each LSOA is presented in Figure \@ref(fig:vhlocalmoran).
+Local variations in spatial autocorrelation are also examined, to determine if levels of autocorrelation vary due to spatial heterogeneity. This is done by calculating local Moran's I values for each LSOA.
 
-```{r vhlocalmoran, echo=FALSE, fig.cap="2017 London vehicle crime rates local Moran's by LSOA"}
-#Local Moran's I
-
-#calculate unadjusted local Moran's I using localmoran
-Ii <- localmoran(vehicle_LSOA$Freq, Wl)
-#Note: localmoran returns p-value with Bonferroni adjustment
-vehicle_LSOA$Ii <- Ii[,"Ii"] #store Ii in a column in medianhpward
-tm_shape(vehicle_LSOA) + tm_polygons(col="Ii", palette="-RdBu", style="quantile", border.col="transparent", title = "Local Moran's I")
-```
-
-LSOAs with local Moran's I values that are statistically significant at the 95% confidence interval were then calculated and mapped. Figure \@ref(fig:vhmorancluster) shows that spatial autocorrelation is non-significant across most of London. It is however noteworthy that the LSOAs with the highest crime rates also tend to form statistically significant high-high clusters. Specifically, high-high clusters are present in West London, central London and East London along the river Thames. This confirms the earlier hypothesis that there is a concentration of crimes on a local level in different regions of London. It is also notable that several other LSOAs (that do not have relatively high vehicle crime rates) also have high-high clusters, indicating that spatial autocorrelation is not only restricted to regions with high vehicle crime rates. This may be related to characteristics of the region or criminal behaviour. Interestingly, a single low-low cluster is observed in south London, in the Bexley region.
+LSOAs with local Moran's I values that are statistically significant at the 95% confidence interval were then mapped. Figure \@ref(fig:vhmorancluster) shows that spatial autocorrelation is non-significant across most of London. It is however noteworthy that the LSOAs with the highest crime rates also tend to form statistically significant high-high clusters. Specifically, high-high clusters are present in West London, central London and East London along the river Thames. This confirms the earlier hypothesis that there is a concentration of crimes on a local level in different regions of London. It is also notable that several other LSOAs (that do not have relatively high vehicle crime rates) also have high-high clusters, indicating that spatial autocorrelation is not only restricted to regions with high vehicle crime rates. This may be related to characteristics of the region or criminal behaviour. Interestingly, a single low-low cluster is observed in South London, in the Bexley region.
 
 ```{r vhmorancluster, echo=FALSE, fig.cap="LSOAs with statistically significant local Moran's clusters for vehicle crime"}
 # adjust local Moran's I to show HH and LL clusters
@@ -697,23 +672,31 @@ tmap_mode("plot")
 tm_shape(vehicle_LSOA) + tm_polygons(col="Ii_cluster", border.col='transparent', title = "Nature of cluster")
 ```
 
+These high-high clusters can be used to identify buffer regions with high vehicle crime rates - a high-high clusters are only identified when an LSOA with high crime rates is surrounded by LSOAs with high crime rates. This can aid the allocation of police resources and outreach efforts in the event of a resource shortage. It is also a strategic move, as the spatial autocorrelation in vehicle crimes may mean that a reduction of crime in one LSOA has effects on crime rates in neighbouring LSOAs.
+
 ### Reasons for vehicle crime rates
 
 Earlier analysis reveals that elevated crime rates tend to occur in specific regions, and there is spatial autocorrelation at the LSOA level. Therefore, this section will examine regions with high vehicle crime rates to identify variables that may contribute to high crime rates.
 
 **East London**
 
-In East London, the LSOAs with high crime rates either have 1) industrial parks/scrapyards/depots (e.g. Barking LSOAs, Newham LSOAs) and/or 2) retail parks/leisure parks (e.g. Newham LSOAs, Greenwich LSOAs). For instance, the agglomeration of retail parks in Newham (and the accompanying parking lots), such as the Gallions reach shopping park, Beckton Triangle retail park and Gateway retail park may contribute to the elevated vehicle crime rates in the LSOA. Likewise, in Greenwich, the presence of leisure parks and the O2 stadium may contribute to the high vehicle crime rates. The high vehicle crime rates at retail parks/leisure parks suggests that thieves are likely opportunistic, and target these areas due to the high volume of vehicles parked in these areas.
+In East London, the LSOAs with high crime rates either have 1) industrial parks/scrapyards/depots (e.g. Barking LSOAs, Newham LSOAs) and/or 2) retail parks/leisure parks (e.g. Newham LSOAs, Greenwich LSOAs). For instance, the agglomeration of retail parks in Newham (and the accompanying parking lots), such as the Gallions Reach shopping park, Beckton Triangle retail park and Gateway retail park may contribute to the elevated vehicle crime rates in the LSOA. Likewise, in Greenwich, the presence of leisure parks and the O2 stadium may contribute to the high vehicle crime rates. The high vehicle crime rates at retail parks/leisure parks suggests that thieves are likely opportunistic, and target these areas due to the high volume of vehicles parked in these areas.
 
-On the other hand, in parts of Creekmouth and Barking, the high vehicle crime rates may be attributed to industrial parks and scrapyards. The high rates of vehicle crime at industrial areas is interesting, as the vehicles are often old and/or damaged. This suggests that thieves may steal vehicle parts from these areas. Industrial areas are also relatively quiet and empty at night, which may mean that the risk of getting caught is lower. The perceived risk may be a contributory factor to the higher crime rates.
+![Parking lots at retail parks at Newham](pictures/Newhamshopping.png)
 
-![Parked vehicles (a) Parking lots at retail parks at Newham, (b) Parking lots at the O2 stadium and leisure park in Greenwich, (c) Vehicles at industrial area in Barking, (d) Parked vehicles at Heathrow airport](pictures/parkedcars.png) 
+On the other hand, in parts of Barking, the high vehicle crime rates may be attributed to industrial parks and scrapyards. The high rates of vehicle crime at industrial areas is interesting, as the vehicles are often old and/or damaged. This suggests that thieves may steal vehicle parts from these areas. Industrial areas are also relatively quiet and empty at night, which may mean that the risk of getting caught is lower. The perceived risk may be a contributory factor to the higher crime rates.
+
+![Vehicles at industrial area in Barking](pictures/Barkingscrapyard.png) 
 
 **West London**
 
 Interestingly, crime patterns are different in West London and can generally be linked to either carparks or car dealers. High rates of vehicle crime near Heathrow airport may be attributed to the high volumes of parked vehicles at short-stay and long-stay carparks. Criminals may therefore choose to operate near the airport, particularly at the long-stay carparks which are likely used by individuals travelling abroad. 
 
+![Locations of carparks around Heathrow airport](pictures/heathrowcarpark.png)
+
 The high crime rates in Chiswick may also be linked to the presence of large numbers of parked cars, as the LSOAs with the highest crime rates tend to have either carparks associated with supermarkets or car dealers. These observations are consistent with the hypothesis that thieves are opportunistic, and pick areas with more parked vehicles. 
+
+![Agglomeration of car dealers in Chiswick](pictures/chiswickcardealers.png)
 
 However, these hypotheses do not apply to Hammersmith and parts of Hounslow, both of which appear to be predominantly residential. It may be possible that these LSOAs have high crime rates as they are in the vicinity of other hotspots, such as those in Chiswick.
 
@@ -733,10 +716,10 @@ It is not clear why vehicle crime rates are high in central London, particularly
 ### Discussion 
 
 More detailed examination of regions with high vehicle crime rates suggests two main modes of operation for criminals:  
-1) Operating in areas with large numbers of parked vehicles (i.e. quantity over quality] )
+1) Operating in areas with large numbers of parked vehicles (i.e. quantity over quality)  
 2) Operating specifically in affluent areas to target high-value vehicles (i.e. quality over quantity)
 
-Based on hypothesis (1), further analysis has identified industrial areas and large carparks to be significant variables associated with elevated vehicle crime rates. A map of industrial areas and the vehicle crime rates by LSOAs is therefore generated to visualise the relationship between vehicle crime rates and industrial areas (Figure \@ref(fig:industrialmap)). There appears to be a correlation between industrial areas and vehicle crime rates. This may be because these areas tend to be quiet at night thus, the risk of getting caught is lower. Future work to model vehicle crime patterns can therefore consider including distance from industrial areas as one of the variables to be modelled. Distances to the nearest police station can also be considered as a proxy for perceived risk of getting caught.
+Based on hypothesis (1), further analysis has identified industrial areas and large carparks to be significant variables associated with elevated vehicle crime rates. A map of industrial areas and the vehicle crime rates by LSOAs is therefore generated to visualise the relationship between vehicle crime rates and industrial areas (Figure \@ref(fig:industrialmap)). There appears to be a correlation between industrial areas and vehicle crime rates. This may be because these areas tend to be quiet at night thus, the risk of getting caught is lower. Future work to model vehicle crime patterns can therefore consider including distance from industrial areas or the proportion of land allocated to industrial uses in each LSOA as variables to be modelled. Distances to the nearest police station can also be considered as a proxy for perceived risk of getting caught.
 
 Ideally, the relationship between large carparks (as a proxy for the number of parked vehicles) and vehicle crime rates will also be visualised. However, datasets for carparks are not fully complete - for instance, the data on OpenStreetMap mainly limited to central London. Moreover, the dataset provides information on general parking spaces (which could be anywhere), and not the location of large carparks. Future work can consider examining the relationship between large car parks and vehicle crime rates.
 
@@ -766,16 +749,31 @@ load("dat_dropped.Rda")
 #tm_shape(vehicle_census)+ tm_layout("Industrial estates and vehicle crime rates by LSOA") + tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents", alpha=0.4)+tm_shape(dat_dropped)+tm_polygons(col='black', border.col='transparent',alpha=0.4)
 
 tmap_mode("plot")
-tm_shape(vehicle_census)+ tm_layout("Industrial estates and vehicle crime rates by LSOA") + tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents")+tm_shape(dat_dropped)+tm_polygons(col='black', border.col='transparent',alpha=0.6)
+tm_shape(vehicle_census)+ tm_layout("Industrial estates and vehicle crime rates by LSOA", title.size = 2) + tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents")+tm_shape(dat_dropped)+tm_polygons(col='black', border.col='transparent',alpha=0.6)
 ```
 
 \pagebreak
 
-# Conclusion
+# Overall discussion and conclusions
+
+compare between crime type
+Different crime type -- different patterns  (so employ different method)
+
+comparing between analysing local scale vs LSOA level
+- prove that results obtained by analysing a single LSOA cannot be generalised to other LSOA
+- hence shows the limitations of a local scale analysis --- that can only be achieved in a LSOA-level analysis 
+- Insert heathrow VSO map -- show that theres no pubs etc. -- show that spatial structure of the environment is vastly different
+
+Future work
+
+
+Spatial point pattern vs Areal analysis 
 
 In conclusion, visual analysis of the location of entertainment outlets and VSO crimes suggest that they are positively correlated. However, further statistical analysis indicates that a repulsive relationship exists between the two. This scenario underpins the importance of rigorous statistical analysis in testing observations. The reasons for the repulsive relationship are unknown, and further research can be conducted in this area. This can include the incorporation of pedestrian footfall data.
 
-Areal analysis of vehicle crime rates at the LSOAs level indicates cluters of high vehicle crime in parts of West London, East London, Central London and Southwest London. Several hypotheses for these cluster have been formulated. Specifically, these clusters may be attributed to 1) large numbers of parked vehicles, or 2) a concentration of high-end vehicles. Future work can looking into quantifying the effect of variables such as the distance from industrial areas, carparks, and the nearest police station. Analysis at the LSOA level is subject to the modifiable areal unit problem, and further investigation of the individual points can be considered to better understand the dynamics at the local level. The limitations of a localised point-based analysis can thus be partially addressed using a broader areal-level analysis, and vice versa. 
+Areal analysis of vehicle crime rates at the LSOAs level indicates cluters of high vehicle crime in parts of West London, East London, Central London and Southwest London. Several hypotheses for these cluster have been formulated. Specifically, these clusters may be attributed to 1) large numbers of parked vehicles, or 2) a concentration of high-end vehicles. Future work can looking into quantifying the effect of variables such as the distance from industrial areas, carparks, and the nearest police station. 
+
+Analysis at the LSOA level is subject to the modifiable areal unit problem, and further investigation of the individual points can be considered to better understand the dynamics at the local level. The limitations of a localised point-based analysis can thus be partially addressed using a broader areal-level analysis, and vice versa. 
 
 As such, an integrated approach will be the best approach.
 
