@@ -75,6 +75,7 @@ library(spatstat)
 
 # for beautifying
 library(plotly)
+library(kableExtra)
 
 # for rmarkdown
 library(knitr)
@@ -86,7 +87,7 @@ library(bookdown)
 \pagebreak
 
 # Introduction  
-Crime (and its prevention and responses) is associated with significant social and economic costs. In England and Wales, the total cost of crimes against individuals and businesses is \$50.1 billion and \$8.7 billion respectively in 2015/16 alone [@Brand2014]. A significant portion of these costs are incurred in London, given that about 20% of crimes in England and Wales occurs in London [@MayorofLondon2016]. 
+Crime (and its prevention and responses) is associated with significant social and economic costs. In England and Wales, the total cost of crimes against individuals and businesses is £50.1 billion and £8.7 billion respectively in 2015/16 alone [@Brand2014]. A significant portion of these costs are incurred in London, given that about 20% of crimes in England and Wales occurs in London [@MayorofLondon2016]. 
 
 Consequently, much work has been done to understand the occurrence of crime, and to predict crime. To date, the spatial concentration of crime in cities is well-established in the literature [@Malleson2016]. [@Sherman1989]'s seminal analysis of predatory crime in Minneapolis revealed that 50% of police calls come from 3% of street segments, indicating that crime hotspots, down to the street level, are present within cities. Recent works have thus focussed on trying to improve spatial analysis techniques for crime. Specifically, [@Chainey2008] examined the use of different hotspot mapping techniques to predict spatial patterns of crime in Camden and Islington local authority district areas in London. Other researchers have been working on developing techniques to examine spatial-temporal patterns of crime [@Cheng2012], in order to understand how crime develops and evolves to improve crime prediction. 
 
@@ -181,7 +182,7 @@ Crime counts are also examined by LSOA, in order to study the distribution of cr
 LSOA_stats <- matrix(c(1.0, 64.0, 127.0, 175.3, 211.0, 7329.0), ncol=1, byrow=TRUE)
 rownames(LSOA_stats) <- c("Minimum","1st Quartile","Median","Mean","3rd Quartile","Maximum")
 colnames(LSOA_stats) <- c("Value")
-LSOA_stats <- kable(LSOA_stats, caption="Crime Count Statistics by LSOA")
+LSOA_stats <- kable(LSOA_stats, caption="Crime Count Statistics by LSOA")%>%kableExtra::kable_styling(latex_options = "hold_position")
 LSOA_stats
 ```
 
@@ -378,7 +379,7 @@ top_20 <-  data.frame(vs_census@data[order(-vs_census$freq_pop)[1:20], "Names"])
 #top_10_ <-  data.frame(vs_census@data[order(-vs_census$Freq)[1:20], "Names"])
 top_20$freq_pop <- vs_census@data[order(-vs_census$freq_pop)[1:20], "freq_pop"]
 colnames(top_20) <- c('LSOA name','Crime Rate')
-kable(top_20, caption = '20 LSOAs with the highest crime rates')
+kable(top_20, caption = '20 LSOAs with the highest crime rates')%>%kableExtra::kable_styling(latex_options = "hold_position")
 ```
 
 We select the City of London 001F (COL001F) to do our analysis as it has the highest crime density. We are also interested to investigate why this is so.   
