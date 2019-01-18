@@ -1,37 +1,49 @@
 ---
-title: "Spatial Analysis of Crime Patterns in London"
+title: \vspace{3in}"Spatial Analysis of Crime Patterns in London"
+subtitle: "CEGE0097: Spatial Analysis and Geocomputation"
 author: "Ng Jia Wen & Junju Ng"
-date: "28/10/2018"
 output:
-  bookdown::html_document2:
-    number_sections: true
-    keep_tex: yes
-    toc: true
-    theme: united
   bookdown::pdf_document2:
-    number_sections: true
-    keep_tex: yes
+    fig_caption: yes
+    number_sections: yes
+    toc: False
+    includes:
+      in_header: preamble-latex.tex
+  rmarkdown::pdf_document:
+    fig_caption: yes
+    number_sections: yes
     toc: true
-bibliography: library.bib
+    includes:
+      in_header: preamble-latex.tex
+  bookdown::html_document2:
+    keep_tex: yes
+    number_sections: yes
+    theme: united
+    toc: yes
 biblio-style: apalike
-always_allow_html: yes
-link-citations: yes
-editor_options: 
+editor_options:
   chunk_output_type: console
+link-citations: yes
+bibliography: library.bib
+always_allow_html: yes
 ---
 
 \pagebreak
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.pos = 'H')
+```
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=FALSE,
                cache=TRUE, autodep=TRUE, cache.comments=FALSE,
                message=FALSE, warning=FALSE)
-
-library(knitr)
-knitr::opts_chunk$set(fig.pos = '!h')
+knitr::opts_chunk$set(fig.pos = 'H')
 #setwd("~/Documents/UCL/Term_1/SAG/geo_project")
 
 ```
+
+\tableofcontents
 
 ```{r}
 ### Load libraries ###
@@ -61,19 +73,20 @@ library(gstat)
 library(spdep)
 library(spatstat)
 
+# for beautifying
+library(plotly)
+
 # for rmarkdown
-#library(knitr)
+library(knitr)
 library(bookdown)
 #library(tinytex)
-
-
 
 ```
 
 \pagebreak
 
 # Introduction  
-Crime (and its prevention and responses) is associated with significant social and economic costs. In England and Wales, the total cost of crimes against individuals and businesses is ?50.1 billion and ?8.7 billion respectively in 2015/16 alone [@Brand2014]. A significant portion of these costs are incurred in London, given that about 20% of crimes in England and Wales occurs in London [@MayorofLondon2016]. 
+Crime (and its prevention and responses) is associated with significant social and economic costs. In England and Wales, the total cost of crimes against individuals and businesses is \$50.1 billion and \$8.7 billion respectively in 2015/16 alone [@Brand2014]. A significant portion of these costs are incurred in London, given that about 20% of crimes in England and Wales occurs in London [@MayorofLondon2016]. 
 
 Consequently, much work has been done to understand the occurrence of crime, and to predict crime. To date, the spatial concentration of crime in cities is well-established in the literature [@Malleson2016]. [@Sherman1989]'s seminal analysis of predatory crime in Minneapolis revealed that 50% of police calls come from 3% of street segments, indicating that crime hotspots, down to the street level, are present within cities. Recent works have thus focussed on trying to improve spatial analysis techniques for crime. Specifically, [@Chainey2008] examined the use of different hotspot mapping techniques to predict spatial patterns of crime in Camden and Islington local authority district areas in London. Other researchers have been working on developing techniques to examine spatial-temporal patterns of crime [@Cheng2012], in order to understand how crime develops and evolves to improve crime prediction. 
 
@@ -85,7 +98,16 @@ London is a thriving metropolis in the United Kingdom with a population of 8.8 m
 
 London consists of 33 local government districts (32 London Boroughs and the City of London). The City of London Police is the police force responsible for law enforcement within the City of London while the Metropolitan Police Service is reponsible for policing the Greater London region, excluding the City of London. Greater London can be split into 4835 geographic regions known as lower layer super output areas(LSOAs) for the purposes of reporting small-area statistics. These LSOAs will form the basis of the analysis.
 
-![Boroughs of London](pictures/London.png){width=500px}
+
+
+```{r, out.width = '50%', fig.align="center", fig.cap="London LSOAs"}
+load("boundaries/LondonLSOA")
+plot(LondonLSOA)
+```
+
+
+![Boroughs of London](pictures/London.png)
+
 \pagebreak
 
 # Data description  
@@ -124,25 +146,15 @@ A total of 1,048,712 crimes were reported in 2017. Of these crimes, 1,035,826 (9
 
 The barplot below depicts the frequency of crimes by crime type in London in 2017 (Figure \@ref(fig:barplot)). Over 40% of reported crimes in London come from 2 categories - anti-social behaviour (22.0%) and violence and sexual offences (20.7%). The next two most significant crime types making up 20% of crimes are other theft (10.5%) and vehicle crime (10.0%). 36.9% of crimes fall under the remaining 10 crime types. As such, different types of crimes are reported at different frequencies, with antisocial behaviour and violence and sexual offences being the most commonly reported crimes, followed by vehicle crime and other theft.
 
+
 ```{r barplot, echo=FALSE, fig.cap="2017 London crime counts by crime type"}
 # Plot barplot of crime type
 par(mar=c(8, 4.1, 4.1, 2.1))
-barplot(table(df$Crime.type),las=2, ylab="Frequency", cex.names=0.6, cex.axis=0.6, cex.lab=0.6)
-text(0.7, 220000, "227995", cex = 0.6)
-text(1.9,28000,"21450", cex=0.6)
-text(3.1,83000,"75801", cex=0.6)
-text(4.3,67000,"61446", cex=0.6)
-text(5.5,38000,"32459", cex=0.6)
-text(6.7,17000,"10094", cex=0.6)
-text(7.9,118000,"108696", cex=0.6)
-text(9.1,13000,"6603", cex=0.6)
-text(10.3,55000,"47766", cex=0.6)
-text(11.5,39000,"30825", cex=0.6)
-text(12.7,55000,"47928", cex=0.6)
-text(13.9,55000,"47422", cex=0.6)
-text(15.1,110000,"103237", cex=0.6)
-text(16.3,205000,"214104", cex=0.6)
+ylim <- c(0, 1.5*max(table(df$Crime.type)))
+barplot <- barplot(table(df$Crime.type),las=2, ylab="Frequency", cex.names=0.6, cex.axis=0.6, cex.lab=0.6, col = rainbow(length(unique(df$Crime.type))), ylim = ylim)
+text(x = barplot, y = table(df$Crime.type), label = table(df$Crime.type), pos = 3, cex = 0.8, col = "black")
 ```
+
 
 **Variations in Crime by Type and Month**
 
@@ -152,12 +164,15 @@ A line graph of crime count by type and month (Figure \@ref(fig:linegraph)) is p
 # Plot line chart crime x month
 crime_count_by_month <-data.frame(table(df$Month, df$Crime.type)) 
 names(crime_count_by_month) <- c("Month", "Crime.type","Freq")
+crime_count_by_month$Month <- gsub("2017-", "", crime_count_by_month$Month)
+
 
 ggplot(crime_count_by_month, aes(x = Month, y = Freq, colour = Crime.type, group=Crime.type), main="Crime Count")+
   geom_line()+
   geom_point()+
   scale_color_discrete(name = "Crime types")+
-  labs(y = "Crime count")
+  labs(y = "Crime count") + 
+  scale_x_discrete(labels = abbreviate)
 ```
 
 **Variations in Crime by LSOA**
@@ -193,8 +208,6 @@ tm_shape(LondonLSOA_transformed) +tm_polygons(col="Freq", palette="Blues", style
 
 A crime rate map (Figure \@ref(fig:crimeratemap)) is also plotted to take into account population size in each LSOA. This is derived by taking the crime count divided by the resident population in the corresponding LSOA and then multipled by 1000 (i.e. crime count per 1000 residents). These crime rate maps allow for the assessment of the risk of crime [@Brantingham1997]. However, it is to be noted that resident populations are used to calculate crime rate. Thus, regions with a low resident population but high pedestrian population (e.g. commercial areas) would have an inflated crime rate. 
 
-Visually, although there are some differences between the crime rate and crime count maps, the regions with the highest crime counts are also the regions with the highest crime rates. However, a number of regions outside of central London with slightly higher crime counts (235 to 871) have lower-than-expected crime rates. This indicates that residential population does not have a significant influence on crime counts, except when crime counts are slightly elevated and occur in LSOAs outside central London (presumably with a higher residential population). 
-
 ```{r crimeratemap, echo=FALSE, fig.cap="2017 London crime rate map by LSOA"}
 load("lsoa_census.Rda")
 census <-  LondonLSOA_transformed
@@ -207,6 +220,10 @@ tm_shape(census) + tm_polygons(col="freq_pop", palette="YlGnBu", style = "jenks"
 
 # Missing data here because no residential areas in those census tracts
 ```
+
+Visually, although there are some differences between the crime rate and crime count maps, the regions with the highest crime counts are also the regions with the highest crime rates. However, a number of regions outside of central London with slightly higher crime counts (235 to 871) have lower-than-expected crime rates. This indicates that residential population does not have a significant influence on crime counts, except when crime counts are slightly elevated and occur in LSOAs outside central London (presumably with a higher residential population). 
+
+
 \pagebreak
 
 # Methodology
@@ -222,12 +239,11 @@ A spatial point pattern analysis was done on the City of London 001F (COL001F) L
 Two hypotheses were made in the process of analysing VSO crime patterns in the LSOA:
 
     H1. VSO crimes are randomly distributed in COL001F 
-
     H2. VSO crime locations positively correlate with the locations of entertainment outlets
 
 The reason for these hypotheses will be made clearer in section 5.1. 
 
-Here is the methodology employed to investigate the hypotheses: 
+**Here is the methodology employed to investigate the hypotheses:** 
 
 1. Test H1 with Quadrat Counting
     + If homogenous, find out if there is clustering with Ripley's K Function. 
@@ -241,7 +257,7 @@ Here is the methodology employed to investigate the hypotheses:
     + If Inhomogenous K cross function reveals no correlation, H2 is rejected.
     + If Inhomogenous K cross function reveals negative correlation, H2 is rejected. 
 
-The following statistical methods were used in the process:
+**The following statistical methods were used in the process:**
 
 1. Quadrat Counting
     
@@ -288,7 +304,6 @@ The following statistical methods were used in the process:
 Visual inspection of the maps suggests that vehicle crime rates appear to concentrate in regions. Thus, the following hypothesis was generated:
 
     H3. Vehicle crimes are spatially correlated
-    
     H4. Vehicle crime rates are correlated with industrial areas
     
 The reason for these hypotheses will be made clearer in section 5.2.
@@ -372,7 +387,7 @@ kable(top_20, caption = '20 LSOAs with the highest crime rates')
 We select the City of London 001F (COL001F) to do our analysis as it has the highest crime density. We are also interested to investigate why this is so.   
 
 ### Analysing Violence and Sexual Offences on a Local Scale (City of London 001F)
-```{r clean-vso-data}
+```{r clean-vso-data, echo=FALSE, results='hide'}
 ######################## Clean data ###########################
 COL001F_shp <- vs_LSOA[vs_LSOA$LSOA11NM == 'City of London 001F',]
 COL001F_roads <- readOGR('boundaries/COL001F_roads/COL001F_roads.shp')
@@ -406,15 +421,14 @@ By plotting the spatial distribution of the crimes on a map (Figure \@ref(fig:CO
 
 H1. VSO crimes are randomly distributed in the City of London 001F LSOA    
 
-
-```{r COL001Fmapwroads, echo=FALSE, fig.cap="City of London 001F LSOA Map with Roads"}
+```{r COL001Fmapwroads, echo=FALSE, fig.cap="City of London 001F LSOA Map with Roads",out.width="70%", fig.align='center'}
 ## plot map of COL001F
 tmap_mode("plot")
 tm_shape(roads)+
   tm_lines(col= 'grey', lwd=1.0)+ #
   tm_layout(legend.bg.color="white",
             title="Roads in City of London 001F",
-            title.position = c("left", "top"), fontfamily = 'Arial') +
+            title.position = c("left", "top")) +
 tm_shape(unique_points)+
   tm_dots(size = 0.1, col = 'red', alpha = 1)
 ```
@@ -427,11 +441,13 @@ pts <- coordinates(points_ll)
 COL001F_Owin <- as.owin(COL001F_shp)
 COL001F_ppp <- ppp(pts[,1],pts[,2], window=COL001F_Owin)
 ```
-To test for H1, we employ the use of quadrat counting. If the spatial pattern is homogeneous, each quadrat should have roughly the same amount of intensity (points per area) (Figure \@ref(fig:COL001Fhomo)).      
-```{r COL001Fhomo, echo=FALSE, fig.cap="Quadrat counts within COL001F LSOA"}
+To test for H1, we employ the use of quadrat counting. If the spatial pattern is homogeneous, each quadrat should have roughly the same amount of intensity (points per area) (Figure \@ref(fig:COL001Fhomo)).
+
+```{r COL001Fhomo, echo=FALSE, fig.cap="Quadrat counts within COL001F LSOA", out.width="70%", fig.align='center'}
 ### test for homogeneity 
 qX <- quadratcount(COL001F_ppp, nx = 8 , ny = 4)
-plot(COL001F_ppp, pch=16)
+COL001F_ppp <- as.ppp(COL001F_ppp)
+plot(COL001F_ppp, pch=16, main = "VSO Quadrat Counts")
 plot(qX, add = TRUE, lty=2, cex = 0, col = 'red') 
 ```
   
@@ -444,18 +460,18 @@ qt
 As the p-value is less than 0.05, it rejects the null hypothesis that the crimes are homogeneous.   
 
 Next, we use the Kernel Density Estimation to visualise the different intensities of the VSO crime on the map.      
+
+![Kernel Density Map of VSO crimes in COL001F](pictures/COL001F_Hotspot_box.png)  
+
 ```{r COL001F-KDE}
 COL001F_den <- density(COL001F_ppp)
-plot(COL001F_den, main='City of London 001F')
 ```
 
 From the map, clusters of VSO crime seem to occur North-East of City of London 001F. To understand why this is so, we can study the area in more detail (red box).    
 
-![](pictures/COL001F_Hotspot_box.png)  
-
 The street level view reveals a hotspot of 67 VSO crimes in the region. 
 
-![](pictures/COL001F_Hotspot.png)
+![Hotspot in North-East COL001F with 67 crime occurrences](pictures/COL001F_Hotspot.png)
 
 Based on visual inspection alone, the offences seem to congregate around public entertainment outlets (orange markers above). Here, we construct a second hypothesis.   
 
@@ -463,7 +479,7 @@ H2: The location of VSO crimes correlate with the location of entertainment outl
 
 We define entertainment outlets here to be: restaurants, bars and pubs. With open street map, we can extract the locations of these outlets and visualise them on a map, alongside the VSO crimes:   
 
-```{r COL001F-redbluedotmap}
+```{r COL001F-redbluedotmap, fig.cap="Map of COL001F showing locations of VSO crimes and entertainment outlets", out.width="70%", fig.align='center'}
 # get COL001F osm data
 COL001F_nodes_ways <- readRDS(file = "COL001F_nodes_ways.rds")
 
@@ -502,7 +518,7 @@ tm_add_legend(
   
 Visually, the map seems to agree with our hypothesis. VSO crime locations seem to correlate with locations of entertainment outlets. We can perform an inhomogeneous kcross function to determine their spatial relationship.   
 
-```{r COL001F-kcross}
+```{r COL001F-kcross, fig.cap="Inhomogeneous K cross function on VSO and entertainment outlet locations", out.width="70%", fig.align='center'}
 ##### prepare data for kcross #####
 # create joint pubs_points df
 POIs_type <- rep('POIs', nrow(POIs@coords))
@@ -518,16 +534,18 @@ POIspoints_ppp <- ppp(pts[,1],pts[,2], window=COL001F_Owin, marks = POIs_points$
 
 # kcross test
 kc <- Kcross.inhom(POIspoints_ppp, i ='POIs', j = 'crime')
-plot(kc)
+plot(kc, main = 'Kcross.inhom: VSO crimes and Entertainment Outlets')
 ```
   
 The inhomogeneous kcross function tells us that there is in fact, a repulsive spatial relationship between the location of VSO crimes and the location of entertainment outlets (lines below the blue line) -- VSO crimes do not cluster around entertainment outlets.  
 
 Running a monte-carlo simulation tells us whether this observation is statistically significant:  
-
-```{r COL001F-kcross-monte}
+```{r, results='hide'}
 Kcross.inhom_monte_carlo <- envelope(POIspoints_ppp, fun = Kcross.inhom, nsim =100, i = 'POIs', j = 'crime')
-plot(Kcross.inhom_monte_carlo)
+```
+
+```{r COL001F-kcross-monte, echo=FALSE, fig.cap="Monte Carlo Simulation on Kcross with observed (black line) below acceptance region", out.width="70%", fig.align='center', results='hide'}
+plot(Kcross.inhom_monte_carlo, main = "Monte Carlo Simulation on Kcross.inhom")
 ```
 
 The observed *Kcrossinhom* line lies below and outside of the acceptance region. This means that the null hypothesis that the 2 variables are independent is rejected. The results also indicate a dispersive relationship between the 2 variables.   
@@ -561,21 +579,6 @@ While this is a quick and dirty way of determining homogeneity, the limitation o
 
 Our second hypothesis was that VSO crimes are positively correlated with entertainment outlets and this was proven to be false -- they in fact have a repulsive relationship. The reason for this is not known but we can come up with several explanations why this may be so. We can also cross-check this by using other statistical methods like pair-correlation cross function (pcfcross) to see if the results match. In this study, the size of the dataset is a limitation and the results may be more accurate (assuming that this interaction is consistent) or even be subjected to change, if we analyse a bigger area like a Middle Layer Super Output Area (MSOA) or a borough. 
 
-```{r H031A-map}
-
-#### Just Hillingdon 031A #### 
-H031A_shp <- vs_LSOA[vs_LSOA$LSOA11NM == 'Hillingdon 031A',] 
-H031A_ll <- vs_df[vs_df$LSOA.name == 'Hillingdon 031A',] 
-H031A_ll <- subset(H031A_ll, select=c("Longitude", "Latitude"))
-
-H031A_map <- leaflet(H031A_ll) %>% 
-  addProviderTiles(providers$CartoDB.Positron) %>% 
-  addCircleMarkers(radius = 1, color = 'blue') %>%  
-  addPolygons(data = H031A_shp, weight = 1) 
-
-H031A_map 
-  
-```
 
 ## Analysing Vehicle Crime
 
@@ -587,8 +590,11 @@ dfvehicle <- dfvehicle[!is.na(dfvehicle$Latitude),]
 ```
 
 Figure \@ref(fig:vhcrimeratemap) shows the spatial distribution of vehicle crime rates by LSOA. Several generalised observations are described below:  
-1. Majority of LSOAs with the highest crime rates are located north of the river Thames  
+
+1. Majority of LSOAs with the highest crime rates are located north of the river Thames 
+
 2. LSOAs with the highest crime rates tend to be found along the river Thames   
+
 3. LSOAs in (2) can be grouped into 4 main areas: East London (e.g. Newham, Barking, Greenwich), Central London (e.g. City of London, Westminster), Southwest London (e.g. Kensington, Knightsbridge), West London (e.g. Heathrow, Acton, Hammersmith, Chiswick)  
 
 ```{r}
@@ -617,7 +623,7 @@ vehicle_census$freq_pop <-  vehicle_census$Freq / vehicle_census$total_pop * 100
 
 tmap_mode("plot")
 #tmap_mode("view")
-tm_shape(vehicle_census)+ tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents")+tm_layout("2017 London Vehicle Crime Rate by LSOA", title.size=0.8)
+tm_shape(vehicle_census)+ tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents")+tm_layout("2017 London Vehicle Crime Rate by LSOA", title.size=1)
 
 # Missing data here because no residential areas in those census tracts??
 ```
@@ -668,7 +674,7 @@ moranCluster <- function(shape, W, var, alpha=0.05, p.adjust.method="bonferroni"
                                         ifelse(shape$scaled<0 & shape$lag_scaled<0, "Low-low",
                                                ifelse(shape$scaled<0 & shape$lag_scaled<0, "Low-high", "Equivalent")))))
   shape$sig_cluster <- as.character(shape$lag_cat)
-  shape$sig_cluster[!shape$sig] <- "Non-sig"
+  shape$sig_cluster[!shape$sig] <- "Non-significant"
   shape$sig_cluster <- as.factor(shape$sig_cluster)
   results <- data.frame(Ii=shape$Ii, pvalue=shape$Iip, type=shape$lag_cat, sig=shape$sig_cluster)
 
@@ -678,9 +684,11 @@ moranCluster <- function(shape, W, var, alpha=0.05, p.adjust.method="bonferroni"
 clusters <- moranCluster(vehicle_LSOA, W=Wl, var="Freq")$results
 vehicle_LSOA$Ii_cluster <- clusters$sig
 
+mycols <- colors()[c(555,490,329)]
+
 #plot Ii values by HH, LL and non-sig
 tmap_mode("plot")
-tm_shape(vehicle_LSOA) + tm_polygons(col="Ii_cluster", border.col='transparent', title = "Nature of cluster")
+tm_shape(vehicle_LSOA) + tm_polygons(col="Ii_cluster", border.col='transparent', title = "Nature of cluster", palette = mycols)+ tm_layout("Statistically Significant Moran's I Clusters", title.size=0.8, legend.title.size=0.8)
 ```
 
 These high-high clusters can be used to identify buffer regions with high vehicle crime rates - a high-high clusters are only identified when an LSOA with high crime rates is surrounded by LSOAs with high crime rates. This can aid the allocation of police resources and outreach efforts in the event of a resource shortage. It is also a strategic move, as the spatial autocorrelation in vehicle crimes may mean that a reduction of crime in one LSOA has effects on crime rates in neighbouring LSOAs.
@@ -691,6 +699,8 @@ Earlier analysis reveals that elevated crime rates tend to occur in specific reg
 
 **East London**
 
+![East London](pictures/eastlondon.png)
+
 In East London, the LSOAs with high crime rates either have 1) industrial parks/scrapyards/depots (e.g. Barking LSOAs, Newham LSOAs) and/or 2) retail parks/leisure parks (e.g. Newham LSOAs, Greenwich LSOAs). For instance, the agglomeration of retail parks in Newham (and the accompanying parking lots), such as the Gallions Reach shopping park, Beckton Triangle retail park and Gateway retail park may contribute to the elevated vehicle crime rates in the LSOA. Likewise, in Greenwich, the presence of leisure parks and the O2 stadium may contribute to the high vehicle crime rates. The high vehicle crime rates at retail parks/leisure parks suggests that thieves are likely opportunistic, and target these areas due to the high volume of vehicles parked in these areas.
 
 ![Parking lots at retail parks at Newham](pictures/Newhamshopping.png)
@@ -700,6 +710,8 @@ On the other hand, in parts of Barking, the high vehicle crime rates may be attr
 ![Vehicles at industrial area in Barking](pictures/Barkingscrapyard.png) 
 
 **West London**
+
+![West London](pictures/westlondon.png)
 
 Interestingly, crime patterns are different in West London and can generally be linked to either carparks or car dealers. High rates of vehicle crime near Heathrow airport may be attributed to the high volumes of parked vehicles at short-stay and long-stay carparks. Criminals may therefore choose to operate near the airport, particularly at the long-stay carparks which are likely used by individuals travelling abroad. 
 
@@ -715,16 +727,20 @@ Vehicle crime rates are also high in Richmond, and may be linked to the presence
 
 **Southwest London**
 
+![Southwest London](pictures/southwestlondon.png)
+
 In contrast to other regions, where high crime rates are associated with industrial and commercial areas, in Southwest London, high vehicle crime rates occur in residential areas such as Kensington, Chelsea and Knightsbridge. Unlike other areas, the volume of parked vehicles is not exceptionally high - there are no carparks/industrial areas/car dealers. However, there are numerous luxury vehicles parked in these areas, as they are affluent neighbourhoods. Hence, it is likely that vehicle crime rates are high in these region, as thieves operating in these areas specifically target high-value vehicles.
 
 ![Luxury vehicles in Knightsbridge](pictures/Knightsbridge.png)
 
 **Central London** 
 
+![Central London](pictures/centrallondon.png)
+
 It is not clear why vehicle crime rates are high in central London, particularly in the City of London and Westminster. However, it is also interesting that some parts of the City of London (e.g. Moorgate, Barbican) have low vehicle crime rates - this may be due to the presence of secure parking in underground carparks.
 
 
-### Discussion 
+### Discussion & Limitations
 
 More detailed examination of regions with high vehicle crime rates suggests two main modes of operation for criminals:  
 1) Operating in areas with large numbers of parked vehicles (i.e. quantity over quality)  
@@ -760,27 +776,14 @@ load("dat_dropped.Rda")
 #tm_shape(vehicle_census)+ tm_layout("Industrial estates and vehicle crime rates by LSOA") + tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents", alpha=0.4)+tm_shape(dat_dropped)+tm_polygons(col='black', border.col='transparent',alpha=0.4)
 
 tmap_mode("plot")
-tm_shape(vehicle_census)+ tm_layout("Industrial estates and vehicle crime rates by LSOA", title.size = 2) + tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents")+tm_shape(dat_dropped)+tm_polygons(col='black', border.col='transparent',alpha=0.6)
+tm_shape(vehicle_census)+ tm_layout("Industrial estates and vehicle crime rates by LSOA", title.size = 1) + tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents",title.size = 0.7)+tm_shape(dat_dropped)+tm_polygons(col='black', border.col='transparent',alpha=0.6)
 ```
 
 \pagebreak
 
 # Overall discussion and conclusions
 
-compare between crime type
-Different crime type -- different patterns  (so employ different method)
-
-comparing between analysing local scale vs LSOA level
-- prove that results obtained by analysing a single LSOA cannot be generalised to other LSOA
-- hence shows the limitations of a local scale analysis --- that can only be achieved in a LSOA-level analysis 
-- Insert heathrow VSO map -- show that theres no pubs etc. -- show that spatial structure of the environment is vastly different
-
-Future work
-
-
-Spatial point pattern vs Areal analysis 
-
-In conclusion, visual analysis of the location of entertainment outlets and VSO crimes suggest that they are positively correlated. However, further statistical analysis indicates that a repulsive relationship exists between the two. This scenario underpins the importance of rigorous statistical analysis in testing observations. The reasons for the repulsive relationship are unknown, and further research can be conducted in this area. This can include the incorporation of pedestrian footfall data.
+In conclusion, visual analysis of the location of entertainment outlets and VSO crimes suggest that they are negatively correlated. However, further statistical analysis indicates that a repulsive relationship exists between the two. This scenario underpins the importance of rigorous statistical analysis in testing observations. The reasons for the repulsive relationship are unknown, and further research can be conducted in this area. This can include the incorporation of pedestrian footfall data. 
 
 Areal analysis of vehicle crime rates at the LSOAs level indicates cluters of high vehicle crime in parts of West London, East London, Central London and Southwest London. Several hypotheses for these cluster have been formulated. Specifically, these clusters may be attributed to 1) large numbers of parked vehicles, or 2) a concentration of high-end vehicles. Future work can looking into quantifying the effect of variables such as the distance from industrial areas, carparks, and the nearest police station. 
 
@@ -792,515 +795,43 @@ As such, an integrated approach will be the best approach.
 
 # References
 
+<!-- blah -->
 
+```{r, echo=FALSE}
+library(stringr)
+library(tidyverse)
 
-<!-- ### Analysing Factors that Contribute to VSO -->
-<!-- ```{r} -->
-<!-- ### Clean census data -->
-<!-- #https://data.london.gov.uk/dataset/lsoa-atlas -->
-<!-- # lsoa_census <- read.csv('data/lsoa_data_edited.csv') -->
-<!-- # lsoa_census$house_price <- as.numeric(lsoa_census$house_price) -->
-<!-- # lsoa_census_2 <- read.csv('data/lsoa_data_edited_2.csv') -->
-<!-- # lsoa_census <- left_join(lsoa_census, lsoa_census_2, by=c("Codes"="Codes", -->
-<!-- #                                                           "Names" = "Names")) -->
-<!-- # save(lsoa_census,file="lsoa_census.Rda") -->
-<!-- load("lsoa_census.Rda") -->
-<!-- vs_census <-  vs_LSOA -->
-<!-- vs_census@data <- left_join(vs_census@data, lsoa_census, by=c("LSOA11CD" = "Codes")) -->
-<!-- vs_census.W <- nb2listw(poly2nb(vs_census)) -->
+# code for counting words
 
-<!-- # run durbin model -->
-<!-- vs.durbin <- lagsarlm(Freq ~ X0.15 + X16.29 + X30.44 + X45.64 + X65. + Working.age + person_per_hectare + couple_w_children + white + uk_born + household_no_english + Christian + Buddhist + Hindu + Jewish + Muslim + Sikh + other_religion + no_religion + owned_outright + social_rented + private_rented + household_at_least_one_usual_resident + household_no_usual_resident + whole_house + apartment + house_price + unemployment_rate + bad_health + no_cars_in_household + poor_transport_access + household_income, data = vs_census@data, listw = vs_census.W, type = 'mixed') -->
+RmdWords <- function(file) {
 
-<!-- summary(vs.durbin) -->
-<!-- ``` -->
-<!-- **Here are the results** -->
-<!-- Significant and negatively correlated:   -->
-<!-- X0.15, X16.29, X45.64, X65, person_per_hectare, owned_outright, household_at_least_one_usual_resident, apartment, poor_transport_access                     -->
+  # Creates a string of text
+  file_string <- file %>%
+    readLines() %>%
+    paste0(collapse = " ") %>%
+    # Remove YAML header
+    str_replace_all("^<--- .*?--- ", "") %>%    
+    str_replace_all("^--- .*?--- ", "") %>%
+    # Remove code
+    str_replace_all("```.*?```", "") %>%
+    str_replace_all("`.*?`", "") %>%
+    # Remove LaTeX
+    str_replace_all("[^\\\\]\\$\\$.*?[^\\\\]\\$\\$", "") %>%
+    str_replace_all("[^\\\\]\\$.*?[^\\\\]\\$", "") %>%
+    # Deletes text between tags
+    str_replace_all("TC:ignore.*?TC:endignore", "") %>%
+    str_replace_all("[[:punct:]]", " ") %>%
+    str_replace_all("  ", "") %>%
+    str_replace_all("<", "") %>%
+    str_replace_all(">", "")
 
-<!-- Significant and positively correlated:   -->
-<!-- Christian, Buddhist, Hindu, Jewish, Muslim, no_religion, private-rented, household_no_usual_resident, unemployment_rate , no_cars_in_household , household_income                                          -->
-<!-- ### Extra code below  -->
+  # Save several different results
+  word_count <- str_count(file_string, "\\S+")
+  char_count <- str_replace_all(string = file_string, " ", "") %>% str_count()
 
-<!-- res_net <- google_places(location = c(51.513841,-0.088650), -->
-<!--               place_type = "restaurant", -->
-<!--               radius = 20000, -->
-<!--               key = api_key) -->
-<!-- #### Get COL001F roads shapefile #### -->
-<!-- # library('osmar') -->
-<!-- # library('geosphere') -->
-<!-- # london.box <- center_bbox(center_lon = -0.090074, center_lat = 51.515190, width =  1900, height = 1900) -->
-<!-- # api <- osmsource_api(url = "https://api.openstreetmap.org/api/0.6/") -->
-<!-- # london <- get_osm(london.box, source = api) -->
-<!-- # ways <- find(london, way(tags(k == "highway"))) -->
-<!-- # ways <- find_down(london, way(ways)) -->
-<!-- # ways <- subset(london, ids = ways) -->
-<!-- # hw_lines <- as_sp(ways, "lines")   -->
-<!-- # raster::shapefile(hw_lines,'COL001F_roads.shp') -->
-<!-- # spplot(hw_lines, zcol = "uid") -->
-<!-- # mapview(hw_lines)  -->
+   return(list(num_words = word_count, num_char = char_count, word_list = file_string))
+}
 
-<!-- Plotting VSO by LSOA, we get the following map:   -->
-<!-- ```{r} -->
-<!-- # Plot map -->
-<!-- cc_colors <- c('#FFE80C','#FF7700','#E81501') -->
-<!-- cc_pal <- colorBin( -->
-<!--   palette = cc_colors, -->
-<!--   bins = c(0,10,100,2000), -->
-<!--   na.color='black') -->
-
-<!-- pop_up_text = paste("Region: ", vs_LSOA$LSOA11NM, "<br>", -->
-<!--                           "Value: ", vs_LSOA$Freq, "<br>") -->
-
-<!-- vs_LSOA_map <- leaflet(vs_LSOA) %>% -->
-<!--   addProviderTiles(providers$CartoDB.Positron) %>% -->
-<!--   setView(lng = -0.118092, lat = 51.509865, zoom = 9)%>% -->
-<!--   addPolygons(stroke = FALSE, smoothFactor = 0.2, fillOpacity = 1, -->
-<!--     color = ~cc_pal(Freq), popup = pop_up_text) %>%  -->
-<!--   addLegend("bottomright",  -->
-<!--     colors= cc_colors,  -->
-<!--     labels=c('0-10', "10-100","100-2000"), -->
-<!--     opacity= 1) -->
-
-<!-- vs_LSOA_map -->
-<!-- ``` -->
-
-
-<!-- ### Violence and Sexual Offences   -->
-<!-- Violence and sexual offences (VSO) crime is chosen as it is one of the more severe crimes that bring about damage to people and property. Violence includes murder, kidnap, etc hence the level of severity of this nature of crime can be high. We want to understand more about these types of crimes in order to help understand and possibly predict the factors that contribute to this crime type.    -->
-
-<!-- ```{r} -->
-<!-- # Get violence and sexual offences crimes only -->
-<!-- vs_df <- subset(df, Crime.type == 'Violence and sexual offences') -->
-<!-- vs_df <- vs_df[!is.na(vs_df$Longitude),] -->
-<!-- vs_df <- vs_df[!is.na(vs_df$Latitude),] -->
-<!-- ``` -->
-
-<!-- If we plot a year's worth of VSO on a map, we would get the following result:    -->
-<!-- ```{r} -->
-<!-- # Violence and Sexual Offences Map  -->
-<!-- vs_dot_map <- leaflet(vs_df) %>%  -->
-<!--     addProviderTiles(providers$CartoDB.Positron) %>% -->
-<!--   setView(lng = -0.118092, lat = 51.509865, zoom = 9)%>% -->
-<!--   addCircleMarkers(radius =1, color = 'red', stroke = FALSE, fillOpacity = 0.5) -->
-
-<!-- vs_dot_map -->
-
-<!-- ``` -->
-<!-- This map is not very helpful in telling us much information about the crime nature. Hence, we employ some methods in point pattern analysis to help us understand more.  -->
-
-<!-- ### Point Pattern Analysis -->
-<!-- ```{r} -->
-<!-- # get ppp file -->
-<!-- london_shape <- readOGR('boundaries/greaterlondon.geojson') -->
-<!-- vs_spatial_points <-  vs_df -->
-<!-- coordinates(vs_spatial_points) <- ~Longitude+Latitude -->
-<!-- pts <- coordinates(vs_spatial_points) -->
-<!-- londonOwin <- as.owin(london_shape) -->
-<!-- vs_ppp <- ppp(pts[,1],pts[,2], window=londonOwin) -->
-
-<!-- # ggplot(data=vs_LSOA@data, aes(vs_LSOA$Freq)) + geom_histogram() + ggtitle('Violence and Sexual Assault Crimes in 2017') + ylab('Number of LSOAs') + xlab('Violence and Sexual Offences Occurrence') -->
-<!-- ``` -->
-
-<!-- Looking at the density plot below, we see that VSO is the most dense in the central part of London. -->
-<!-- ```{r} -->
-<!-- # density plot -->
-<!-- ds <- density(vs_ppp) -->
-<!-- plot(ds, main='Violence and Sexual Offences') -->
-<!-- ``` -->
-
-<!-- To test for spatial clustering, we run ripley's K function and it indicates that there is a high level of clustering for VSO.  -->
-<!-- ```{r} -->
-<!-- # ripley's k function -->
-<!-- ktest <- Kest(vs_ppp) -->
-<!-- plot(ktest) -->
-<!-- ``` -->
-
-<!-- However, this result is not very helpful. The sheer number of cases in central london as compared to everywhere else, skews ripley's K function -- there is clustering and the clustering happens in central london.    -->
-
-<!-- We could perhaps analyse VSO by LSOAs to ensure that the crime density is contained.  -->
-
-
-
-<!-- ### Map pubs in london -->
-<!-- ```{r} -->
-<!-- library("raster") -->
-<!-- library("sp") -->
-<!-- pubs <- readOGR("data/pubs.geojson", "OGRGeoJSON",require_geomType="wkbPoint") -->
-<!-- pubs <- spTransform(pubs, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0")) -->
-
-<!-- plot(LondonLSOA) -->
-<!-- plot(pubs, col="red" , add=TRUE) -->
-<!-- l <- LondonLSOA -->
-<!-- l@data <- subset(l@data,select=c('LSOA11NM')) -->
-<!-- res <- sp::over(pubs, l) -->
-
-<!-- res <- poly.counts(pubs,LondonLSOA) -->
-<!-- setNames(res, LondonLSOA@data$lala) -->
-
-<!-- pubs <- readOGR("data/pubs.geojson", "OGRGeoJSON",require_geomType="wkbPoint") -->
-<!-- map <- leaflet() %>% -->
-<!--   addProviderTiles(providers$CartoDB.Positron, group = "Base") %>% -->
-<!--   addCircleMarkers( -->
-<!--     data = pubs, -->
-<!--     radius = 1, -->
-<!--     color = "red", -->
-<!--     stroke = TRUE, fillOpacity = 1) -->
-
-<!-- map -->
-<!-- ``` -->
-<!-- ![](outputs/GIFs/all_gifs/Anti-social behaviour.gif) -->
-
-<!-- ### Create Maps for GIF -->
-<!-- ```{r} -->
-<!-- months <- c("2017-01","2017-02","2017-03","2017-04","2017-05","2017-06","2017-07","2017-08","2017-09","2017-10","2017-11","2017-12") -->
-
-<!-- crime_types <- unique(df$Crime.type) -->
-
-<!-- for (crime_type in crime_types){ -->
-<!--   for (month in months){ -->
-<!--   single_crime_df <- subset(df, Crime.type == crime_type & Month == month) -->
-<!--   single_crime_map <- leaflet(single_crime_df, width = "100%")%>% -->
-<!--   addProviderTiles(providers$CartoDB.Positron) %>% -->
-<!--   setView(lng = -0.118092, lat = 51.509865, zoom = 9)%>% -->
-<!--   addCircleMarkers(radius =1, color = 'red', stroke = FALSE, fillOpacity = 0.5) %>% -->
-<!--   addLabelOnlyMarkers(lng = -0.5, lat = 51.7, label = month, -->
-<!--                       labelOptions = labelOptions(noHide = T, textOnly = T,style = list( -->
-<!--         "color" = "black", -->
-<!--         "font-family" = "source sans pro", -->
-<!--         "font-style" = "bold", -->
-<!--         "font-size" = "20px", -->
-<!--         "border-color" = "rgba(0,0,0,0.5)" -->
-<!--       ))) -->
-<!--   path <- sprintf("/GIFs/%s/%s_%s.png", crime_type, crime_type,month) -->
-<!--   print(path) -->
-<!--   mapshot(single_crime_map, file = paste0(getwd(), path, sep="")) -->
-<!-- } -->
-<!-- } -->
-
-<!-- ``` -->
-
-<!-- ### Create GIFs -->
-<!-- ```{r} -->
-
-<!-- library(purrr) -->
-<!-- library(magick) -->
-
-<!-- crime_types <- unique(df$Crime.type) -->
-
-<!-- for (crime_type in crime_types){ -->
-<!--   file_path = paste0(getwd(), sprintf("/GIFs/%s", crime_type), sep="") -->
-<!--   list.files(path = file_path, pattern = "*.png", full.names = T) %>% -->
-<!--     map(image_read) %>% # reads each path file -->
-<!--     image_join() %>% # joins image -->
-<!--     image_animate(fps=2) %>% # animates, can opt for number of loops -->
-<!--     image_write(sprintf("%s.gif",crime_type)) # write to current dir -->
-<!-- } -->
-
-<!-- ``` -->
-
-
-<!-- ### Clean Data -->
-<!-- ```{r} -->
-<!-- # Load crime and boundary data -->
-<!-- COL_data <- read.csv(file=paste(getwd(),'/data/COL_street.csv',sep=''), header=TRUE, sep="\t") -->
-<!-- metro_data <- read.csv(file=paste(getwd(),'/data/metro_street.csv',sep=''), header=TRUE, sep="\t") -->
-<!-- data <- rbind(COL_data, metro_data) -->
-<!-- load("boundaries/LondonLSOA") -->
-<!-- load("boundaries/LondonWards") -->
-<!-- projection <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") -->
-<!-- LondonWards <- spTransform(LondonWards, projection) -->
-<!-- LondonLSOA <- spTransform(LondonLSOA, projection) -->
-
-<!-- # get crime df -->
-<!-- df <- subset(data, select=c("Crime.type", "LSOA.name","Longitude","Latitude","Month")) -->
-<!-- save(df,file="df.Rda") -->
-<!-- ``` -->
-
-
-
-<!-- safa -->
-<!-- ```{r} -->
-<!-- #Local Moran's I -->
-
-<!-- #calculate unadjusted local Moran's I using localmoran -->
-<!-- Ii <- localmoran(vehicle_LSOA$Freq, Wl) -->
-<!-- #Note: localmoran returns p-value with Bonferroni adjustment -->
-<!-- vehicle_LSOA$Ii <- Ii[,"Ii"] #store Ii in a column in medianhpward -->
-<!-- tm_shape(vehicle_LSOA) + tm_polygons(col="Ii", palette="-RdBu", style="quantile", border.col="transparent") -->
-
-<!-- #ADJUSTED P-VALUE -->
-<!-- #calculate adjusted local Moran's I -->
-<!-- Ii_adjusted <- localmoran(vehicle_LSOA$Freq, Wl, p.adjust.method = "bonferroni") -->
-<!-- vehicle_LSOA$Iip_adjusted <- Ii_adjusted[,"Pr(z > 0)"] -->
-<!-- #make all Ii values nonsignificant -->
-<!-- vehicle_LSOA$Ii_ad_sig <- "nonsignificant" -->
-
-<!-- #then make significant Ii values significant -->
-<!-- vehicle_LSOA$Ii_ad_sig[which(vehicle_LSOA$Iip_adjusted < 0.05)] <- "significant" -->
-
-<!-- #plot adjusted p-value significance map for Ii -->
-<!-- tm_shape(vehicle_LSOA) + tm_polygons(col="Ii_ad_sig", palette="-RdBu") -->
-
-<!-- ``` -->
-
-```{r}
-#mparking <- opq(bbox = 'greater london uk') %>%
-#    add_osm_feature(key = 'amenity', value = 'motorcycle_parking')
-#cparking <- opq(bbox = 'greater london uk') %>%
-#     add_osm_feature(key = 'amenity', value = 'parking')
-# parking <- c (mparking, cparking)
-# parkingdata <- osmdata_sf(parking)
-# 
-# industrial <- opq(bbox = 'greater london uk') %>%
-#     add_osm_feature(key = 'landuse', value = 'industrial')
-# industrialdata <- osmdata_sf(industrial)
-
-# plots industrial areas as polygons
-
-# tmap_mode("view")
-# tm_shape(vehicle_census)+ tm_layout("Parking, industrial estates and vehicle crime rates by LSOA") + tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents", alpha=0.4)+tm_shape(parkingdata$osm_points)+tm_dots(alpha=0.4)+tm_shape(parkingdata$osm_polygons)+tm_polygons(alpha=0.4)+tm_shape(dat_dropped)+tm_polygons(col='blue', border.col='transparent',alpha=0.4)
-# 
-# tmap_mode("plot")
-# tm_shape(vehicle_census)+ tm_layout("Parking, industrial estates and vehicle crime rates by LSOA") + tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents")+tm_shape(parkingdata$osm_points)+tm_dots(alpha=0.4)+tm_shape(parkingdata$osm_polygons)+tm_polygons(alpha=0.4)+tm_shape(dat_dropped)+tm_polygons(col='blue', border.col='transparent',alpha=0.4)
-
-
-# plots industrial areas as points
-#tmap_mode("view")
-#tm_shape(vehicle_census)+ tm_layout("Parking, industrial estates and vehicle crime rates by LSOA") + tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents", alpha=0.4)+tm_shape(parkingdata$osm_points)+tm_dots(alpha=0.4)+tm_shape(parkingdata$osm_polygons)+tm_polygons(alpha=0.4)+tm_shape(industrialdata$osm_polygons)+tm_dots(col='blue',alpha=0.4)
-
-#tmap_mode("plot")
-#tm_shape(vehicle_census)+ tm_layout("Parking, industrial estates and vehicle crime rates by LSOA") + tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents")+tm_shape(parkingdata$osm_points)+tm_dots(alpha=0.4)+tm_shape(parkingdata$osm_polygons)+tm_polygons(alpha=0.4)+tm_shape(industrialdata$osm_points)+tm_dots(col='blue',alpha=0.4)
-
+#words <- RmdWords("geo_project_r.Rmd")
+#words$num_words
 ```
-<!-- ```{r} -->
-<!-- #EXTRA -->
-<!-- # count number of industrial POIs in each LSOA -->
-<!-- industrialosm <- opq(bbox = 'greater london uk') %>% -->
-<!--     add_osm_feature(key = 'landuse', value = 'industrial') %>% -->
-<!--     osmdata_xml(filename = 'industrial.osm') -->
-
-<!-- dat <- sf::st_read('industrial.osm', layer = 'multipolygons', quiet = TRUE) -->
-<!-- dat_sp <- as(dat, 'Spatial') -->
-<!-- dat_sp_transformed <- spTransform(dat_sp, projection) -->
-
-<!-- n.industrial = poly.counts(dat_sp_transformed, LondonLSOA_transformed_vehicle) -->
-
-<!-- tm_shape(vehicle_census)+ tm_layout("Parking, industrial estates and vehicle crime rates by LSOA") + tm_polygons(col="freq_pop", palette="YlOrRd", style = "jenks", border.col='transparent', n=3, title = "Vehicle crime counts per 1000 residents", alpha=0.4)+tm_shape(parkingdata$osm_points)+tm_dots(alpha=0.4)+tm_shape(parkingdata$osm_polygons)+tm_polygons(alpha=0.4)+tm_shape(dat_sp_transformed)+tm_polygons(col='blue', border.col='transparent',alpha=0.4) -->
-
-<!-- choropleth(LondonLSOA_transformed_vehicle,n.industrial) -->
-
-<!-- ``` -->
-
-
-<!-- Not sure why for Hounslow 008C but other parts of Chiswick seem to be tied to used car shops/car dealers. Other parts also have sainsburys. Although some other areas appear to be purely residential could this be due to High concentration of large carparks -> car thieves in the area -> opportunistic crime? -->
-
-<!-- Neighbouring Hammersmith area appears quite residential but not sure why high vehicle theft rates... -->
-
-<!-- South Kensington/Knightsbridge/parts of Chelsea, HSK, W Ken areas residential but probably because wealthy... -->
-
-<!-- Not sure about central London/covent garden areas (Mayfair because wealthy?). Surprisingly, parts of City of London e.g. Monument/St Pauls'/Barbican/Moorgate area low rates (proper carparks with security?) -->
-
-<!-- Stratford - ASDA superstore, industrial areas -->
-
-<!-- Need to qualify ecological fallacy error - larger regions. but also need to consider that some LSOAs only have 1 crime... -->
-
-<!-- Also need to consider pedestrian counts... high crime count may just be a reflection of high pedestrian counts... -->
-
-<!-- # A closer analysis of Heathrow Airport -->
-
-<!-- ```{r} -->
-<!-- #Only for hillingdon -->
-<!-- H031A_ll <- dfvehicle[dfvehicle$LSOA.name == 'Hillingdon 031A',] -->
-<!-- H031C_ll <- dfvehicle[dfvehicle$LSOA.name == 'Hillingdon 031C',] -->
-<!-- H032A_ll <- dfvehicle[dfvehicle$LSOA.name == 'Hillingdon 032A',] -->
-
-<!-- H031A_llxy <- H031A_ll[,c(3,4)] -->
-<!-- H031C_llxy <- H031C_ll[,c(3,4)] -->
-<!-- H032A_llxy <- H032A_ll[,c(3,4)] -->
-
-<!-- H031A_llshp <- LondonLSOA_transformed[LondonLSOA_transformed$LSOA11NM == 'Hillingdon 031A',] -->
-<!-- H031C_llshp <- LondonLSOA_transformed[LondonLSOA_transformed$LSOA11NM == 'Hillingdon 031C',] -->
-<!-- H032A_llshp <- LondonLSOA_transformed[LondonLSOA_transformed$LSOA11NM == 'Hillingdon 032A',] -->
-
-
-<!-- H031A_llvehiclespdf <- SpatialPointsDataFrame(coords = H031A_llxy, data = H031A_ll, proj4string = projection) -->
-<!-- H031C_llvehiclespdf <- SpatialPointsDataFrame(coords = H031C_llxy, data = H031C_ll, proj4string = projection) -->
-<!-- H032A_llvehiclespdf <- SpatialPointsDataFrame(coords = H032A_llxy, data = H032A_ll, proj4string = projection) -->
-
-<!-- tm_shape(H031A_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(H031A_llvehiclespdf)+ tm_dots(alpha=0.4) +tm_shape(H031C_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(H031C_llvehiclespdf)+ tm_dots(alpha=0.4)+tm_shape(H032A_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(H032A_llvehiclespdf)+ tm_dots(alpha=0.4) -->
-
-<!-- #with carpark -->
-<!-- tm_shape(H031A_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(H031A_llvehiclespdf)+ tm_dots(alpha=0.4) +tm_shape(H031C_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(H031C_llvehiclespdf)+ tm_dots(alpha=0.4)+tm_shape(H032A_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(H032A_llvehiclespdf)+ tm_dots(alpha=0.4)+tm_shape(parkingdata$osm_points)+tm_dots(col='red')+tm_shape(parkingdata$osm_polygons)+tm_polygons(col='red') -->
-
-<!-- ``` -->
-
-<!-- # A closer analysis of Richmond -->
-
-<!-- ```{r} -->
-<!-- #Only for Richmond -->
-<!-- R008B_ll <- dfvehicle[dfvehicle$LSOA.name == 'Richmond upon Thames 008B',] -->
-
-
-<!-- R008B_llxy <- R008B_ll[,c(3,4)] -->
-
-
-<!-- R008B_llshp <- LondonLSOA_transformed[LondonLSOA_transformed$LSOA11NM == 'Richmond upon Thames 008B',] -->
-
-
-
-<!-- R008B_llvehiclespdf <- SpatialPointsDataFrame(coords = R008B_llxy, data = R008B_ll, proj4string = projection) -->
-
-<!-- tm_shape(R008B_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(R008B_llvehiclespdf)+ tm_dots(alpha=0.4)  -->
-
-<!-- #with carpark -->
-<!-- tm_shape(R008B_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(R008B_llvehiclespdf)+ tm_dots(alpha=0.4)+tm_shape(parkingdata$osm_points)+tm_dots(col='red')+tm_shape(parkingdata$osm_polygons)+tm_polygons(col='red') -->
-
-<!-- ``` -->
-
-
-<!-- # A closer analysis of Knightsbridge -->
-
-<!-- ```{r} -->
-<!-- #Only for Knightsbridge -->
-<!-- W019C_ll <- dfvehicle[dfvehicle$LSOA.name == 'Westminster 019C',] -->
-<!-- W019E_ll <- dfvehicle[dfvehicle$LSOA.name == 'Westminster 019E',] -->
-<!-- KC012A_ll <- dfvehicle[dfvehicle$LSOA.name == 'Kensington and Chelsea 012A',] -->
-
-<!-- W019C_llxy <- W019C_ll[,c(3,4)] -->
-<!-- W019E_llxy <- W019E_ll[,c(3,4)] -->
-<!-- KC012A_llxy <- KC012A_ll[,c(3,4)] -->
-
-<!-- W019C_llshp <- LondonLSOA_transformed[LondonLSOA_transformed$LSOA11NM == 'Westminster 019C',] -->
-<!-- W019E_llshp <- LondonLSOA_transformed[LondonLSOA_transformed$LSOA11NM == 'Westminster 019E',] -->
-<!-- KC012A_llshp <- LondonLSOA_transformed[LondonLSOA_transformed$LSOA11NM == 'Kensington and Chelsea 012A',] -->
-
-<!-- W019C_llvehiclespdf <- SpatialPointsDataFrame(coords = W019C_llxy, data = W019C_ll, proj4string = projection) -->
-<!-- W019E_llvehiclespdf <- SpatialPointsDataFrame(coords = W019E_llxy, data = W019E_ll, proj4string = projection) -->
-<!-- KC012A_llvehiclespdf <- SpatialPointsDataFrame(coords = KC012A_llxy, data = KC012A_ll, proj4string = projection) -->
-
-<!-- tm_shape(W019C_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(W019C_llvehiclespdf)+ tm_dots(alpha=0.4) +tm_shape(W019E_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(W019E_llvehiclespdf)+ tm_dots(alpha=0.4) +tm_shape(KC012A_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(KC012A_llvehiclespdf)+ tm_dots(alpha=0.4) -->
-
-<!-- #with carpark -->
-<!-- tm_shape(R008B_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(R008B_llvehiclespdf)+ tm_dots(alpha=0.4)+tm_shape(parkingdata$osm_points)+tm_dots(col='red')+tm_shape(parkingdata$osm_polygons)+tm_polygons(col='red') -->
-
-<!-- ``` -->
-
-<!-- # A closer analysis of East London  -->
-
-<!-- ```{r} -->
-<!-- #Only for east london -->
-<!-- BD019E_ll <- dfvehicle[dfvehicle$LSOA.name == 'Barking and Dagenham 019E',] -->
-<!-- NH33B_ll <- dfvehicle[dfvehicle$LSOA.name == 'Newham 033B',] -->
-<!-- BD021E_ll <- dfvehicle[dfvehicle$LSOA.name == 'Barking and Dagenham 021E',] -->
-
-<!-- BD019E_llxy <- BD019E_ll[,c(3,4)] -->
-<!-- NH33B_llxy <- NH33B_ll[,c(3,4)] -->
-<!-- BD021E_llxy <- BD021E_ll[,c(3,4)] -->
-
-<!-- BD019E_llshp <- LondonLSOA_transformed[LondonLSOA_transformed$LSOA11NM == 'Barking and Dagenham 019E',] -->
-<!-- NH33B_llshp <- LondonLSOA_transformed[LondonLSOA_transformed$LSOA11NM == 'Newham 033B',] -->
-<!-- BD021E_llshp <- LondonLSOA_transformed[LondonLSOA_transformed$LSOA11NM == 'Barking and Dagenham 021E',] -->
-
-
-<!-- BD019E_llvehiclespdf <- SpatialPointsDataFrame(coords = BD019E_llxy, data = BD019E_ll, proj4string = projection) -->
-<!-- NH33B_llvehiclespdf <- SpatialPointsDataFrame(coords = NH33B_llxy, data = NH33B_ll, proj4string = projection) -->
-<!-- BD021E_llvehiclespdf <- SpatialPointsDataFrame(coords = BD021E_llxy, data = BD021E_ll, proj4string = projection) -->
-
-<!-- tmap_mode("view") -->
-<!-- tm_shape(BD019E_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(BD019E_llvehiclespdf)+ tm_dots(alpha=0.4) +tm_shape(NH33B_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(NH33B_llvehiclespdf)+ tm_dots(alpha=0.4)+tm_shape(BD021E_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(BD021E_llvehiclespdf)+ tm_dots(alpha=0.4) -->
-
-<!-- #with carpark -->
-<!-- tm_shape(BD019E_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(BD019E_llvehiclespdf)+ tm_dots(alpha=0.4) +tm_shape(NH33B_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(NH33B_llvehiclespdf)+ tm_dots(alpha=0.4)+tm_shape(BD021E_llshp) + tm_polygons(col='blue', alpha = 0.4)+tm_shape(BD021E_llvehiclespdf)+ tm_dots(alpha=0.4)+tm_shape(parkingdata$osm_points)+tm_dots(col='red')+tm_shape(parkingdata$osm_polygons)+tm_polygons(col='red') -->
-
-<!-- ``` -->
-
-<!-- ## Modelling -->
-
-<!-- summary(vs.durbin) -->
-<!-- ``` -->
-<!-- **Here are the results** -->
-<!-- Significant and negatively correlated:   -->
-<!-- X0.15, X16.29, X45.64, X65, person_per_hectare, owned_outright, household_at_least_one_usual_resident, apartment, poor_transport_access                     -->
-
-<!-- Significant and positively correlated:   -->
-<!-- Christian, Buddhist, Hindu, Jewish, Muslim, no_religion, private-rented, household_no_usual_resident, unemployment_rate , no_cars_in_household , household_income      -->
-
-<!-- ### Analysing Factors that Contribute to vehicle crime -->
-<!-- ```{r} -->
-<!-- load(file = "lsoa_census.rda") -->
-<!-- vehicle_census <-  LondonLSOA_transformed_vehicle -->
-<!-- vehicle_census@data <- left_join(vehicle_census@data, lsoa_census, by=c("LSOA11CD" = "Codes")) -->
-<!-- vehicle_census.W <- nb2listw(poly2nb(vehicle_census)) -->
-<!-- # run durbin model -->
-<!-- vehicle.durbin <- lagsarlm(Freq ~ X0.15 + X16.29 + X30.44 + X45.64 + X65. + Working.age + person_per_hectare + couple_w_children + white + uk_born + household_no_english + Christian + Buddhist + Hindu + Jewish + Muslim + Sikh + other_religion + no_religion + owned_outright + social_rented + private_rented + household_at_least_one_usual_resident + household_no_usual_resident + whole_house + apartment + house_price + unemployment_rate + bad_health + no_cars_in_household + poor_transport_access + household_income, data = vehicle_census@data, listw = vehicle_census.W, type = 'mixed') -->
-<!-- summary(vehicle.durbin) -->
-
-<!-- vehicle_census$durbin.res <- residuals(vehicle.durbin) -->
-<!-- vehicle_census$durbin.fit <- exp(fitted.values(vehicle.durbin)) -->
-<!-- #ggplot(data=boston.shp@data, aes(sample=durbin.res)) + geom_qq() + geom_qq_line() -->
-<!-- tm_shape(vehicle_census)+tm_polygons("durbin.res", palette="-RdBu", style="quantile") -->
-
-<!-- ``` -->
-<!-- Call:lagsarlm(formula = Freq ~ X0.15 + X16.29 + X30.44 + X45.64 +  -->
-<!--     X65. + Working.age + person_per_hectare + couple_w_children +  -->
-<!--     white + uk_born + household_no_english + Christian + Buddhist +  -->
-<!--     Hindu + Jewish + Muslim + Sikh + other_religion + no_religion +  -->
-<!--     owned_outright + social_rented + private_rented + household_at_least_one_usual_resident +  -->
-<!--     household_no_usual_resident + whole_house + apartment + house_price +  -->
-<!--     unemployment_rate + bad_health + no_cars_in_household + poor_transport_access +  -->
-<!--     household_income, data = vehicle_census@data, listw = vehicle_census.W,     type = "mixed") -->
-
-<!-- Residuals: -->
-<!--      Min       1Q   Median       3Q      Max  -->
-<!-- -54.4349  -6.4456  -1.2971   4.4781 150.6435  -->
-
-<!-- Type: mixed  -->
-<!-- Coefficients: (numerical Hessian approximate standard errors)  -->
-<!--     (2 not defined because of singularities) -->
-<!--                                              Estimate  Std. Error  z value  Pr(>|z|) -->
-<!-- (Intercept)                                9.8126e-01          NA       NA        NA -->
-<!-- X16.29                                     1.8074e-02  2.4036e-03   7.5195 5.507e-14 -->
-<!-- X30.44                                     1.2822e-02  5.4908e-03   2.3352 0.0195355 -->
-<!-- person_per_hectare                        -8.8644e-02  4.3354e-03 -20.4467 < 2.2e-16 -->
-<!-- white                                      6.8761e-03  2.3354e-03   2.9442 0.0032377 -->
-<!-- uk_born                                   -1.4548e-02  2.1446e-03  -6.7835 1.173e-11 -->
-<!-- household_no_english                      -4.0367e-02  1.0544e-02  -3.8285 0.0001289 -->
-<!-- Hindu                                     -1.4953e-02  2.8444e-03  -5.2570 1.464e-07 -->
-<!-- no_religion                               -1.5385e-02  2.7047e-03  -5.6880 1.285e-08 -->
-<!-- private_rented                             2.7600e-02  5.4415e-03   5.0722 3.933e-07 -->
-<!-- household_at_least_one_usual_resident      1.7044e-02  4.6907e-03   3.6335 0.0002796 -->
-<!-- household_no_usual_resident                8.1492e-02  9.4678e-03   8.6073 < 2.2e-16 -->
-<!-- apartment                                 -1.5312e-02  2.2545e-03  -6.7920 1.106e-11 -->
-<!-- house_price                               -1.6642e-03  5.4228e-04  -3.0690 0.0021477 -->
-<!-- unemployment_rate                          1.0443e-01  1.2705e-01   0.8220 0.4110821 -->
-<!-- no_cars_in_household                       1.9622e-02  4.7107e-03   4.1653 3.109e-05 -->
-<!-- poor_transport_access                     -2.9699e-02  9.1465e-03  -3.2471 0.0011660 -->
-<!-- lag.X0.15                                 -2.8073e-02  8.8616e-03  -3.1679 0.0015355 -->
-<!-- lag.X16.29                                -3.0780e-02  2.9748e-03 -10.3470 < 2.2e-16 -->
-<!-- lag.X30.44                                -6.9140e-03  8.5713e-03  -0.8066 0.4198693 -->
-<!-- lag.X65.                                  -3.5627e-02  6.6695e-03  -5.3418 9.204e-08 -->
-<!-- lag.person_per_hectare                     2.9417e-02  6.5724e-03   4.4759 7.609e-06 -->
-<!-- lag.couple_w_children                     -5.5452e-02  2.2105e-02  -2.5086 0.0121219 -->
-<!-- lag.white                                  1.2306e-02  2.8397e-03   4.3334 1.468e-05 -->
-<!-- lag.Muslim                                 2.5303e-02  6.0630e-04  41.7338 < 2.2e-16 -->
-<!-- lag.Sikh                                   2.2354e-02  5.2089e-03   4.2915 1.775e-05 -->
-<!-- lag.private_rented                        -1.0251e-02  8.2718e-03  -1.2393 0.2152247 -->
-<!-- lag.household_at_least_one_usual_resident  5.0089e-02  8.0641e-03   6.2113 5.255e-10 -->
-<!-- lag.household_no_usual_resident            5.6730e-02  2.3454e-02   2.4188 0.0155720 -->
-<!-- lag.whole_house                           -5.9668e-02  1.4610e-02  -4.0841 4.424e-05 -->
-<!-- lag.apartment                             -5.3884e-02  1.6824e-02  -3.2028 0.0013610 -->
-<!-- lag.unemployment_rate                      2.3898e-01  1.1306e-01   2.1137 0.0345375 -->
-<!-- lag.poor_transport_access                  4.0853e-02  1.6146e-02   2.5303 0.0113968 -->
-
-<!-- Rho: 0.44921, LR test value: 579.71, p-value: < 2.22e-16 -->
-<!-- Approximate (numerical Hessian) standard error: 0.016542 -->
-<!--     z-value: 27.156, p-value: < 2.22e-16 -->
-<!-- Wald statistic: 737.47, p-value: < 2.22e-16 -->
-
-<!-- Log likelihood: -18996.41 for mixed model -->
-<!-- ML residual variance (sigma squared): 148, (sigma: 12.165) -->
-<!-- Number of observations: 4825  -->
-<!-- Number of parameters estimated: 65  -->
-<!-- AIC: 38123, (AIC for lm: 38701) -->
-
