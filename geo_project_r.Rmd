@@ -1,5 +1,5 @@
 ---
-title: \vspace{3in}"Spatial Analysis of Crime Patterns in London"
+title: \vspace{3in} Spatial Analysis of Crime Patterns in London
 subtitle: "CEGE0097: Spatial Analysis and Geocomputation"
 author: "Ng Jia Wen & Junju Ng"
 output:
@@ -97,7 +97,7 @@ London is a thriving metropolis in the United Kingdom with a population of 8.8 m
 
 London consists of 33 local government districts (32 London Boroughs and the City of London). The City of London Police is the police force responsible for law enforcement within the City of London while the Metropolitan Police Service is reponsible for policing the Greater London region, excluding the City of London. Greater London can be split into 4835 geographic regions known as lower layer super output areas(LSOAs) for the purposes of reporting small-area statistics. These LSOAs will form the basis of the analysis.
 
-![Boroughs of London](pictures/London.png)
+![Boroughs of London](pictures/London.png){width=400px}
 \pagebreak
 
 # Data description  
@@ -205,8 +205,6 @@ tm_shape(LondonLSOA_transformed) +tm_polygons(col="Freq", palette="Blues", style
 
 A crime rate map (Figure \@ref(fig:crimeratemap)) is also plotted to take into account population size in each LSOA. This is derived by taking the crime count divided by the resident population in the corresponding LSOA and then multipled by 1000 (i.e. crime count per 1000 residents). These crime rate maps allow for the assessment of the risk of crime [@Brantingham1997]. However, it is to be noted that resident populations are used to calculate crime rate. Thus, regions with a low resident population but high pedestrian population (e.g. commercial areas) would have an inflated crime rate. 
 
-Visually, although there are some differences between the crime rate and crime count maps, the regions with the highest crime counts are also the regions with the highest crime rates. However, a number of regions outside of central London with slightly higher crime counts (235 to 871) have lower-than-expected crime rates. This indicates that residential population does not have a significant influence on crime counts, except when crime counts are slightly elevated and occur in LSOAs outside central London (presumably with a higher residential population). 
-
 ```{r crimeratemap, echo=FALSE, fig.cap="2017 London crime rate map by LSOA"}
 load("lsoa_census.Rda")
 census <-  LondonLSOA_transformed
@@ -215,10 +213,13 @@ census$total_pop <- census$X0.15 + census$X16.29 + census$X30.44 + census$X45.64
 
 census$freq_pop <-  census$Freq / census$total_pop * 1000 #crime per 1000 people
 
-tm_shape(census) + tm_polygons(col="freq_pop", palette="YlGnBu", style = "jenks", border.col='transparent', title = "Crime count per 1000 residents", n=4)+tm_layout("2017 London Crime Rate Map by LSOA", title.size=1)
+tm_shape(census) + tm_polygons(col="freq_pop", palette="Purples", style = "jenks", border.col='transparent', title = "Crime count per 1000 residents", n=4)+tm_layout("2017 London Crime Rate Map by LSOA", title.size=1)
 
 # Missing data here because no residential areas in those census tracts
 ```
+
+Visually, although there are some differences between the crime rate and crime count maps, the regions with the highest crime counts are also the regions with the highest crime rates. However, a number of regions outside of central London with slightly higher crime counts (235 to 871) have lower-than-expected crime rates. This indicates that residential population does not have a significant influence on crime counts, except when crime counts are slightly elevated and occur in LSOAs outside central London (presumably with a higher residential population). 
+
 \pagebreak
 
 # Methodology

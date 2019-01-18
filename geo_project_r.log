@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2018.11.15)  17 JAN 2019 23:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2018.11.15)  17 JAN 2019 23:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -707,35 +707,30 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 File: pictures/London.png Graphic file (type png)
 <use pictures/London.png>
 Package pdftex.def Info: pictures/London.png  used on input line 172.
-(pdftex.def)             Requested size: 469.74939pt x 348.15213pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 172--173
-[][]
- []
-
-[3] [4 <./pictures/London.PNG>] [5]
-<geo_project_r_files/figure-latex/barplot-1.pdf, id=130, 469.755pt x 325.215pt>
+(pdftex.def)             Requested size: 301.12053pt x 223.1738pt.
+[3 <./pictures/London.PNG>] [4]
+<geo_project_r_files/figure-latex/barplot-1.pdf, id=126, 469.755pt x 325.215pt>
 
 File: geo_project_r_files/figure-latex/barplot-1.pdf Graphic file (type pdf)
 <use geo_project_r_files/figure-latex/barplot-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/barplot-1.pdf  used o
 n input line 251.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<geo_project_r_files/figure-latex/linegraph-1.pdf, id=133, 469.755pt x 325.215p
+<geo_project_r_files/figure-latex/linegraph-1.pdf, id=129, 469.755pt x 325.215p
 t>
 File: geo_project_r_files/figure-latex/linegraph-1.pdf Graphic file (type pdf)
 <use geo_project_r_files/figure-latex/linegraph-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/linegraph-1.pdf  used
  on input line 267.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[6pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
+[5pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
 has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
 l.270 
        <./geo_project_r_files/figure-latex/barplot-1.pdf>]
-<geo_project_r_files/figure-latex/crimecountmap-1.pdf, id=147, 469.755pt x 325.
+<geo_project_r_files/figure-latex/crimecountmap-1.pdf, id=143, 469.755pt x 325.
 215pt>
 File: geo_project_r_files/figure-latex/crimecountmap-1.pdf Graphic file (type p
 df)
@@ -743,7 +738,7 @@ df)
 Package pdftex.def Info: geo_project_r_files/figure-latex/crimecountmap-1.pdf  
 used on input line 315.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[7pdfTeX warning (ext4): destination with the same identifier (name{table.1}) h
+[6pdfTeX warning (ext4): destination with the same identifier (name{table.1}) h
 as been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
@@ -756,358 +751,355 @@ l.318
                                                   \fi \fi 
 l.318 
        <./geo_project_r_files/figure-latex/linegraph-1.pdf>]
-
-LaTeX Warning: Reference `fig:crimeratemap' on page 8 undefined on input line 3
-19.
-
-<geo_project_r_files/figure-latex/crimeratemap-1.pdf, id=161, 469.755pt x 325.2
+<geo_project_r_files/figure-latex/crimeratemap-1.pdf, id=157, 469.755pt x 325.2
 15pt>
 File: geo_project_r_files/figure-latex/crimeratemap-1.pdf Graphic file (type pd
 f)
 <use geo_project_r_files/figure-latex/crimeratemap-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/crimeratemap-1.pdf  u
-sed on input line 339.
+sed on input line 332.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 339--341
-[][]
- []
-
-[8pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) 
+[7pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) 
 has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.341 
-       <./geo_project_r_files/figure-latex/crimecountmap-1.pdf>] [9 <./geo_proj
-ect_r_files/figure-latex/crimeratemap-1.pdf>]
-LaTeX Font Info:    Try loading font information for T1+lmtt on input line 369.
+l.335 
+       <./geo_project_r_files/figure-latex/crimecountmap-1.pdf>] [8pdfTeX warni
+ng (ext4): destination with the same identifier (name{figure.4}) has been alrea
+dy used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.346 
+       <./geo_project_r_files/figure-latex/crimeratemap-1.pdf>]
+LaTeX Font Info:    Try loading font information for T1+lmtt on input line 374.
 
 (c:/texlive/2018/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 388.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 393.
 
 (c:/texlive/2018/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-<pictures/quadratcount.png, id=182, 183.68625pt x 76.285pt>
+<pictures/quadratcount.png, id=180, 183.68625pt x 76.285pt>
 File: pictures/quadratcount.png Graphic file (type png)
 <use pictures/quadratcount.png>
-Package pdftex.def Info: pictures/quadratcount.png  used on input line 437.
+Package pdftex.def Info: pictures/quadratcount.png  used on input line 442.
 (pdftex.def)             Requested size: 183.69418pt x 76.28828pt.
-[10pdfTeX warning (ext4): destination with the same identifier (name{figure.4})
- has been already used, duplicate ignored
+[9pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) 
+has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.452   C
-         hi-sq test <./pictures/quadratcount.png>] [11] [12]
-<geo_project_r_files/figure-latex/vsocrimeratemap-1.pdf, id=228, 469.755pt x 32
+l.457   C
+         hi-sq test <./pictures/quadratcount.png>] [10] [11]
+<geo_project_r_files/figure-latex/vsocrimeratemap-1.pdf, id=226, 469.755pt x 32
 5.215pt>
 File: geo_project_r_files/figure-latex/vsocrimeratemap-1.pdf Graphic file (type
  pdf)
 <use geo_project_r_files/figure-latex/vsocrimeratemap-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/vsocrimeratemap-1.pdf
-  used on input line 584.
+  used on input line 589.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[13pdfTeX warning (ext4): destination with the same identifier (name{figure.5})
+[12pdfTeX warning (ext4): destination with the same identifier (name{figure.6})
  has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.659 \end{verbatim}
+l.664 \end{verbatim}
                      <./geo_project_r_files/figure-latex/vsocrimeratemap-1.pdf>
 ]
-Overfull \hbox (412.24242pt too wide) in paragraph at lines 659--659
+Overfull \hbox (412.24242pt too wide) in paragraph at lines 664--664
 []\T1/lmtt/m/n/10 ## Source: "C:\Users\Junju\Desktop\Masters\Term 1\Spatial Ana
 lysis and Geocomputation\Geocomputation\boundaries\COL001F_roads\COL001F_roads.
 shp", layer: "COL001F_roads"[] 
  []
 
 
-LaTeX Warning: Reference `fig:COL001Fmapwroads' on page 14 undefined on input l
-ine 662.
+LaTeX Warning: Reference `fig:COL001Fmapwroads' on page 13 undefined on input l
+ine 667.
 
 
-LaTeX Warning: Reference `fig:COL001Fhomo' on page 14 undefined on input line 6
-68.
+LaTeX Warning: Reference `fig:COL001Fhomo' on page 13 undefined on input line 6
+73.
 
-<geo_project_r_files/figure-latex/COL001Fhomo-1.pdf, id=242, 469.755pt x 325.21
+<geo_project_r_files/figure-latex/COL001Fhomo-1.pdf, id=239, 469.755pt x 325.21
 5pt>
 File: geo_project_r_files/figure-latex/COL001Fhomo-1.pdf Graphic file (type pdf
 )
 <use geo_project_r_files/figure-latex/COL001Fhomo-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/COL001Fhomo-1.pdf  us
-ed on input line 669.
+ed on input line 674.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[14pdfTeX warning (ext4): destination with the same identifier (name{table.2}) 
+[13pdfTeX warning (ext4): destination with the same identifier (name{table.2}) 
 has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.671 A
+l.676 A
         chi-sq test gives the following results:]
-<geo_project_r_files/figure-latex/COL001F-KDE-1.pdf, id=247, 469.755pt x 325.21
+<geo_project_r_files/figure-latex/COL001F-KDE-1.pdf, id=245, 469.755pt x 325.21
 5pt>
 File: geo_project_r_files/figure-latex/COL001F-KDE-1.pdf Graphic file (type pdf
 )
 <use geo_project_r_files/figure-latex/COL001F-KDE-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/COL001F-KDE-1.pdf  us
-ed on input line 690.
+ed on input line 695.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[15 <./geo_project_r_files/figure-latex/COL001Fhomo-1.pdf>]
-<pictures/COL001F_Hotspot_box.png, id=260, 963.1182pt x 481.3182pt>
+[14 <./geo_project_r_files/figure-latex/COL001Fhomo-1.pdf>]
+<pictures/COL001F_Hotspot_box.png, id=258, 963.1182pt x 481.3182pt>
 File: pictures/COL001F_Hotspot_box.png Graphic file (type png)
 <use pictures/COL001F_Hotspot_box.png>
-Package pdftex.def Info: pictures/COL001F_Hotspot_box.png  used on input line 6
-98.
+Package pdftex.def Info: pictures/COL001F_Hotspot_box.png  used on input line 7
+03.
 (pdftex.def)             Requested size: 469.75705pt x 234.76102pt.
-<pictures/COL001F_Hotspot.png, id=261, 818.5782pt x 542.025pt>
+<pictures/COL001F_Hotspot.png, id=259, 818.5782pt x 542.025pt>
 File: pictures/COL001F_Hotspot.png Graphic file (type png)
 <use pictures/COL001F_Hotspot.png>
-Package pdftex.def Info: pictures/COL001F_Hotspot.png  used on input line 706.
+Package pdftex.def Info: pictures/COL001F_Hotspot.png  used on input line 711.
 (pdftex.def)             Requested size: 469.75452pt x 311.04993pt.
-[16pdfTeX warning (ext4): destination with the same identifier (name{figure.6})
+[15pdfTeX warning (ext4): destination with the same identifier (name{figure.7})
  has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.708 \end{figure}
+l.713 \end{figure}
                    <./geo_project_r_files/figure-latex/COL001F-KDE-1.pdf> <./pi
 ctures/COL001F_Hotspot_box.png>]
-<geo_project_r_files/figure-latex/COL001F-redbluedotmap-1.pdf, id=278, 469.755p
+<geo_project_r_files/figure-latex/COL001F-redbluedotmap-1.pdf, id=276, 469.755p
 t x 325.215pt>
 File: geo_project_r_files/figure-latex/COL001F-redbluedotmap-1.pdf Graphic file
  (type pdf)
 <use geo_project_r_files/figure-latex/COL001F-redbluedotmap-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/COL001F-redbluedotmap
--1.pdf  used on input line 721.
+-1.pdf  used on input line 726.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[17pdfTeX warning (ext4): destination with the same identifier (name{figure.7})
+[16pdfTeX warning (ext4): destination with the same identifier (name{figure.8})
  has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.723 V
+l.728 V
        isually, the map seems to agree with our hypothesis. VSO crime <./pictur
 es/COL001F_Hotspot.png>]
-<geo_project_r_files/figure-latex/COL001F-kcross-1.pdf, id=285, 469.755pt x 325
+<geo_project_r_files/figure-latex/COL001F-kcross-1.pdf, id=283, 469.755pt x 325
 .215pt>
 File: geo_project_r_files/figure-latex/COL001F-kcross-1.pdf Graphic file (type 
 pdf)
 <use geo_project_r_files/figure-latex/COL001F-kcross-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/COL001F-kcross-1.pdf 
- used on input line 728.
+ used on input line 733.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[18 <./geo_project_r_files/figure-latex/COL001F-redbluedotmap-1.pdf>]
-Overfull \hbox (291.49277pt too wide) in paragraph at lines 745--745
+[17 <./geo_project_r_files/figure-latex/COL001F-redbluedotmap-1.pdf>]
+Overfull \hbox (291.49277pt too wide) in paragraph at lines 750--750
 []\T1/lmtt/m/n/10 ## 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
  18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37
 , 38,[] 
  []
 
 
-Overfull \hbox (338.74263pt too wide) in paragraph at lines 745--745
+Overfull \hbox (338.74263pt too wide) in paragraph at lines 750--750
 []\T1/lmtt/m/n/10 ## 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53
 , 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 7
 3, 74, 75, 76,[] 
  []
 
 
-Overfull \hbox (55.24345pt too wide) in paragraph at lines 745--745
+Overfull \hbox (55.24345pt too wide) in paragraph at lines 750--750
 []\T1/lmtt/m/n/10 ## 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91
 , 92, 93, 94, 95, 96, 97, 98, 99,  100.[] 
  []
 
-<geo_project_r_files/figure-latex/COL001F-kcross-monte-1.pdf, id=295, 469.755pt
+<geo_project_r_files/figure-latex/COL001F-kcross-monte-1.pdf, id=293, 469.755pt
  x 325.215pt>
 File: geo_project_r_files/figure-latex/COL001F-kcross-monte-1.pdf Graphic file 
 (type pdf)
 <use geo_project_r_files/figure-latex/COL001F-kcross-monte-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/COL001F-kcross-monte-
-1.pdf  used on input line 747.
+1.pdf  used on input line 752.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[19 <./geo_project_r_files/figure-latex/COL001F-kcross-1.pdf>] [20pdfTeX warnin
+[18 <./geo_project_r_files/figure-latex/COL001F-kcross-1.pdf>] [19pdfTeX warnin
 g (ext4): destination with the same identifier (name{table.3}) has been already
  used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.801 
+l.806 
        <./geo_project_r_files/figure-latex/COL001F-kcross-monte-1.pdf>]
-<geo_project_r_files/figure-latex/vhcrimeratemap-1.pdf, id=325, 469.755pt x 325
+<geo_project_r_files/figure-latex/vhcrimeratemap-1.pdf, id=323, 469.755pt x 325
 .215pt>
 File: geo_project_r_files/figure-latex/vhcrimeratemap-1.pdf Graphic file (type 
 pdf)
 <use geo_project_r_files/figure-latex/vhcrimeratemap-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/vhcrimeratemap-1.pdf 
- used on input line 820.
+ used on input line 825.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[21pdfTeX warning (ext4): destination with the same identifier (name{figure.8})
+[20pdfTeX warning (ext4): destination with the same identifier (name{figure.9})
  has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.842 
+l.847 
        <./geo_project_r_files/figure-latex/vhcrimeratemap-1.pdf>]
-<geo_project_r_files/figure-latex/vhmorancluster-1.pdf, id=338, 469.755pt x 325
+<geo_project_r_files/figure-latex/vhmorancluster-1.pdf, id=336, 469.755pt x 325
 .215pt>
 File: geo_project_r_files/figure-latex/vhmorancluster-1.pdf Graphic file (type 
 pdf)
 <use geo_project_r_files/figure-latex/vhmorancluster-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/vhmorancluster-1.pdf 
- used on input line 868.
+ used on input line 873.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[22pdfTeX warning (ext4): destination with the same identifier (name{figure.9})
- has been already used, duplicate ignored
+[21pdfTeX warning (ext4): destination with the same identifier (name{figure.10}
+) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.882 \subsubsection
+l.887 \subsubsection
                     {Reasons for vehicle crime <./geo_project_r_files/figure-la
 tex/vhmorancluster-1.pdf>]
-<pictures/eastlondon.png, id=349, 435.6275pt x 323.2075pt>
+<pictures/eastlondon.png, id=347, 435.6275pt x 323.2075pt>
 File: pictures/eastlondon.png Graphic file (type png)
 <use pictures/eastlondon.png>
-Package pdftex.def Info: pictures/eastlondon.png  used on input line 895.
+Package pdftex.def Info: pictures/eastlondon.png  used on input line 900.
 (pdftex.def)             Requested size: 435.62643pt x 323.20671pt.
-<pictures/Newhamshopping.png, id=350, 941.5175pt x 374.39874pt>
+<pictures/Newhamshopping.png, id=348, 941.5175pt x 374.39874pt>
 File: pictures/Newhamshopping.png Graphic file (type png)
 <use pictures/Newhamshopping.png>
-Package pdftex.def Info: pictures/Newhamshopping.png  used on input line 914.
+Package pdftex.def Info: pictures/Newhamshopping.png  used on input line 919.
 (pdftex.def)             Requested size: 469.75195pt x 186.79901pt.
-[23pdfTeX warning (ext4): destination with the same identifier (name{figure.10}
+[22pdfTeX warning (ext4): destination with the same identifier (name{figure.11}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.917 
+l.922 
        <./pictures/eastlondon.PNG>]
-<pictures/Barkingscrapyard.png, id=357, 759.33687pt x 400.49625pt>
+<pictures/Barkingscrapyard.png, id=355, 759.33687pt x 400.49625pt>
 File: pictures/Barkingscrapyard.png Graphic file (type png)
 <use pictures/Barkingscrapyard.png>
-Package pdftex.def Info: pictures/Barkingscrapyard.png  used on input line 929.
+Package pdftex.def Info: pictures/Barkingscrapyard.png  used on input line 934.
 
 (pdftex.def)             Requested size: 469.76437pt x 247.76733pt.
-<pictures/westlondon.png, id=358, 502.37688pt x 320.19624pt>
+<pictures/westlondon.png, id=356, 502.37688pt x 320.19624pt>
 File: pictures/westlondon.png Graphic file (type png)
 <use pictures/westlondon.png>
-Package pdftex.def Info: pictures/westlondon.png  used on input line 937.
+Package pdftex.def Info: pictures/westlondon.png  used on input line 942.
 (pdftex.def)             Requested size: 469.75066pt x 299.4015pt.
-[24pdfTeX warning (ext4): destination with the same identifier (name{figure.11}
+[23pdfTeX warning (ext4): destination with the same identifier (name{figure.12}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.940 
+l.945 
       pdfTeX warning (ext4): destination with the same identifier (name{figure.
-12}) has been already used, duplicate ignored
+13}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.940 
+l.945 
        <./pictures/Newhamshopping.PNG> <./pictures/Barkingscrapyard.PNG>]
-<pictures/heathrowcarpark.png, id=367, 559.08875pt x 248.93pt>
+<pictures/heathrowcarpark.png, id=365, 559.08875pt x 248.93pt>
 File: pictures/heathrowcarpark.png Graphic file (type png)
 <use pictures/heathrowcarpark.png>
-Package pdftex.def Info: pictures/heathrowcarpark.png  used on input line 951.
+Package pdftex.def Info: pictures/heathrowcarpark.png  used on input line 956.
 (pdftex.def)             Requested size: 469.76784pt x 209.16054pt.
-[25pdfTeX warning (ext4): destination with the same identifier (name{figure.13}
+[24pdfTeX warning (ext4): destination with the same identifier (name{figure.14}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.954 
+l.959 
        <./pictures/westlondon.PNG>]
-<pictures/chiswickcardealers.png, id=375, 375.90437pt x 326.21875pt>
+<pictures/chiswickcardealers.png, id=372, 375.90437pt x 326.21875pt>
 File: pictures/chiswickcardealers.png Graphic file (type png)
 <use pictures/chiswickcardealers.png>
 Package pdftex.def Info: pictures/chiswickcardealers.png  used on input line 96
-3.
+8.
 (pdftex.def)             Requested size: 375.92638pt x 326.23784pt.
-[26pdfTeX warning (ext4): destination with the same identifier (name{figure.14}
+[25pdfTeX warning (ext4): destination with the same identifier (name{figure.15}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.966 
+l.971 
        <./pictures/heathrowcarpark.PNG>]
-<pictures/southwestlondon.png, id=382, 420.06938pt x 312.16624pt>
+<pictures/southwestlondon.png, id=380, 420.06938pt x 312.16624pt>
 File: pictures/southwestlondon.png Graphic file (type png)
 <use pictures/southwestlondon.png>
-Package pdftex.def Info: pictures/southwestlondon.png  used on input line 979.
+Package pdftex.def Info: pictures/southwestlondon.png  used on input line 984.
 (pdftex.def)             Requested size: 420.06836pt x 312.16548pt.
-[27pdfTeX warning (ext4): destination with the same identifier (name{figure.15}
+[26pdfTeX warning (ext4): destination with the same identifier (name{figure.16}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.982 
+l.987 
        <./pictures/chiswickcardealers.PNG>]
-<pictures/Knightsbridge.png, id=389, 912.91063pt x 341.77687pt>
+<pictures/Knightsbridge.png, id=387, 912.91063pt x 341.77687pt>
 File: pictures/Knightsbridge.png Graphic file (type png)
 <use pictures/Knightsbridge.png>
-Package pdftex.def Info: pictures/Knightsbridge.png  used on input line 995.
+Package pdftex.def Info: pictures/Knightsbridge.png  used on input line 1000.
 (pdftex.def)             Requested size: 469.7433pt x 175.8632pt.
-<pictures/centrallondon.png, id=390, 428.60126pt x 321.2pt>
+<pictures/centrallondon.png, id=388, 428.60126pt x 321.2pt>
 File: pictures/centrallondon.png Graphic file (type png)
 <use pictures/centrallondon.png>
-Package pdftex.def Info: pictures/centrallondon.png  used on input line 1003.
+Package pdftex.def Info: pictures/centrallondon.png  used on input line 1008.
 (pdftex.def)             Requested size: 428.6002pt x 321.19922pt.
-[28pdfTeX warning (ext4): destination with the same identifier (name{figure.16}
+[27pdfTeX warning (ext4): destination with the same identifier (name{figure.17}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1005 \end{figure}
+l.1010 \end{figure}
                    pdfTeX warning (ext4): destination with the same identifier 
-(name{figure.17}) has been already used, duplicate ignored
+(name{figure.18}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1005 \end{figure}
+l.1010 \end{figure}
                     <./pictures/southwestlondon.PNG> <./pictures/Knightsbridge.
-PNG>] [29pdfTeX warning (ext4): destination with the same identifier (name{figu
-re.18}) has been already used, duplicate ignored
+PNG>] [28pdfTeX warning (ext4): destination with the same identifier (name{figu
+re.19}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1044 
+l.1049 
         <./pictures/centrallondon.PNG>]
-<geo_project_r_files/figure-latex/industrialmap-1.pdf, id=407, 469.755pt x 325.
+<geo_project_r_files/figure-latex/industrialmap-1.pdf, id=405, 469.755pt x 325.
 215pt>
 File: geo_project_r_files/figure-latex/industrialmap-1.pdf Graphic file (type p
 df)
 <use geo_project_r_files/figure-latex/industrialmap-1.pdf>
 Package pdftex.def Info: geo_project_r_files/figure-latex/industrialmap-1.pdf  
-used on input line 1067.
+used on input line 1072.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[30pdfTeX warning (ext4): destination with the same identifier (name{figure.19}
+[29pdfTeX warning (ext4): destination with the same identifier (name{figure.20}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1073 
-        <./geo_project_r_files/figure-latex/industrialmap-1.pdf>] [31]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1198.
-[32]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1198.
+l.1078 
+        <./geo_project_r_files/figure-latex/industrialmap-1.pdf>] [30]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1203.
+[31]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1203.
 (./geo_project_r.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1198.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1198.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1203.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1203.
 
 Package rerunfilecheck Info: File `geo_project_r.out' has not changed.
 (rerunfilecheck)             Checksum: DFBAF8D974951D5FA9A1E316DB631352;3049.
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1198.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1203.
  ) 
 Here is how much of TeX's memory you used:
  12949 strings out of 492639
- 190586 string characters out of 6133087
- 297966 words of memory out of 5000000
+ 190588 string characters out of 6133087
+ 298024 words of memory out of 5000000
  16461 multiletter control sequences out of 15000+600000
  51697 words of font info for 95 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1129,10 +1121,10 @@ ive/2018/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/texlive/2018/texmf-dis
 t/fonts/type1/public/lm/lmri12.pfb><c:/texlive/2018/texmf-dist/fonts/type1/publ
 ic/lm/lmsy10.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c
 :/texlive/2018/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on geo_project_r.pdf (32 pages, 16900888 bytes).
+Output written on geo_project_r.pdf (31 pages, 16900589 bytes).
 PDF statistics:
- 524 PDF objects out of 1000 (max. 8388607)
- 413 compressed objects within 5 object streams
+ 522 PDF objects out of 1000 (max. 8388607)
+ 412 compressed objects within 5 object streams
  94 named destinations out of 1000 (max. 500000)
  10491 words of extra memory for PDF output out of 12000 (max. 10000000)
 
