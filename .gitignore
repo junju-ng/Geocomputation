@@ -4,14 +4,13 @@
 .Rproj.user/
 .idea/
 data/
+geo_project_r.log
+geo_project_r.tex
 outputs/
 geo_project_r.html
 geo_project_r_cache/
 geo_project_r_files/
 boundaries/england-roads-shape/
-<<<<<<< HEAD
 picture_edits.pptx
 industrial.osm
-=======
-industrial.som
->>>>>>> 582bf408702ba8e2f3c13025a1c74735335f3636
+

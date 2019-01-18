@@ -98,7 +98,7 @@ London is a thriving metropolis in the United Kingdom with a population of 8.8 m
 
 London consists of 33 local government districts (32 London Boroughs and the City of London). The City of London Police is the police force responsible for law enforcement within the City of London while the Metropolitan Police Service is reponsible for policing the Greater London region, excluding the City of London. Greater London can be split into 4835 geographic regions known as lower layer super output areas(LSOAs) for the purposes of reporting small-area statistics. These LSOAs will form the basis of the analysis.
 
-```{r, out.width = '50%', fig.align="center", fig.cap="London LSOAs"}
+```{r, out.width = '80%', fig.align="center", fig.cap="London LSOAs"}
 load("boundaries/LondonLSOA")
 plot(LondonLSOA)
 ```
