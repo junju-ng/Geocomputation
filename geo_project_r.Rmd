@@ -87,7 +87,7 @@ library(bookdown)
 \pagebreak
 
 # Introduction  
-Crime (and its prevention and responses) is associated with significant social and economic costs. In England and Wales, the total cost of crimes against individuals and businesses is £50.1 billion and £8.7 billion respectively in 2015/16 alone [@Brand2014]. A significant portion of these costs are incurred in London, given that about 20% of crimes in England and Wales occurs in London [@MayorofLondon2016]. 
+Crime (and its prevention and responses) is associated with significant social and economic costs. In England and Wales, the total cost of crimes against individuals and businesses is 50.1 billion GBP and 8.7 billion GBP respectively in 2015/16 alone [@Brand2014]. A significant portion of these costs are incurred in London, given that about 20% of crimes in England and Wales occurs in London [@MayorofLondon2016]. 
 
 Consequently, much work has been done to understand the occurrence of crime, and to predict crime. To date, the spatial concentration of crime in cities is well-established in the literature [@Malleson2016]. [@Sherman1989]'s seminal analysis of predatory crime in Minneapolis revealed that 50% of police calls come from 3% of street segments, indicating that crime hotspots, down to the street level, are present within cities. Recent works have thus focussed on trying to improve spatial analysis techniques for crime. Specifically, [@Chainey2008] examined the use of different hotspot mapping techniques to predict spatial patterns of crime in Camden and Islington local authority district areas in London. Other researchers have been working on developing techniques to examine spatial-temporal patterns of crime [@Cheng2012], in order to understand how crime develops and evolves to improve crime prediction. 
 
@@ -151,7 +151,7 @@ The barplot below depicts the frequency of crimes by crime type in London in 201
 par(mar=c(8, 4.1, 4.1, 2.1))
 ylim <- c(0, 1.5*max(table(df$Crime.type)))
 barplot <- barplot(table(df$Crime.type),las=2, ylab="Frequency", cex.names=0.6, cex.axis=0.6, cex.lab=0.6, col = rainbow(length(unique(df$Crime.type))), ylim = ylim)
-text(x = barplot, y = table(df$Crime.type), label = table(df$Crime.type), pos = 3, cex = 0.8, col = "black")
+text(x = barplot, y = table(df$Crime.type), label = table(df$Crime.type), pos = 3, cex = 0.6, col = "black")
 ```
 
 
@@ -182,7 +182,7 @@ Crime counts are also examined by LSOA, in order to study the distribution of cr
 LSOA_stats <- matrix(c(1.0, 64.0, 127.0, 175.3, 211.0, 7329.0), ncol=1, byrow=TRUE)
 rownames(LSOA_stats) <- c("Minimum","1st Quartile","Median","Mean","3rd Quartile","Maximum")
 colnames(LSOA_stats) <- c("Value")
-LSOA_stats <- kable(LSOA_stats, caption="Crime Count Statistics by LSOA")%>%kableExtra::kable_styling(latex_options = "hold_position")
+LSOA_stats <- kable(LSOA_stats, caption="Crime Count Statistics by LSOA")%>% kableExtra::kable_styling(latex_options = "hold_position")
 LSOA_stats
 ```
 
@@ -373,7 +373,10 @@ tm_shape(vs_census) +
 
 This map shows us that VSO crimes are mainly concentrated in central london, with a few LSOAs having mid-range crime density dispersed across london. 
 
-Ranking the LSOAs by crime density, we obtain the following rank table (Table \@ref(tab:top20)), showing the top 20 LSOAs with the highest crime rates (crime count per 1000 people): 
+\pagebreak
+
+Ranking the LSOAs by crime density, we obtain the following rank table (Table \@ref(tab:top20)), showing the top 20 LSOAs with the highest crime rates (crime count per 1000 people). We select the City of London 001F (COL001F) to do our analysis as it has the highest crime density. We are also interested to investigate why this is so.   
+
 ```{r top20}
 top_20 <-  data.frame(vs_census@data[order(-vs_census$freq_pop)[1:20], "Names"])
 #top_10_ <-  data.frame(vs_census@data[order(-vs_census$Freq)[1:20], "Names"])
@@ -382,7 +385,7 @@ colnames(top_20) <- c('LSOA name','Crime Rate')
 kable(top_20, caption = '20 LSOAs with the highest crime rates')%>%kableExtra::kable_styling(latex_options = "hold_position")
 ```
 
-We select the City of London 001F (COL001F) to do our analysis as it has the highest crime density. We are also interested to investigate why this is so.   
+\pagebreak 
 
 ### Analysing Violence and Sexual Offences on a Local Scale (City of London 001F)
 ```{r clean-vso-data, echo=FALSE, results='hide'}
@@ -419,13 +422,13 @@ By plotting the spatial distribution of the crimes on a map (Figure \@ref(fig:CO
 
 H1. VSO crimes are randomly distributed in the City of London 001F LSOA    
 
-```{r COL001Fmapwroads, echo=FALSE, fig.cap="City of London 001F LSOA Map with Roads",out.width="70%", fig.align='center'}
+```{r COL001Fmapwroads, echo=FALSE, fig.cap="City of London 001F LSOA Map with Roads (red dots being VSO crime locations)",out.width="70%", fig.align='center'}
 ## plot map of COL001F
 tmap_mode("plot")
 tm_shape(roads)+
   tm_lines(col= 'grey', lwd=1.0)+ #
   tm_layout(legend.bg.color="white",
-            title="Roads in City of London 001F",
+            title="City of London 001F Map",
             title.position = c("left", "top")) +
 tm_shape(unique_points)+
   tm_dots(size = 0.1, col = 'red', alpha = 1)
@@ -466,6 +469,8 @@ COL001F_den <- density(COL001F_ppp)
 ```
 
 From the map, clusters of VSO crime seem to occur North-East of City of London 001F. To understand why this is so, we can study the area in more detail (red box).    
+
+\pagebreak
 
 The street level view reveals a hotspot of 67 VSO crimes in the region. 
 
@@ -562,7 +567,7 @@ roads <- spTransform(roads, CRS(tmerc))
 buffered_points <- gBuffer(points, width = 5, byid=TRUE)
 
 points_on_roads <- gIntersects(roads,buffered_points, byid=TRUE)
-kable(table(points_on_roads), caption = 'Points on the streets')
+kable(table(points_on_roads), caption = 'Points on the streets') %>% kableExtra::kable_styling(latex_options = "hold_position")
 ```
 
 The results show that **`r round(table(points_on_roads)['TRUE']/sum(table(points_on_roads))*100)`%** of VSO crimes happen on the streets. This may support our hypothesis that the spatial pattern of the VSO crimes is heavily influenced by the spatial structure of the environment. 
@@ -692,6 +697,8 @@ tm_shape(vehicle_LSOA) + tm_polygons(col="Ii_cluster", border.col='transparent',
 ```
 
 These high-high clusters can be used to identify buffer regions with high vehicle crime rates - a high-high clusters are only identified when an LSOA with high crime rates is surrounded by LSOAs with high crime rates. This can aid the allocation of police resources and outreach efforts in the event of a resource shortage. It is also a strategic move, as the spatial autocorrelation in vehicle crimes may mean that a reduction of crime in one LSOA has effects on crime rates in neighbouring LSOAs.
+
+\pagebreak 
 
 ### Reasons for vehicle crime rates
 
